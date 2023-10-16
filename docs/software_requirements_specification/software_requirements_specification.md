@@ -66,7 +66,7 @@ A feature that provides the ability to see a map with all the bars and cafes in 
 
 ### Composer
 - With different forms like input fields, checkboxes, dropdown menus, etc. the user should be able to specify attributes of a drink.
-- A dynamicly expanding list should enable the user to add as many ingredients as he/she wants.
+- A dynamically expanding list should enable the user to add as many ingredients as he/she wants.
 - The user should be able to describe the preparation process of the drink.
 - Images should be uploadable to illustrate the drink and its preparation process.
   - If the user does not upload an image, an AI should generate an image based on the ingredients and the preparation process.
