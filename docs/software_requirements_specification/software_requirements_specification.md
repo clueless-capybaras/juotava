@@ -3,14 +3,14 @@
 # Introduction
 
 ## Purpose
-This SRS lists requirements of a basic design for **DrinkViewer** in its conceptional entirety. This includes key functionalities like the **Browser**, **Composer** and **Accout Management**, advanced functionalities like **Map** and **Bartinder**.
+This SRS lists requirements of a basic design for **Juotava** in its conceptional entirety. This includes key functionalities like the **Browser**, **Composer** and **Accout Management**, advanced functionalities like **Map** and **Bartinder**.
 
 This SRS does not try to initially and foresightedly define each and every functionality that we want to include to the app, but claims to deliver a set of the most crucial requirements to enable us to design and implement a working and desirable application.
 
 Since this document contributes to an agile project, it itself is agile in nature. It is growing with the project in detail and extent and stays open towards deeper insight from our experiences with the subject.
 
 ## Scope
-With **DrinkViewer**, we want to offer a tool specifically and thoroughly assembled for browsing, creating and exploring different kind of drinks. With this app, we want to address beginners and amateurs as well as professional bartenders. Furthermore, our goal is to encourage people to visit local bars and cafes to discover new drinks and locations to meet friends and family.
+With **Juotava**, we want to offer a tool specifically and thoroughly assembled for browsing, creating and exploring different kind of drinks. With this app, we want to address beginners and amateurs as well as professional bartenders. Furthermore, our goal is to encourage people to visit local bars and cafes to discover new drinks and locations to meet friends and family.
 
 Hence, the scope of this software project is to setup the full stack of a progressive web application that serves the aforementioned purpose. 
 
@@ -29,7 +29,7 @@ The SRS includes overall descriptions of the application and its functionalities
 
 
 # Overall Descripiton
-With **DrinkViewer**, we aim to create a progressive web application that serves as a tool for browsing, creating and exploring different kind of drinks. We wamt to enhance the experience of mixing and compoing drinks with the benefis of a digital tool that is easy to use and offers useful features. **These features include the following:** 
+With **Juotava**, we aim to create a progressive web application that serves as a tool for browsing, creating and exploring different kind of drinks. We wamt to enhance the experience of mixing and compoing drinks with the benefis of a digital tool that is easy to use and offers useful features. **These features include the following:** 
 
 ## Browser
 A feature that provides the ability to search for specific drinks, browse through a list of drinks and filter drinks by different attributes. Furthermore, the user should be able to rate drinks and see the average rating of other users. By clicking on a certain drink, the recipe should be displayed including ingredients and preparation process. When the user is logged in, he/she should be able to save drinks to different lists like favorites, to-do, etc.
