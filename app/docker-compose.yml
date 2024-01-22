@@ -1,0 +1,48 @@
+services:
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  backend-recipe:
+    container_name: backend-recipes
+    build: ./backend/recipes
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - database
+    
+  #backend-bartinder:
+  #  container_name: backend-bartinder
+  #  build: ./backend/bartinder
+  #  ports:
+  #    - "8081:8080"
+  #  restart: unless-stopped
+  #  depends_on:
+  #    - database
+    
+  #backend-maps:
+  #  container_name: backend-maps
+  #  build: ./backend/maps
+  #  ports:
+  #    - "8082:8080"
+  #  restart: unless-stopped
+  #  depends_on:
+  #    - database
+  
+  database:
+    container_name: database
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    restart: unless-stopped 
+    volumes:
+      - ./database/init/init.sql:/docker-entrypoint-initdb.d/dump.sql
+    environment:
+      - MARIADB_ROOT_PASSWORD=dummyrootpassword
+      - MARIADB_DATABASE=juotava
+      - MARIADB_USER=dummyuser
+      - MARIADB_PASSWORD=dummypassword
