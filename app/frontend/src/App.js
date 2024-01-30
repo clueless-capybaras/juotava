@@ -1,23 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
+import { createContext } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Navibar from './components/Navibar';
+import ErrorModal from './components/ErrorModal';
+import Home from './components/Home';
+import About from './components/About';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Navibar cyClass="cy-navBarNav"/>
+        <ErrorModal />
+        <Routes>
+          <Route path='/' element={<Home />}/>
+          <Route path='/about' element={<About />}/>
+          <Route path='*' element={<h1>404</h1>} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
