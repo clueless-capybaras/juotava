@@ -1,0 +1,17 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4.1.1
+      - name: Compose down potentially running old version
+        run: docker-compose -f app/docker-compose.yml down --remove-orphans --rmi all
+      - name: Compose Up
+        run: docker-compose -f app/docker-compose.yml up --build --force-recreate -d
