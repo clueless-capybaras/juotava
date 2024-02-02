@@ -39,10 +39,24 @@ services:
     ports:
       - "3306:3306"
     restart: unless-stopped 
-    volumes:
-      - ./database/init/init.sql:/docker-entrypoint-initdb.d/dump.sql
+    #volumes:
+      #- ./database/init/init.sql:/docker-entrypoint-initdb.d/dump.sql
     environment:
       - MARIADB_ROOT_PASSWORD=dummyrootpassword
       - MARIADB_DATABASE=juotava
       - MARIADB_USER=dummyuser
       - MARIADB_PASSWORD=dummypassword
+
+  proxy:
+    container_name: proxy
+    image: haproxy:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend-recipe
+      #- backend-bartinder
+      #- backend-maps
+    restart: unless-stopped
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
