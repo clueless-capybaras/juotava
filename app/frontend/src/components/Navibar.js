@@ -4,6 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 
 import logo from "../icons/Juotava_Draft_Icon.png";
+import LogInIndicator from './auth/LogInIndicator';
 
 function Navibar(props) {
     return (
@@ -15,27 +16,23 @@ function Navibar(props) {
         </Nav>
         <Nav>
           <Nav.Link as={NavLink} to="/search">
-            <span class="material-icons">
+            <span className="material-icons">
               search
             </span>
           </Nav.Link>
           <Nav.Link as={NavLink} to="/add">
-            <span class="material-icons">
+            <span className="material-icons">
               add_circle_outline
             </span>
           </Nav.Link>
           <Nav.Link as={NavLink} to="/bartinder">
-            <span class="material-icons">
+            <span className="material-icons">
               local_fire_department
             </span>
           </Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Link as={NavLink} to="/user">
-            <span class="material-icons">
-              person
-            </span>
-        </Nav.Link>
+          <LogInIndicator />
         </Nav>
       </Navbar>
     );
