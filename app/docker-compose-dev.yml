@@ -1,16 +1,21 @@
 services:
   frontend:
     container_name: frontend
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.Dev
     ports:
-      - "3000"
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
     restart: unless-stopped
 
   backend-recipe:
     container_name: backend-recipes
     build: ./backend/recipes
     ports:
-      - "8080"
+      - "8080:8080"
     restart: unless-stopped
     depends_on:
       - database
