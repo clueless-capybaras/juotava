@@ -5,6 +5,7 @@ import ErrorModal from './components/ErrorModal';
 import Home from './components/Home';
 import Search from './components/Search';
 import Add from './components/Add';
+import Composer from './components/composer/Composer';
 import Bartinder from './components/Bartinder';
 import User from './components/User';
 import About from './components/About';
@@ -24,7 +25,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />}/>
             <Route path='/search' element={<Search />}/>
-            <Route path='/add' element={<Add />}/>
+            <Route path='/composer' element={<Composer />}/>
             <Route path='/bartinder' element={<Bartinder />}/>
             <Route path='/user' element={<AuthGuard component={User}/>}/>
             <Route path='/about' element={<About />}/>

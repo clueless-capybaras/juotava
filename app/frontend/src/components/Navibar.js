@@ -20,7 +20,7 @@ function Navibar(props) {
               search
             </span>
           </Nav.Link>
-          <Nav.Link as={NavLink} to="/add">
+          <Nav.Link as={NavLink} to="/composer">
             <span className="material-icons">
               add_circle_outline
             </span>
