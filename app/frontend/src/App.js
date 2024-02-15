@@ -6,7 +6,7 @@ import Home from './components/home/Home';
 import Browser from './components/browser/Browser';
 import Composer from './components/composer/Composer';
 import Bartinder from './components/bartinder/Bartinder';
-import User from './components/User';
+import User from './components/settings/user/User';
 import About from './components/settings/about/About';
 import { AuthGuard } from './components/auth/AuthGuard';
 import { createContext } from 'react';

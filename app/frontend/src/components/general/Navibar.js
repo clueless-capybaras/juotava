@@ -3,7 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 
-import logo from "../icons/Juotava_Draft_Icon.png";
+import logo from "../../icons/Juotava_Draft_Icon.png";
 import LogInIndicator from '../auth/LogInIndicator';
 
 function Navibar(props) {
