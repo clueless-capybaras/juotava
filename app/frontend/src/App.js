@@ -1,14 +1,13 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Navibar from './components/Navibar';
-import ErrorModal from './components/ErrorModal';
-import Home from './components/Home';
-import Search from './components/Search';
-import Add from './components/Add';
+import Navibar from './components/general/Navibar';
+import ErrorModal from './components/general/ErrorModal';
+import Home from './components/home/Home';
+import Browser from './components/browser/Browser';
 import Composer from './components/composer/Composer';
-import Bartinder from './components/Bartinder';
+import Bartinder from './components/bartinder/Bartinder';
 import User from './components/User';
-import About from './components/About';
+import About from './components/settings/about/About';
 import { AuthGuard } from './components/auth/AuthGuard';
 import { createContext } from 'react';
 import AuthenticatedRequestWrapper from './components/auth/AuthenticatedRequestWrapper';
@@ -24,7 +23,7 @@ function App() {
           <ErrorModal />
           <Routes>
             <Route path='/' element={<Home />}/>
-            <Route path='/search' element={<Search />}/>
+            <Route path='/browser' element={<Browser />}/>
             <Route path='/composer' element={<Composer />}/>
             <Route path='/bartinder' element={<Bartinder />}/>
             <Route path='/user' element={<AuthGuard component={User}/>}/>
