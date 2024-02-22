@@ -22,7 +22,7 @@ function App() {
           <ErrorModal />
           <Routes>
             <Route path='/' element={<Home />}/>
-            <Route path='/browser' element={<Browser />}/>
+            <Route path='/browser' element={<AuthGuard component={Browser}/>}/>
             <Route path='/composer' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<Bartinder />}/>
             <Route path='/settings' element={<AuthGuard component={Settings}/>}/>
