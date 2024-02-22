@@ -10,5 +10,5 @@ import java.util.UUID;
 
 
 public interface SpringRecipeRepository extends JpaRepository<Recipe, UUID> {
-
+    public List<Recipe> findByCreatedByAuth0id(String auth0id);
 }
