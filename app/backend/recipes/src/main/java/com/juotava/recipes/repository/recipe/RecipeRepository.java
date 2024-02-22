@@ -19,6 +19,10 @@ public class RecipeRepository {
         return this.springRecipeRepository.findById(uuid).get();
     }
 
+    public List<Recipe> findByCreatedByAuth0id(String auth0id){
+        return this.springRecipeRepository.findByCreatedByAuth0id(auth0id);
+    }
+
     public List<Recipe> findAll(){
         return this.springRecipeRepository.findAll();
     }

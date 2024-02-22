@@ -1,6 +1,5 @@
 package com.juotava.recipes.model;
 
-import com.juotava.recipes.model.enums.Unit;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,27 +8,21 @@ import lombok.Getter;
 
 import java.util.UUID;
 
-@Getter
 @Entity
-public class Ingredient {
-
+@Getter
+public class Step {
     @Id
     @GeneratedValue
     private UUID uuid;
-    @Column(name = "ingredientorder")
+    @Column(name = "steporder")
     private int order;
-    private String name;
-    private int amount;
-    private Unit unit;
+    private String description;
 
-    public Ingredient(String name, int amount, Unit unit) {
-        this.name = name;
-        this.amount = amount;
-        this.unit = unit;
+    public Step(String description) {
+        this.description = description;
     }
 
-    public Ingredient() {
-    }
+    public Step() {}
 
     public void setOrder(int order) {
         this.order = order;
