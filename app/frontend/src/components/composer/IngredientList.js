@@ -7,17 +7,21 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
-function IngredientList() {
+function IngredientList({handleFunction}) {
 
-    const [inputs, setInputs] = useState([{ingredient: "", amount: "", unit: "ml"}]);
+    const [inputs, setInputs] = useState([{order: 0, name: "", amount: "", unit: "MILLILITRES"}]);
 
     const handleAdd = () => {
-        setInputs([...inputs, {ingredient: "", amount: "", unit: "ml"}]);
+        setInputs([...inputs, {order: inputs.length, name: "", amount: "", unit: "MILLILITRES"}]);
     };
 
     const handleDelete = (index) => {
         const newArray = [...inputs];
         newArray.splice(index, 1);
+        newArray.forEach((item, index) => {
+            item.order = index;
+        });
+        handleFunction(newArray);
         setInputs(newArray);
     }
 
@@ -25,6 +29,7 @@ function IngredientList() {
         let { name, value } = event.target;
         let onChangeValue = [...inputs];
         onChangeValue[index][name] = value;
+        handleFunction(onChangeValue);
         setInputs(onChangeValue);
     }
 
@@ -35,23 +40,23 @@ function IngredientList() {
                 <Col xs="6" sm="6" md="6">
                     <InputGroup>
                         <FloatingLabel label={"Zutat " + (index + 1)}>
-                            <Form.Control name="ingredient" value={item.ingredient} placeholder="Zutat" onChange={(event) => handleInputChange(event, index)} />
+                            <Form.Control name="name" value={item.name} placeholder="Zutat" onChange={(event) => handleInputChange(event, index)} />
                         </FloatingLabel>
                         <FloatingLabel label="Menge">
                             <Form.Control name="amount" value={item.amount} placeholder="Menge" onChange={(event) => handleInputChange(event, index)} />
                         </FloatingLabel>
                         <FloatingLabel label="Einheit">
                             <Form.Select name="unit" placeholder="Einheit" value={item.unit} onChange={(event) => handleInputChange(event, index)} >
-                                <option>ml</option>
-                                <option>dl</option>
-                                <option>l</option>
-                                <option>oz</option>
-                                <option>mg</option>
-                                <option>g</option>
-                                <option>kg</option>
-                                <option>pcs</option>
-                                <option>TL</option>
-                                <option>EL</option>
+                                <option value="MILLILITRES">ml</option>
+                                <option value="DECILITRES">dl</option>
+                                <option value="LITRES">l</option>
+                                <option value="OUNCES">oz</option>
+                                <option value="MILLIGRAMS">mg</option>
+                                <option value="GRAMS">g</option>
+                                <option value="KILOGRAMS">kg</option>
+                                <option value="PIECES">pcs</option>
+                                <option value="TEASPOONS">TL</option>
+                                <option value="TABLESPOONS">EL</option>
                             </Form.Select>
                         </FloatingLabel>
                     </InputGroup>

@@ -23,7 +23,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />}/>
             <Route path='/browser' element={<Browser />}/>
-            <Route path='/composer' element={<Composer />}/>
+            <Route path='/composer' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<Bartinder />}/>
             <Route path='/settings' element={<AuthGuard component={Settings}/>}/>
             <Route path='*' element={<h1>404</h1>} />
