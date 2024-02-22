@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
@@ -13,7 +14,72 @@ import IngredientList from './IngredientList';
 import PrepList from './PrepList';
 import TagField from './TagField';
 
+import Recipe from '../../model/recipe';
+import { AuthenticatedRequestWrapperContext } from '../../App';
+import { baseUrlRecipes } from '../../config/config';
+
+
 function Composer() {
+    const arw = useContext(AuthenticatedRequestWrapperContext);
+    const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
+    const [recipe, setRecipe] = useState(new Recipe());
+
+    const handleChangeTitle = (event) => {
+        let tmpRecipe = recipe;
+        tmpRecipe.title = event.target.value;
+        setRecipe(tmpRecipe);
+        //console.log(recipe);
+    }
+
+    const handleChangeCategory = (event) => {
+        let tmpRecipe = recipe;
+        tmpRecipe.category = event.target.value;
+        setRecipe(tmpRecipe);
+        //console.log(recipe);
+    }
+
+    const handleChangeNonAlcoholic = (event) => {
+        let tmpRecipe = recipe;
+        tmpRecipe.nonAlcoholic = event.target.checked;
+        setRecipe(tmpRecipe);
+        //console.log(recipe);
+    }
+
+    const handleChangeDescription = (event) => {
+        let tmpRecipe = recipe;
+        tmpRecipe.description = event.target.value;
+        setRecipe(tmpRecipe);
+        //console.log(recipe);
+    }
+
+    const handleChangeIngredients = (data) => {
+        let tmpRecipe = recipe;
+        tmpRecipe.ingredients = data;
+        setRecipe(tmpRecipe);
+        //console.log(recipe);
+    }
+
+    const handleChangeSteps = (data) => {
+        let tmpRecipe = recipe;
+        tmpRecipe.steps = data;
+        setRecipe(tmpRecipe);
+        //console.log(recipe);
+    }
+
+    const handleSave = () => {
+        let tmpRecipe = recipe;
+        tmpRecipe.createdBy =  {
+            auth0id: user.sub,
+            userName: user.nickname,
+        }
+        tmpRecipe.image = {
+            name: "test.png",
+            prompt: "test",
+            data: "VGhpcyBpcyBhbiBpbWFnZQ=="
+        };
+        console.log('Saving Recipe:', tmpRecipe);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmpRecipe), undefined, true);
+    }
 
     return(
         <>
@@ -26,7 +92,7 @@ function Composer() {
             <Row className="justify-content-center mb-3">
                 <Col xs="6" sm="6" md="6">
                     <FloatingLabel controlId="floatingTitle" label="Titel">
-                        <Form.Control placeholder="Titel" />
+                        <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}/>
                     </FloatingLabel>
                 </Col>
                 <Col xs="2" sm="2" md="2">
@@ -36,7 +102,7 @@ function Composer() {
             <Row className="justify-content-center mb-3">
                 <Col xs="6" sm="6" md="6">
                     <FloatingLabel controlId="floatingCategory" label="Kategorie wählen...">
-                        <Form.Select placeholder="Kategorie wählen...">
+                        <Form.Select placeholder="Kategorie wählen..." onChange={(e) => handleChangeCategory(e)} value={recipe.category}>
                             <option>Cocktail</option>
                             <option>Kaffee</option>
                             <option>Limonade</option>
@@ -47,14 +113,14 @@ function Composer() {
                     </FloatingLabel>
                 </Col>
                 <Col xs="2" sm="2" md="2">
-                    <Form.Check type="checkbox" label="alkoholfrei" />
+                    <Form.Check type="checkbox" label="alkoholfrei" onChange={(e) => handleChangeNonAlcoholic(e)}  value={recipe.nonAlcoholic}/>
                 </Col>
             </Row>
 
             <Row className="justify-content-center mb-3">
                 <Col xs="8" sm="8" md="8">
                     <FloatingLabel label="Beschreibung" className="mb-3">
-                        <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} />
+                        <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}/>
                     </FloatingLabel>
                 </Col>
             </Row>
@@ -64,7 +130,7 @@ function Composer() {
             <h3 className="text-center">Zutatenliste</h3>
             <Row className="justify-content-center mb-3">
                 <Col>
-                    <IngredientList />
+                    <IngredientList handleFunction={handleChangeIngredients} />
                 </Col>
             </Row>
         </Container>
@@ -73,7 +139,7 @@ function Composer() {
             <h3 className="text-center">Zubereitung</h3>
             <Row className="justify-content-center mb-3">
                 <Col>
-                 <PrepList />
+                 <PrepList handleFunction={handleChangeSteps} />
                 </Col>
             </Row>
         </Container>
@@ -89,7 +155,7 @@ function Composer() {
         <Container className="text-center mb-5">
             <Row className="justify-content-center mb-3">
                 <Col xs="8" sm="8" md="8">
-                    <Button variant="primary" className="me-1">Veröffentlichen</Button>
+                    <Button variant="primary" className="me-1" onClick={(e) => handleSave()}>Veröffentlichen</Button>
                     <Button variant="secondary">Entwurf speichern</Button>
                 </Col>
             </Row>

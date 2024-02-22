@@ -1,15 +1,16 @@
 package com.juotava.recipes.controller;
 
-import com.juotava.recipes.model.Ingredient;
-import com.juotava.recipes.model.Recipe;
+import com.juotava.recipes.model.*;
+import com.juotava.recipes.model.enums.Unit;
 import com.juotava.recipes.service.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,15 +29,77 @@ public class RecipesController {
     }
 
     @GetMapping(path = "/test")
-    public Recipe addDemoRecipe(){
-        Recipe recipe = new Recipe("Demo Recipe", "This is a demo recipe!");
-        this.recipesService.addIngredientToRecipe(recipe, new Ingredient());
+    public Recipe addDemoRecipe(Authentication authentication){
+        String auth0uid = authentication.getName();
+        Recipe recipe = new Recipe("Demo Recipe", "This is a demo recipe!", "Dairy", true);
+        this.recipesService.addIngredientToRecipe(recipe, new Ingredient(
+                "Water", 100, Unit.MILLILITRES
+        ));
+        this.recipesService.addIngredientToRecipe(recipe, new Ingredient(
+                "Milk", 50, Unit.MILLILITRES
+        ));
+        this.recipesService.addIngredientToRecipe(recipe, new Ingredient(
+                "Sugar", 1, Unit.TEASPOONS
+        ));
+        this.recipesService.addStepToRecipe(recipe, new Step(
+            "Fill water into a cup"
+        ));
+        this.recipesService.addStepToRecipe(recipe, new Step(
+                "Add cute latte art with milk"
+        ));
+        this.recipesService.addStepToRecipe(recipe, new Step(
+                "place the sugar inside a straw"
+        ));
+        this.recipesService.addStepToRecipe(recipe, new Step(
+                "Finished, ready to drink 🍷"
+        ));
+        this.recipesService.setImageOfRecipe(recipe, new Image(
+                "image.png", "picture of a drink", "This is an image".getBytes(StandardCharsets.UTF_8)
+        ));
+        this.recipesService.setCreatedByOfRecipe(recipe, new UserRepresentation(auth0uid));
         this.recipesService.saveRecipe(recipe);
+        System.out.println(recipe.getUuid());
         return recipe;
+    }
+
+    /*
+        Endpoints /recipe/*
+        Interact with recipes
+     */
+
+    @PostMapping(path = "recipe/save")
+    public String saveRecipe(@RequestBody Recipe recipe, Authentication authentication){
+        try {
+            String auth0uid = authentication.getName();
+            if (!auth0uid.equals(recipe.getCreatedBy().getAuth0id())){
+                System.out.println("ERROR: User id "+recipe.getCreatedBy().getAuth0id()+" does not match with sending user "+auth0uid);
+                return "false";
+            }
+            this.recipesService.setCurrentUserToRecipe(recipe, auth0uid);
+            this.recipesService.saveRecipe(recipe);
+            System.out.println("INFO: Saved Recipe: " + recipe.getUuid());
+            return recipe.getUuid().toString();
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return "false";
+        }
+    }
+
+    @GetMapping(path = "recipe/all")
+    public List<Recipe> getAllRecipes(){
+        return this.recipesService.getAllRecipes();
+    }
+
+    @GetMapping(path = "recipe/my")
+    public List<Recipe> getMyRecipes(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getRecipesByUser(auth0id);
     }
 
     @GetMapping(path = "recipe/{uuid}")
     public Recipe getRecipe(@PathVariable UUID uuid){
         return this.recipesService.getRecipe(uuid);
     }
+
+
 }
