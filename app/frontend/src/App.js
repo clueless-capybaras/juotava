@@ -6,8 +6,7 @@ import Home from './components/home/Home';
 import Browser from './components/browser/Browser';
 import Composer from './components/composer/Composer';
 import Bartinder from './components/bartinder/Bartinder';
-import User from './components/settings/user/User';
-import About from './components/settings/about/About';
+import Settings from './components/settings/Settings';
 import { AuthGuard } from './components/auth/AuthGuard';
 import { createContext } from 'react';
 import AuthenticatedRequestWrapper from './components/auth/AuthenticatedRequestWrapper';
@@ -26,8 +25,7 @@ function App() {
             <Route path='/browser' element={<Browser />}/>
             <Route path='/composer' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<Bartinder />}/>
-            <Route path='/user' element={<AuthGuard component={User}/>}/>
-            <Route path='/about' element={<About />}/>
+            <Route path='/settings' element={<AuthGuard component={Settings}/>}/>
             <Route path='*' element={<h1>404</h1>} />
           </Routes>
         </BrowserRouter>

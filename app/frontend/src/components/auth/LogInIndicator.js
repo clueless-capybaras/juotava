@@ -7,7 +7,7 @@ function LogInIndicator(){
     const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
     return (
         (isAuthenticated) ? (<>
-            <Nav.Link as={NavLink} to="/user">
+            <Nav.Link as={NavLink} to="/settings">
                 <span className="material-icons">
                 manage_accounts
                 </span>
