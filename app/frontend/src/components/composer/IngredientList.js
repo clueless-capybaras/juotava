@@ -48,6 +48,7 @@ function IngredientList({handleFunction}) {
                         <FloatingLabel label="Einheit">
                             <Form.Select name="unit" placeholder="Einheit" value={item.unit} onChange={(event) => handleInputChange(event, index)} >
                                 <option value="MILLILITRES">ml</option>
+                                <option value="CENTILITRES">cl</option>
                                 <option value="DECILITRES">dl</option>
                                 <option value="LITRES">l</option>
                                 <option value="OUNCES">oz</option>
