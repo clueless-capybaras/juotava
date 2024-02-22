@@ -1,15 +1,23 @@
-import React from 'react';
-import { useNavigate } from 'react-router';
+import {Col, Container, Row} from 'react-bootstrap'
+import RecipeCard from './RecipeCard';
 
 function Browser(props) {
-    let style = { width: 'auto', cursor: 'pointer', padding: '0' };
-    if(props.disabled) {
-        style = { width: 'auto', cursor: 'not-allowed', padding: '0', opacity: '0.5' };
-    }
-    const navigate = useNavigate();
-    const cyClass = (props.cyClass !== undefined) ? " "+props.cyClass : "";
     return (
-        <h1>Browser page</h1>
+        <>
+        <Container className='mb-5'>
+            <Row>
+                <Col sm='3'>Filter</Col>
+                <Col sm='8'>
+                    <Row className='mb-3'>
+                        <RecipeCard />
+                    </Row>
+                    <Row className='mb-3'>
+                        <RecipeCard />
+                    </Row>
+                </Col>
+            </Row>
+        </Container>
+        </>
     );
 }
 export default Browser;
