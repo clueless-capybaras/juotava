@@ -24,7 +24,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />}/>
             <Route path='/browser' element={<Browser />}/>
-            <Route path='/composer' element={<Composer />}/>
+            <Route path='/composer' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<Bartinder />}/>
             <Route path='/user' element={<AuthGuard component={User}/>}/>
             <Route path='/about' element={<About />}/>
