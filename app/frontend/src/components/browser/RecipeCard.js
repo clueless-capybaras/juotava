@@ -3,7 +3,7 @@ import placeholderImage from '../../image-placeholder.jpeg'
 
 function RecipeCard(props) {
     return (
-        <Card style={{}}>
+        <Card style={{paddingLeft: 0, paddingRight: 0}}>
             <Row className='g-0'>
                 <Col sm='auto'>
                     <Card.Img src={placeholderImage} alt='...' style={{maxWidth:'10rem'}} fluid />
