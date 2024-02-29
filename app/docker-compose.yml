@@ -14,6 +14,15 @@ services:
     restart: unless-stopped
     depends_on:
       - database
+  
+  backend-users:
+    container_name: backend-users
+    build: ./backend/users
+    ports:
+      - "8080"
+    restart: unless-stopped
+    depends_on:
+      - database
     
   #backend-bartinder:
   #  container_name: backend-bartinder
@@ -55,6 +64,7 @@ services:
     depends_on:
       - frontend
       - backend-recipe
+      - backend-users
       #- backend-bartinder
       #- backend-maps
     restart: unless-stopped

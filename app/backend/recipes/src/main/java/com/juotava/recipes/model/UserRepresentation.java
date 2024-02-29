@@ -7,7 +7,6 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "user")
 public class UserRepresentation {
     @Id
     private String auth0id;

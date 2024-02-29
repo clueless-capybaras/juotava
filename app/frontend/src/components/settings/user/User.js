@@ -2,8 +2,19 @@ import {React, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router';
 import LogOutButton from '../../auth/LogOutButton';
 import { useAuth0 } from '@auth0/auth0-react';
-import { baseUrlRecipes } from '../../../config/config';
+import {baseUrlUser } from '../../../config/config';
 import { AuthenticatedRequestWrapperContext } from '../../../App';
+
+import ImageUploaderUser from './ImageUploaderUser';
+import {userSettings, Settings} from '../../../model/userSettings';
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 
 function User(props) {
     let style = { width: 'auto', cursor: 'pointer', padding: '0' };
@@ -15,25 +26,70 @@ function User(props) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
-    //auth request demo
-    const [recipe, setRecipe] = useState({});
+    const handleChangeUsername = (event) => {
+        //console.log(event.target.value);
+        const newUsername = event.target.value;
+        setUserSet(prevUserSet => ({
+            ...prevUserSet,
+            userName: newUsername
+        }));
+    }
+
+    const handleChangeShowUsername = (event) => {
+        //console.log(event.target.checked);
+        const newShowUsername = event.target.checked;
+        setUserSet(prevUserSet => ({
+            ...prevUserSet,
+            settings: {
+                ...prevUserSet.settings,
+                showUserNameInRecipe: newShowUsername
+            }
+        }));
+    }
+
+    const handleSave = () => {
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/save', 'POST', JSON.stringify(userSet), undefined, true);
+    }
+
+    const [userSet, setUserSet] = useState(new userSettings(user.sub, "", new Settings(undefined, false)));
+
     useEffect(() => {
-        console.log('User useEffect');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'test', 'GET', undefined, setRecipe, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/'+ encodeURIComponent(user.sub), 'GET', undefined, setUserSet, true);
     }, []);
     
     
     return (
         <>
-            <h1>User page</h1>
-            <h3>Auth Info:</h3>
-            <p>isAuthenticated: {isAuthenticated.toString()}</p>
-            <p>Auth0 userdata: {JSON.stringify(user)}</p>
-            <LogOutButton />
-            
-            <h3> Authenticated Request Demo (Recipe)</h3>
-            <p> Recipe: {recipe.title}</p>
-            
+        <h1 className="text-center mb-5">Benutzer {userSet.userName}</h1>
+        <Container className="mb-5">
+            <Row className="justify-content-center mb-3">
+                <Col className="text-end">
+                    <LogOutButton />
+                </Col>
+            </Row>
+            <Row className="justify-content-center mb-3">
+                <ImageUploaderUser />
+            </Row>
+            <Row className="justify-content-center mb-3">
+                <Col>
+                    <FloatingLabel controlId="floatingUserName" label="Benutzername">
+                        <Form.Control placeholder="Benutzername" onChange={(e) => handleChangeUsername(e)} value={userSet.userName} />
+                    </FloatingLabel>
+                </Col>
+            </Row>
+            <Row className="justify-content-center mb-3">
+                <Col>
+                    <FloatingLabel controlId='floatingShowUserName'>
+                        <Form.Check type="checkbox" label="Benutzername anzeigen" onChange={(e) => handleChangeShowUsername(e)} checked={userSet.settings.showUserNameInRecipe}/>
+                    </FloatingLabel>
+                </Col>
+            </Row>
+            <Row>
+                <Col className='text-center'>
+                    <Button variant="primary" className="me-1" onClick={() => handleSave()}>Speichern</Button>
+                </Col>
+            </Row>
+        </Container>
         </>
     );
 }

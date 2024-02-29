@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 
 import imgplaceholder from '../../image-placeholder.jpeg';
 
-function ImageUploader() {
+function ImageUploaderComposer() {
 
     return(
         <Container className='text-center'>
@@ -25,4 +25,4 @@ function ImageUploader() {
     );
 }
 
-export default ImageUploader;
+export default ImageUploaderComposer;
