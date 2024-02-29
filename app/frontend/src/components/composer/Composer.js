@@ -9,7 +9,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
-import ImageUploader from './ImageUploader';
+import ImageUploaderComposer from './ImageUploaderComposer';
 import IngredientList from './IngredientList';
 import PrepList from './PrepList';
 import TagField from './TagField';
@@ -86,7 +86,7 @@ function Composer() {
         <h1 className="text-center mb-5">Composer</h1>
         <Container className="mb-5">
             <Row className="justify-content-center mb-3">
-                <ImageUploader />
+                <ImageUploaderComposer />
             </Row>
 
             <Row className="justify-content-center mb-3">
