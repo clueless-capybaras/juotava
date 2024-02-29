@@ -63,6 +63,11 @@ function User(props) {
         <h1 className="text-center mb-5">Benutzer {userSet.userName}</h1>
         <Container className="mb-5">
             <Row className="justify-content-center mb-3">
+                <Col className="text-end">
+                    <LogOutButton />
+                </Col>
+            </Row>
+            <Row className="justify-content-center mb-3">
                 <ImageUploaderUser />
             </Row>
             <Row className="justify-content-center mb-3">
