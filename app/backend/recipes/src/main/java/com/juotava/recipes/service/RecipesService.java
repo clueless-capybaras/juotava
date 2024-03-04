@@ -9,8 +9,10 @@ import com.juotava.recipes.repository.step.StepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipesService {
@@ -39,6 +41,14 @@ public class RecipesService {
 
     public List<Recipe> getRecipesByUser(String auth0id){
         return this.recipeRepository.findByCreatedByAuth0id(auth0id);
+    }
+
+    public List<RecipeExcerpt> getAllRecipeExcerpts() {
+        List<RecipeExcerpt> tempList = new ArrayList<>();
+        getAllRecipes().stream()
+                .map(elt -> tempList.add(new RecipeExcerpt(elt.getUuid(), elt.getTitle(), elt.getCategory(), elt.isNonAlcoholic(), elt.getDescription(), elt.getIngredients(), elt.getImage())))
+                .collect(Collectors.toList());
+        return(tempList);
     }
 
     public void saveRecipe(Recipe recipe){
