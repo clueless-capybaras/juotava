@@ -26,6 +26,16 @@ function User(props) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
+    const handleChangeImage = (base64Image) => {
+        setUserSet(prevUserSet => ({
+            ...prevUserSet,
+            image: {
+                ...prevUserSet.image,
+                base64data: base64Image
+            }
+        }));
+    }
+
     const handleChangeUsername = (event) => {
         //console.log(event.target.value);
         const newUsername = event.target.value;
@@ -51,7 +61,12 @@ function User(props) {
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/save', 'POST', JSON.stringify(userSet), undefined, true);
     }
 
-    const [userSet, setUserSet] = useState(new userSettings(user.sub, "", new Settings(undefined, false)));
+    const [userSet, setUserSet] = useState(
+        new userSettings(
+            user.sub, "", 
+            new Settings(undefined, false),
+            new Image(undefined, "")
+        ));
 
     useEffect(() => {
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/'+ encodeURIComponent(user.sub), 'GET', undefined, setUserSet, true);
@@ -68,7 +83,7 @@ function User(props) {
                 </Col>
             </Row>
             <Row className="justify-content-center mb-3">
-                <ImageUploaderUser />
+                <ImageUploaderUser handleChangeFunction={handleChangeImage} passedImage={userSet.image.base64data} />
             </Row>
             <Row className="justify-content-center mb-3">
                 <Col>

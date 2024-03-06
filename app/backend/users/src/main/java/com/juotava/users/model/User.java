@@ -13,6 +13,8 @@ public class User {
     private String userName;
     @OneToOne
     private Settings settings;
+    @OneToOne
+    private Image image;
 
     public User(String auth0id, String userName) {
         this.auth0id = auth0id;
@@ -24,5 +26,9 @@ public class User {
 
     public void setSettings(Settings settings) {
         this.settings = settings;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }
