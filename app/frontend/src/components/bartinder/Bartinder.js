@@ -20,6 +20,42 @@ function Bartinder(props) {
     return (
         <Container>
             <Row>
+                <Col></Col>
+                <Col>
+                    <Row className='justify-content-center mb-3'>
+                        <Col className='text-center mt-auto'>
+                            <Row>
+                                <span className="material-icons">
+                                    favorite_border
+                                </span>
+                            </Row>
+                            <Row>
+                                <span>4,7k</span>
+                            </Row>
+                        </Col>
+                        <Col className='justify-content-center'>
+                            <h2>Drink Name</h2>
+                        </Col>
+                        <Col className='text-center mt-auto'>
+                            <Row>
+                                <span className="material-icons">
+                                    star_border
+                                </span>
+                            </Row>
+                            <Row>
+                                <span>5</span>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className='text-end'>
+                    Präferenzen
+                    <span className="material-icons-outlined inline-icon">
+                        tune
+                    </span>
+                </Col>
+            </Row>
+            <Row>
                 <Col className='text-end'>
                     <Container className='justify-content-end mb-5'>
                         <Row className='justify-content-end'>
@@ -35,35 +71,18 @@ function Bartinder(props) {
                         </Row>
                     {tags.map((tag, index) => {
                         return (
-                            <Badge key={index} as="lg" variant="primary" className="me-2">{tag}</Badge>
+                            <Badge key={index} variant="primary" className="me-2">{tag}</Badge>
                         );
                     })}
                     </Container>
                 </Col>
                 <Col>
-                    <Row className='justify-content-center mb-3'>
-                        <Col className='text-center'>
-                            <span className="material-icons">
-                                favorite_border
-                            </span>
-                            4,7k
-                        </Col>
-                        <Col className='justify-content-center'>
-                            <h1>Drink Name</h1>
-                        </Col>
-                        <Col className='text-center'>
-                            <span className="material-icons">
-                                star_border
-                            </span>
-                            5,0
-                        </Col>
-                    </Row>
                     <Row className='mb-3'>
                         <Image src={placeholderImage} rounded />
                     </Row>
                     <Row>
                         <Col className='text-center'>
-                            <span class="material-icons-outlined md-48">
+                            <span className="material-icons-outlined md-48">
                                 cancel
                             </span>
                         </Col>
@@ -74,12 +93,7 @@ function Bartinder(props) {
                         </Col>
                     </Row>
                 </Col>
-                <Col className='text-end'>
-                    Präferenzen
-                    <span class="material-icons-outlined">
-                        tune
-                    </span>
-                </Col>
+                <Col></Col>
             </Row>
         </Container>
     );
