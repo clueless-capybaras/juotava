@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {Col, Container, Placeholder, Row, Card} from 'react-bootstrap';
+import TextTruncate from 'react-text-truncate';
 import placeholderImage from '../../image-placeholder.jpeg'
 
 function RecipeCard(props) {
@@ -29,14 +30,17 @@ function RecipeCard(props) {
         <Card onClick={props.onClick} style={{paddingLeft: 0, paddingRight: 0}}>
             <Row className='g-0'>
                 <Col sm='auto'>
-                    <Card.Img src={placeholderImage} alt='...' style={{maxWidth:'11rem'}} />
+                    <Card.Img src={image.base64data} alt={image.prompt} style={{maxWidth:'11rem'}} />
                 </Col>
                 <Col>
                     <Card.Body>
                         <Card.Title>{title}</Card.Title>
                         <Card.Subtitle className='text-muted mb-2'>{category}{nonAlcoholic ? <strong> (✅ alkoholfrei)</strong> : null}</Card.Subtitle>
                         <Card.Text>
-                            {description}
+                            <TextTruncate
+                                line={2}
+                                text={description}
+                            />
                         </Card.Text>
                         <Card.Text className='text-muted'>
                             {ingredients.map((ingr, index) => {

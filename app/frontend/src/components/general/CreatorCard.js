@@ -1,29 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Col, Image, Row } from 'react-bootstrap';
 import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders';
+import { useAuth0 } from '@auth0/auth0-react';
+import {baseUrlUser } from '../../config/config';
+import { AuthenticatedRequestWrapperContext } from '../../App';
 
 import placeholderimage from '../../image-placeholder.jpeg';
 
-function CreatorCard(createdBy) {
+function CreatorCard({createdBy}) {
+    const arw = useContext(AuthenticatedRequestWrapperContext);
+    const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const [creator, setCreator] = useState();
 
     useEffect(() => {
-        setCreator(createdBy);
-    }, [createdBy])
+        console.log(createdBy);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/'+ encodeURIComponent(createdBy), 'GET', undefined, setCreator, true);
+    }, [createdBy]);
 
     return (
         <Row className="d-flex align-items-center">
             <Col style={{maxWidth: "5rem"}}>
                 <Image
-                    src={creator === undefined ? placeholderimage : /*creator.image*/placeholderimage}
-                    style={{maxWidth: "4rem"}}
+                    src={creator ? creator.image.base64data : placeholderimage}
+                    style={{maxWidth: "4rem", maxHeight: "4rem"}}
                     roundedCircle
                 />
             </Col>
             <Col style={{maxHeight: "4rem"}}>
                 <Row>
                     {creator ?
-                        <div>{checkUserName(creator.userName)}</div>
+                        <div>{creator.userName}</div>
                     : generatePlaceholders(1, 1, 2)}
                 </Row>
                 <Row className="text-muted">
@@ -35,10 +41,3 @@ function CreatorCard(createdBy) {
 }
 
 export default CreatorCard;
-
-function checkUserName(userName) {
-    if(userName != null) {
-        return userName;
-    }
-    else {return "Anonym";}
-}

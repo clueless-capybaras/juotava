@@ -42,7 +42,7 @@ function Recipe(props) {
         <Container>
         <Row className="mb-5">
             <Col xs="3" className="me-5">
-                <Image src={placeholderimage} style={{maxWidth: "20rem"}} rounded />
+                <Image src={recipe? recipe.image.base64data : placeholderimage} style={{maxWidth: "20rem"}} rounded />
             </Col>
             <Col xs="6">
                 <Row>
