@@ -56,7 +56,7 @@ public class RecipesController {
         this.recipesService.setImageOfRecipe(recipe, new Image(
                 "picture of a drink", "This is an image"
         ));
-        this.recipesService.setCreatedByOfRecipe(recipe, new UserRepresentation(auth0uid));
+        this.recipesService.setCreatedByOfRecipe(recipe, auth0uid);
         this.recipesService.saveRecipe(recipe);
         System.out.println(recipe.getUuid());
         return recipe;
@@ -71,8 +71,8 @@ public class RecipesController {
     public String saveRecipe(@RequestBody Recipe recipe, Authentication authentication){
         try {
             String auth0uid = authentication.getName();
-            if (!auth0uid.equals(recipe.getCreatedBy().getAuth0id())){
-                System.out.println("ERROR: User id "+recipe.getCreatedBy().getAuth0id()+" does not match with sending user "+auth0uid);
+            if (!auth0uid.equals(recipe.getCreatedBy())){
+                System.out.println("ERROR: User id "+recipe.getCreatedBy()+" does not match with sending user "+auth0uid);
                 return "false";
             }
             this.recipesService.setCurrentUserToRecipe(recipe, auth0uid);

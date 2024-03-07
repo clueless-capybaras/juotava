@@ -1,7 +1,6 @@
 package com.juotava.recipes.service;
 
 import com.juotava.recipes.model.*;
-import com.juotava.recipes.repository.user.UserRepRepository;
 import com.juotava.recipes.repository.image.ImageRepository;
 import com.juotava.recipes.repository.ingredient.IngredientRepository;
 import com.juotava.recipes.repository.recipe.RecipeRepository;
@@ -18,15 +17,13 @@ public class RecipesService {
     private final IngredientRepository ingredientRepository;
     private final StepRepository stepRepository;
     private final ImageRepository imageRepository;
-    private final UserRepRepository userRepRepository;
 
     @Autowired
-    public RecipesService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, StepRepository stepRepository, ImageRepository imageRepository, UserRepRepository userRepRepository) {
+    public RecipesService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, StepRepository stepRepository, ImageRepository imageRepository) {
         this.recipeRepository = recipeRepository;
         this.ingredientRepository = ingredientRepository;
         this.stepRepository = stepRepository;
         this.imageRepository = imageRepository;
-        this.userRepRepository = userRepRepository;
     }
 
     public Recipe getRecipe(UUID uuid){
@@ -53,7 +50,6 @@ public class RecipesService {
         recipe.getIngredients().forEach(this.ingredientRepository::save);
         recipe.getSteps().forEach(this.stepRepository::save);
         this.imageRepository.save(recipe.getImage());
-        this.userRepRepository.save(recipe.getCreatedBy());
         this.recipeRepository.save(recipe);
     }
 
@@ -75,21 +71,12 @@ public class RecipesService {
         this.recipeRepository.save(recipe);
     }
 
-    public void setCreatedByOfRecipe(Recipe recipe, UserRepresentation userRep){
-        this.userRepRepository.save(userRep);
-        recipe.setCreatedBy(userRep);
+    public void setCreatedByOfRecipe(Recipe recipe, String auth0id){
+        recipe.setCreatedBy(auth0id);
         this.recipeRepository.save(recipe);
     }
 
-    public void setCurrentUserToRecipe(Recipe recipe, String auth0name){
-        try {
-            UserRepresentation userRep = this.userRepRepository.findByAuth0Id(auth0name);
-            System.out.println("Found existing user: "+userRep.getAuth0id());
-            recipe.setCreatedBy(userRep);
-        } catch (Exception e){
-            recipe.setCreatedBy(new UserRepresentation(
-                auth0name
-            ));
-        }
+    public void setCurrentUserToRecipe(Recipe recipe, String auth0id){
+        recipe.setCreatedBy(auth0id);
     }
 }

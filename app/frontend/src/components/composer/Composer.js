@@ -76,10 +76,7 @@ function Composer() {
     const handleSave = (draft) => {
         let tmpRecipe = recipe;
         tmpRecipe.draft = draft;
-        tmpRecipe.createdBy =  {
-            auth0id: user.sub,
-            userName: user.nickname,
-        }
+        tmpRecipe.createdBy = user.sub;
         console.log('Saving Recipe:', tmpRecipe);
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmpRecipe), undefined, true);
     }
