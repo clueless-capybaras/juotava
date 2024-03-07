@@ -1,8 +1,6 @@
 package com.juotava.recipes.repository.recipeList;
 
-import com.juotava.recipes.model.Recipe;
 import com.juotava.recipes.model.RecipeList;
-import com.juotava.recipes.repository.recipe.SpringRecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +27,9 @@ public class RecipeListRepository {
 
     public void save(RecipeList recipeList){
         this.springRecipeListRepository.save(recipeList);
+    }
+
+    public RecipeList getFavoritesList(String auth0id){
+        return this.springRecipeListRepository.findByCreatedByAndTitle(auth0id, "Favoriten");
     }
 }

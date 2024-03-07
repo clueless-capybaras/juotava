@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface SpringRecipeListRepository extends JpaRepository<RecipeList, UUID> {
     public List<RecipeList> findByCreatedBy(String auth0id);
+    public RecipeList findByCreatedByAndTitle(String auth0id, String title);
 }

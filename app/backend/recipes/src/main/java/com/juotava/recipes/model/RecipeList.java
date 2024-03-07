@@ -1,9 +1,6 @@
 package com.juotava.recipes.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -20,7 +17,7 @@ public class RecipeList {
 
     private String title;
 
-    @OneToMany
+    @ManyToMany
     private List<Recipe> recipes;
 
     private String createdBy;
