@@ -1,6 +1,6 @@
 package com.juotava.users.repository.user;
 
-import com.juotava.users.model.User;
+import com.juotava.users.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

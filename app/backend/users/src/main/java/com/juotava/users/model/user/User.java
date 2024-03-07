@@ -1,5 +1,7 @@
-package com.juotava.users.model;
+package com.juotava.users.model.user;
 
+import com.juotava.users.model.Image;
+import com.juotava.users.model.Settings;
 import jakarta.persistence.*;
 import lombok.Getter;
 

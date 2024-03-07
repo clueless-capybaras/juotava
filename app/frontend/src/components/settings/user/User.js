@@ -69,7 +69,7 @@ function User(props) {
         ));
 
     useEffect(() => {
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/'+ encodeURIComponent(user.sub), 'GET', undefined, setUserSet, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/my', 'GET', undefined, setUserSet, true);
     }, []);
     
     

@@ -1,6 +1,7 @@
 package com.juotava.users.controller;
 
-import com.juotava.users.model.User;
+import com.juotava.users.model.user.PublicUserRepresentation;
+import com.juotava.users.model.user.User;
 import com.juotava.users.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,12 +23,13 @@ public class UsersController {
         return "hello world, this is users backend";
     }
 
+    @GetMapping(path = "user/my")
+    public User getMyUserDetails(Authentication authentication){
+        return this.usersService.getMyUserDetails(authentication.getName());
+    }
+
     @GetMapping(path = "user/{auth0id}")
-    public User getUserDetails(@PathVariable String auth0id, Authentication authentication){
-        if(!authentication.getName().equals(auth0id)){
-            System.out.println("WARNING: User "+ authentication.getName()+" requested user details of "+ auth0id);
-            return null;
-        }
+    public PublicUserRepresentation getUserDetails(@PathVariable String auth0id, Authentication authentication){
         return this.usersService.getUserDetails(auth0id);
     }
 

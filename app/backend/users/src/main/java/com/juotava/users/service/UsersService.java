@@ -2,7 +2,8 @@ package com.juotava.users.service;
 
 import com.juotava.users.model.Image;
 import com.juotava.users.model.Settings;
-import com.juotava.users.model.User;
+import com.juotava.users.model.user.PublicUserRepresentation;
+import com.juotava.users.model.user.User;
 import com.juotava.users.repository.image.ImageRepository;
 import com.juotava.users.repository.settings.SettingsRepository;
 import com.juotava.users.repository.user.UserRepository;
@@ -22,7 +23,7 @@ public class UsersService {
         this.imageRepository = imageRepository;
     }
 
-    public User getUserDetails(String auth0id){
+    public User getMyUserDetails(String auth0id){
         try {
             return this.userRepository.findById(auth0id);
         } catch (Exception ex){
@@ -31,6 +32,18 @@ public class UsersService {
             newUser.setImage(new Image(""));
             this.saveUserDetails(newUser);
             return newUser;
+        }
+
+    }
+
+    public PublicUserRepresentation getUserDetails(String auth0id){
+        try {
+            User user = this.userRepository.findById(auth0id);
+            PublicUserRepresentation pubUser = new PublicUserRepresentation(user);
+            return pubUser;
+        } catch (Exception ex){
+            System.out.println("WARNING: User "+auth0id+" does not exist!");
+            return null;
         }
 
     }
