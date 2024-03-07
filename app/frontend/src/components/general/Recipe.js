@@ -17,12 +17,13 @@ function Recipe(props) {
 
     const [recipe, setRecipe] = useState();
     const [portions, setPortions] = useState(1);
+    const [loadRecipeSuccess, setLoadRecipeSuccess] = useState();
 
     // get UUID from URL to request the recipe
     const { uuid } = useParams();
     // send request for specific recipe
     useEffect(() => {
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipe, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipe, setLoadRecipeSuccess, true);
     }, []);
 
     const [tags, setTags] = useState(['SampleTag', 'AnotherTag', 'Tasty']);

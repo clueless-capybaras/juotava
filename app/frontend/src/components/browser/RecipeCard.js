@@ -39,6 +39,7 @@ function RecipeCard(props) {
                         <Card.Text>
                             <TextTruncate
                                 line={2}
+                                element="span"
                                 text={description}
                             />
                         </Card.Text>

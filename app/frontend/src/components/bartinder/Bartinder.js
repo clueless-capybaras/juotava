@@ -12,9 +12,11 @@ function Bartinder(props) {
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
     const [tags, setTags] = useState(['SampleTag', 'Sweet', 'Tasty']);
+
+    const [loadRecipeSuccess, setLoadRecipeSuccess] = useState("");
     
     useEffect(() => {
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/all', 'GET', undefined, undefined, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/all', 'GET', undefined, undefined, setLoadRecipeSuccess, true);
     }, []);
 
     return (

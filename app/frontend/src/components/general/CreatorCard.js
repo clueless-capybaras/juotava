@@ -11,10 +11,11 @@ function CreatorCard({createdBy}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const [creator, setCreator] = useState();
+    const [loadCreatorSuccess, setLoadCreatorSuccess] = useState();
 
     useEffect(() => {
         console.log(createdBy);
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/'+ encodeURIComponent(createdBy), 'GET', undefined, setCreator, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/'+ encodeURIComponent(createdBy), 'GET', undefined, setCreator, setLoadCreatorSuccess, true);
     }, [createdBy]);
 
     return (
