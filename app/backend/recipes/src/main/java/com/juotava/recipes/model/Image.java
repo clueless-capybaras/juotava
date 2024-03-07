@@ -1,9 +1,6 @@
 package com.juotava.recipes.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.UUID;
@@ -14,21 +11,18 @@ public class Image {
     @Id
     @GeneratedValue
     private UUID uuid;
-
-    private String name;
     private String prompt;
     @Lob
-    private byte[] data;
+    @Column(columnDefinition = "LONGTEXT")
+    private String base64data;
 
-    public Image(String name, String prompt, byte[] data) {
-        this.name = name;
+    public Image(String prompt, String base64data) {
         this.prompt = prompt;
-        this.data = data;
+        this.base64data = base64data;
     }
 
-    public Image(String name, byte[] data) {
-        this.name = name;
-        this.data = data;
+    public Image(String base64data) {
+        this.base64data = base64data;
     }
 
     public Image() {}

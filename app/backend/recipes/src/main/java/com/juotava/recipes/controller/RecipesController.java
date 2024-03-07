@@ -54,7 +54,7 @@ public class RecipesController {
                 "Finished, ready to drink 🍷"
         ));
         this.recipesService.setImageOfRecipe(recipe, new Image(
-                "image.png", "picture of a drink", "This is an image".getBytes(StandardCharsets.UTF_8)
+                "picture of a drink", "This is an image"
         ));
         this.recipesService.setCreatedByOfRecipe(recipe, new UserRepresentation(auth0uid));
         this.recipesService.saveRecipe(recipe);

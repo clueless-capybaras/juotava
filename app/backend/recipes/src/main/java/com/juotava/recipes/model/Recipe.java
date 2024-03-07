@@ -23,6 +23,8 @@ public class Recipe {
 
     private boolean nonAlcoholic;
 
+    private boolean draft;
+
     @OneToMany
     private List<Ingredient> ingredients;
 
@@ -39,6 +41,7 @@ public class Recipe {
         this.title = title;
         this.description = description;
         this.nonAlcoholic = nonAlcoholic;
+        this.draft = false;
         this.ingredients = new ArrayList<>();
         this.steps = new ArrayList<>();
     }
@@ -46,6 +49,7 @@ public class Recipe {
     public Recipe() {
         this.title = "";
         this.description = "";
+        this.draft = false;
         this.ingredients = new ArrayList<>();
         this.steps = new ArrayList<>();
     }

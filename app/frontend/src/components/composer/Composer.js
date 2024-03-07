@@ -24,6 +24,13 @@ function Composer() {
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const [recipe, setRecipe] = useState(new Recipe());
 
+    const handleChangeImage = (data) => {
+        let tmpRecipe = recipe;
+        tmpRecipe.image = data;
+        setRecipe(tmpRecipe);
+        //console.log(recipe);
+    }
+
     const handleChangeTitle = (event) => {
         let tmpRecipe = recipe;
         tmpRecipe.title = event.target.value;
@@ -66,17 +73,13 @@ function Composer() {
         //console.log(recipe);
     }
 
-    const handleSave = () => {
+    const handleSave = (draft) => {
         let tmpRecipe = recipe;
+        tmpRecipe.draft = draft;
         tmpRecipe.createdBy =  {
             auth0id: user.sub,
             userName: user.nickname,
         }
-        tmpRecipe.image = {
-            name: "test.png",
-            prompt: "test",
-            data: "VGhpcyBpcyBhbiBpbWFnZQ=="
-        };
         console.log('Saving Recipe:', tmpRecipe);
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmpRecipe), undefined, true);
     }
@@ -86,7 +89,7 @@ function Composer() {
         <h1 className="text-center mb-5">Composer</h1>
         <Container className="mb-5">
             <Row className="justify-content-center mb-3">
-                <ImageUploaderComposer />
+                <ImageUploaderComposer handleChangeFunction={handleChangeImage} />
             </Row>
 
             <Row className="justify-content-center mb-3">
@@ -155,8 +158,8 @@ function Composer() {
         <Container className="text-center mb-5">
             <Row className="justify-content-center mb-3">
                 <Col xs="8" sm="8" md="8">
-                    <Button variant="primary" className="me-1" onClick={(e) => handleSave()}>Veröffentlichen</Button>
-                    <Button variant="secondary">Entwurf speichern</Button>
+                    <Button variant="primary" className="me-1" onClick={() => handleSave(false)}>Veröffentlichen</Button>
+                    <Button variant="secondary" onClick={() => handleSave(true)}>Entwurf speichern</Button>
                 </Col>
             </Row>
         </Container>
