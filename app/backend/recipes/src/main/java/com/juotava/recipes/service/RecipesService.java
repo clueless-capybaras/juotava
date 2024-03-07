@@ -34,11 +34,19 @@ public class RecipesService {
     }
 
     public List<Recipe> getAllRecipes(){
-        return this.recipeRepository.findAll();
+        return this.recipeRepository.findAllPublished();
     }
 
     public List<Recipe> getRecipesByUser(String auth0id){
         return this.recipeRepository.findByCreatedByAuth0id(auth0id);
+    }
+
+    public List<Recipe> getDraftedRecipesByUser(String auth0id){
+        return this.recipeRepository.findDraftedByCreatedByAuth0id(auth0id);
+    }
+
+    public List<Recipe> getPublishedRecipesByUser(String auth0id){
+        return this.recipeRepository.findPublishedByCreatedByAuth0id(auth0id);
     }
 
     public void saveRecipe(Recipe recipe){

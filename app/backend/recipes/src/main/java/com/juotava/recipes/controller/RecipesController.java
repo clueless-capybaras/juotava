@@ -96,6 +96,18 @@ public class RecipesController {
         return this.recipesService.getRecipesByUser(auth0id);
     }
 
+    @GetMapping(path = "recipe/mydrafts")
+    public List<Recipe> getMyDraftedRecipes(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getDraftedRecipesByUser(auth0id);
+    }
+
+    @GetMapping(path = "recipe/mypublished")
+    public List<Recipe> getMyPublishedRecipes(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getPublishedRecipesByUser(auth0id);
+    }
+
     @GetMapping(path = "recipe/{uuid}")
     public Recipe getRecipe(@PathVariable UUID uuid){
         return this.recipesService.getRecipe(uuid);

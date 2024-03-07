@@ -23,8 +23,16 @@ public class RecipeRepository {
         return this.springRecipeRepository.findByCreatedByAuth0id(auth0id);
     }
 
-    public List<Recipe> findAll(){
-        return this.springRecipeRepository.findAll();
+    public List<Recipe> findDraftedByCreatedByAuth0id(String auth0id){
+        return this.springRecipeRepository.findByCreatedByAuth0idAndDraftTrue(auth0id);
+    }
+
+    public List<Recipe> findPublishedByCreatedByAuth0id(String auth0id){
+        return this.springRecipeRepository.findByCreatedByAuth0idAndDraftTrue(auth0id);
+    }
+
+    public List<Recipe> findAllPublished(){
+        return this.springRecipeRepository.findByDraftFalse();
     }
 
     public void save(Recipe recipe){

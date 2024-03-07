@@ -11,4 +11,8 @@ import java.util.UUID;
 
 public interface SpringRecipeRepository extends JpaRepository<Recipe, UUID> {
     public List<Recipe> findByCreatedByAuth0id(String auth0id);
+    public List<Recipe> findByCreatedByAuth0idAndDraftTrue(String auth0id);
+    public List<Recipe> findByCreatedByAuth0idAndDraftFalse(String auth0id);
+
+    public List<Recipe> findByDraftFalse();
 }
