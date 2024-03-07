@@ -39,9 +39,11 @@ class AuthenticatedRequestWrapper{
                     let res = await responseClone.text(); 
                     if (res === 'true') {
                         successFunction('success');
+                        console.log(res);
                         stateFunction(res);
                     } else if (uuidRegex.test(res)) {
                         successFunction('success');
+                        console.log(res);
                         stateFunction(res);
                     } else {
                         successFunction('error');

@@ -13,15 +13,14 @@ function Browser(props) {
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
     const [recipeExcerpts, setRecipeExcerpts] = useState([]);
+    const [loadRecipeExcerptsSuccess, setLoadRecipeExcerptsSuccess] = useState();
 
     // send Request: RecipeExcerpts
     useEffect(() => {
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all', 'GET', undefined, setRecipeExcerpts, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, true);
     }, []);
 
     const handleOpenRecipe = ((uuid) => {
-        //arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ uuid, 'GET', undefined, setFullRecipe, true);
-        console.log("open");
         navigate('/browser/recipe/'+uuid);
     });
 
