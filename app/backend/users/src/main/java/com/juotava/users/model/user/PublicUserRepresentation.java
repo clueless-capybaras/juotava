@@ -14,4 +14,9 @@ public class PublicUserRepresentation {
         this.userName = (user.getSettings().isShowUserNameInRecipe())?user.getUserName():"Anonym";
         this.image = (user.getSettings().isShowUserNameInRecipe())?user.getImage():new Image();
     }
+
+    public PublicUserRepresentation(String auth0id) {
+        this.userName = "Anonym";
+        this.image = new Image();
+    }
 }

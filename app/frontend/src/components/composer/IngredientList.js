@@ -55,7 +55,7 @@ function IngredientList({handleFunction}) {
                                 <option value="MILLIGRAMS">mg</option>
                                 <option value="GRAMS">g</option>
                                 <option value="KILOGRAMS">kg</option>
-                                <option value="PIECES">pcs</option>
+                                <option value="PIECES">Stk</option>
                                 <option value="TEASPOONS">TL</option>
                                 <option value="TABLESPOONS">EL</option>
                             </Form.Select>

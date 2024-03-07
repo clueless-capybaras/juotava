@@ -90,6 +90,11 @@ public class RecipesController {
         return this.recipesService.getAllRecipes();
     }
 
+    @GetMapping(path = "recipeexcerpt/all")
+    public List<RecipeExcerpt> getAllRecipeExcerpts() { 
+        return this.recipesService.getAllRecipeExcerpts(); 
+    }
+
     @GetMapping(path = "recipe/my")
     public List<Recipe> getMyRecipes(Authentication authentication){
         String auth0id = authentication.getName();

@@ -37,7 +37,7 @@ function ImageUploaderUser({handleChangeFunction, passedImage}) {
         <Container className='text-center'>
             <Row>
                 <Col>
-                <Image src={image? image : imgplaceholder} style={{maxHeight: 250, maxWidth: 250}} className="mb-3" rounded />
+                <Image src={image? image : imgplaceholder} style={{height: 250, width: 250}} className="mb-3" rounded />
                 </Col>
             </Row>
             <Row>

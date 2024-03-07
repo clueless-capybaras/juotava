@@ -14,6 +14,7 @@ import Col from 'react-bootstrap/Col';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
 
 function User(props) {
@@ -57,8 +58,10 @@ function User(props) {
         }));
     }
 
+    const [saveUserSuccess, setSaveUserSuccess] = useState();
     const handleSave = () => {
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/save', 'POST', JSON.stringify(userSet), undefined, true);
+        setSaveUserSuccess("waiting");
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/save', 'POST', JSON.stringify(userSet), undefined, setSaveUserSuccess, true);
     }
 
     const [userSet, setUserSet] = useState(
@@ -68,8 +71,10 @@ function User(props) {
             new Image(undefined, "")
         ));
 
+    const [userSetSuccess, setUserSetSuccess] = useState();
     useEffect(() => {
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/my', 'GET', undefined, setUserSet, true);
+        setUserSetSuccess("waiting");
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/my', 'GET', undefined, setUserSet, setUserSetSuccess, true);
     }, []);
     
     
@@ -99,9 +104,22 @@ function User(props) {
                     </FloatingLabel>
                 </Col>
             </Row>
-            <Row>
+            <Row className="justify-content-center mb-3">
                 <Col className='text-center'>
                     <Button variant="primary" className="me-1" onClick={() => handleSave()}>Speichern</Button>
+                </Col>
+            </Row>
+            <Row className="justify-content-center mb-3">
+                <Col className="text-center">
+                {saveUserSuccess === "waiting" ?
+                    <Spinner animation="border" role="status" />
+                : null}
+                {saveUserSuccess === "success" ?
+                    <div>Speichern erfolgreich</div>
+                : null}
+                {saveUserSuccess === "error" ?
+                    <div>Speichern fehlgeschlagen</div>
+                : null}
                 </Col>
             </Row>
         </Container>
