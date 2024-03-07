@@ -27,7 +27,7 @@ function App() {
             <Route path='/browser' element={<Browser />}/>
             <Route path='/browser/recipe/:uuid' element={ <Recipe /> } />
             <Route path='/composer' element={<AuthGuard component={Composer}/>}/>
-            <Route path='/bartinder' element={<Bartinder />}/>
+            <Route path='/bartinder' element={<AuthGuard component={Bartinder} />}/>
             <Route path='/settings' element={<AuthGuard component={Settings}/>}/>
             <Route path='*' element={<h1>404</h1>} />
           </Routes>
