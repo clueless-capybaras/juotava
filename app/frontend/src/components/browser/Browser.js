@@ -1,5 +1,5 @@
 import {Col, Container, Row} from 'react-bootstrap'
-import RecipeCard from './RecipeCard';
+import RecipeCard from '../general/RecipeCard';
 
 function Browser(props) {
     return (

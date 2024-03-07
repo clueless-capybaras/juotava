@@ -4,7 +4,7 @@ import User from './user/User';
 import About from './about/About';
 import Imprint from './imprint/Imprint';
 import Privacy from './privacy/Privacy';
-import Lists from './lists/Lists';
+import Lists from './lists/ListsOverview';
 
 function Settings() {
 
@@ -12,7 +12,7 @@ function Settings() {
         <>
         <Tab.Container defaultActiveKey="user">
             <Row>
-                <Col sm={3}>
+                <Col sm={'auto'}>
                     <Nav variant="pills" className="flex-column">
                         <Nav.Item>
                             <Nav.Link eventKey="user">Benutzer</Nav.Link>
