@@ -1,4 +1,4 @@
-package com.juotava.recipes.model;
+package com.juotava.users.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,24 +6,20 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Entity
+@Table(name = "userimage")
 @Getter
 public class Image {
     @Id
     @GeneratedValue
     private UUID uuid;
-    private String prompt;
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String base64data;
-
-    public Image(String prompt, String base64data) {
-        this.prompt = prompt;
-        this.base64data = base64data;
-    }
 
     public Image(String base64data) {
         this.base64data = base64data;
     }
 
-    public Image() {}
+    public Image() {
+    }
 }

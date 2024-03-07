@@ -23,6 +23,10 @@ public class Recipe {
 
     private boolean nonAlcoholic;
 
+    private boolean draft;
+
+    private String createdBy;
+
     @OneToMany
     private List<Ingredient> ingredients;
 
@@ -32,13 +36,11 @@ public class Recipe {
     @OneToOne
     private Image image;
 
-    @ManyToOne
-    private UserRepresentation createdBy;
-
     public Recipe(String title, String description, String category, boolean nonAlcoholic) {
         this.title = title;
         this.description = description;
         this.nonAlcoholic = nonAlcoholic;
+        this.draft = false;
         this.ingredients = new ArrayList<>();
         this.steps = new ArrayList<>();
     }
@@ -46,6 +48,7 @@ public class Recipe {
     public Recipe() {
         this.title = "";
         this.description = "";
+        this.draft = false;
         this.ingredients = new ArrayList<>();
         this.steps = new ArrayList<>();
     }
@@ -74,7 +77,7 @@ public class Recipe {
         this.image = image;
     }
 
-    public void setCreatedBy(UserRepresentation createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedBy(String auth0id) {
+        this.createdBy = auth0id;
     }
 }

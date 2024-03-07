@@ -1,5 +1,7 @@
-package com.juotava.users.model;
+package com.juotava.users.model.user;
 
+import com.juotava.users.model.Image;
+import com.juotava.users.model.Settings;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -13,6 +15,8 @@ public class User {
     private String userName;
     @OneToOne
     private Settings settings;
+    @OneToOne
+    private Image image;
 
     public User(String auth0id, String userName) {
         this.auth0id = auth0id;
@@ -24,5 +28,9 @@ public class User {
 
     public void setSettings(Settings settings) {
         this.settings = settings;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }

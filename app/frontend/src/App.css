@@ -36,3 +36,20 @@ h1,h2 {
     transform: rotate(360deg);
   }
 }
+
+.material-icons.md-48 {
+font-size: 48px !important;
+height: 48px !important;
+width: 48px !important;
+}
+
+.material-icons-outlined.md-48 {
+font-size: 48px !important;
+height: 48px !important;
+width: 48px !important;
+}
+
+.inline-icon {
+  vertical-align: bottom;
+  font-size: 24px !important;
+}
