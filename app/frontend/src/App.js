@@ -4,16 +4,18 @@ import Navibar from './components/general/Navibar';
 import ErrorModal from './components/general/ErrorModal';
 import Home from './components/home/Home';
 import Browser from './components/browser/Browser';
+import Recipe from './components/general/Recipe';
 import Composer from './components/composer/Composer';
 import Bartinder from './components/bartinder/Bartinder';
 import Settings from './components/settings/Settings';
 import { AuthGuard } from './components/auth/AuthGuard';
-import { createContext } from 'react';
+import { createContext, useState } from 'react';
 import AuthenticatedRequestWrapper from './components/auth/AuthenticatedRequestWrapper';
 
 export const AuthenticatedRequestWrapperContext = createContext(AuthenticatedRequestWrapper);
 
 function App() {
+
   return (
     <div className="App">
       <AuthenticatedRequestWrapperContext.Provider value={new AuthenticatedRequestWrapper()}>
@@ -23,6 +25,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />}/>
             <Route path='/browser' element={<Browser />}/>
+            <Route path='/browser/recipe/:uuid' element={ <Recipe /> } />
             <Route path='/composer' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<AuthGuard component={Bartinder} />}/>
             <Route path='/settings' element={<AuthGuard component={Settings}/>}/>

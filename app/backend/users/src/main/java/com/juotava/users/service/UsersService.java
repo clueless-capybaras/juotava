@@ -42,8 +42,8 @@ public class UsersService {
             PublicUserRepresentation pubUser = new PublicUserRepresentation(user);
             return pubUser;
         } catch (Exception ex){
-            System.out.println("WARNING: User "+auth0id+" does not exist!");
-            return null;
+            System.out.println("INFO: User "+auth0id+" does not exist!");
+            return new PublicUserRepresentation(auth0id);
         }
 
     }

@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router';
 
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
@@ -8,6 +9,7 @@ import Container from 'react-bootstrap/Container';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import Spinner from 'react-bootstrap/Spinner';
 
 import ImageUploaderComposer from './ImageUploaderComposer';
 import IngredientList from './IngredientList';
@@ -22,7 +24,10 @@ import { baseUrlRecipes } from '../../config/config';
 function Composer() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
+    const navigate = useNavigate();
     const [recipe, setRecipe] = useState(new Recipe());
+    const [saveRecipeSuccess, setSaveRecipeSuccess] = useState("");
+    const [uuid, setUuid] = useState();
 
     const handleChangeImage = (data) => {
         let tmpRecipe = recipe;
@@ -74,11 +79,16 @@ function Composer() {
     }
 
     const handleSave = (draft) => {
+        setSaveRecipeSuccess("waiting");
         let tmpRecipe = recipe;
         tmpRecipe.draft = draft;
         tmpRecipe.createdBy = user.sub;
         console.log('Saving Recipe:', tmpRecipe);
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmpRecipe), undefined, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmpRecipe), setUuid, setSaveRecipeSuccess, true);
+    }
+
+    const handleOpenRecipe = (uuid) => {
+        navigate('/browser/recipe/'+uuid);
     }
 
     return(
@@ -144,19 +154,32 @@ function Composer() {
             </Row>
         </Container>
 
-        <Container className="text-center mb-5">
+        {/*<Container className="text-center mb-5">
             <Row className="justify-content-center mb-3">
                 <Col>
                     <TagField />
                 </Col>
             </Row>
-        </Container>
+        </Container>*/}
 
         <Container className="text-center mb-5">
             <Row className="justify-content-center mb-3">
-                <Col xs="8" sm="8" md="8">
+                <Col xs="8">
                     <Button variant="primary" className="me-1" onClick={() => handleSave(false)}>Veröffentlichen</Button>
                     <Button variant="secondary" onClick={() => handleSave(true)}>Entwurf speichern</Button>
+                </Col>
+            </Row>
+            <Row className="justify-content-center mb-3">
+                <Col xs="8">
+                    {saveRecipeSuccess === "waiting" ? 
+                        <Spinner animation="border" role="status" />
+                    : null}
+                    {saveRecipeSuccess === "success" ? 
+                        handleOpenRecipe(uuid)
+                    : null}
+                    {saveRecipeSuccess === "error" ? 
+                        <div>Speichern fehlgeschlagen</div>
+                    : null}
                 </Col>
             </Row>
         </Container>
