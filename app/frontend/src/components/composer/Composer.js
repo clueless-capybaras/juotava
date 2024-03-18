@@ -25,69 +25,71 @@ function Composer() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const navigate = useNavigate();
-    const [recipe, setRecipe] = useState(new Recipe());
+    const [recipe, setRecipe] = useState(new Recipe(
+        '', '', 'Cocktail', '', '', [], [], {prompt: '', basebase64data: ''}, ''
+    ));
     const [saveRecipeSuccess, setSaveRecipeSuccess] = useState("");
     const [uuid, setUuid] = useState();
 
     const handleChangeImage = (data) => {
-        let tmpRecipe = recipe;
-        tmpRecipe.image = data;
-        setRecipe(tmpRecipe);
+        setRecipe({...recipe, image: data})
         //console.log(recipe);
     }
 
     const handleChangeTitle = (event) => {
-        let tmpRecipe = recipe;
-        tmpRecipe.title = event.target.value;
-        setRecipe(tmpRecipe);
+        setRecipe({...recipe, title: event.target.value});
         //console.log(recipe);
     }
 
     const handleChangeCategory = (event) => {
-        let tmpRecipe = recipe;
-        tmpRecipe.category = event.target.value;
-        setRecipe(tmpRecipe);
+        setRecipe({...recipe, category: event.target.value});
         //console.log(recipe);
     }
 
     const handleChangeNonAlcoholic = (event) => {
-        let tmpRecipe = recipe;
-        tmpRecipe.nonAlcoholic = event.target.checked;
-        setRecipe(tmpRecipe);
+        setRecipe({...recipe, nonAlcoholic: event.target.checked});
         //console.log(recipe);
     }
 
     const handleChangeDescription = (event) => {
-        let tmpRecipe = recipe;
-        tmpRecipe.description = event.target.value;
-        setRecipe(tmpRecipe);
+        setRecipe({...recipe, description: event.target.value});
         //console.log(recipe);
     }
 
     const handleChangeIngredients = (data) => {
-        let tmpRecipe = recipe;
-        tmpRecipe.ingredients = data;
-        setRecipe(tmpRecipe);
+        setRecipe({...recipe, ingredients: data});
         //console.log(recipe);
     }
 
     const handleChangeSteps = (data) => {
-        let tmpRecipe = recipe;
-        tmpRecipe.steps = data;
-        setRecipe(tmpRecipe);
+        setRecipe({...recipe, steps: data});
         //console.log(recipe);
     }
 
     const handleSave = (draft) => {
         setSaveRecipeSuccess("waiting");
-        let tmpRecipe = recipe;
-        tmpRecipe.draft = draft;
-        tmpRecipe.createdBy = user.sub;
-        console.log('Saving Recipe:', tmpRecipe);
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmpRecipe), setUuid, setSaveRecipeSuccess, true);
+        //setRecipe({...recipe, draft: draft, createdBy: user.sub});
+        let tmp = {...recipe};
+        tmp.draft = draft;
+        tmp.createdBy = user.sub;
+        setRecipe((prevRecipe) => ({...prevRecipe, draft: draft, createdBy: user.sub}));
+        console.log('draft:', draft);
+        console.log('user:', user.sub);
+        console.log('Saving Recipe:', tmp);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmp), setUuid, setSaveRecipeSuccess, true);
+    }
+
+    const validateRecipe = (recipe) => {
+        return (recipe.title === "" || recipe.title === undefined || recipe.title === null 
+            || recipe.category === "" || recipe.category === undefined || recipe.category === null
+            || recipe.description === "" || recipe.description === undefined || recipe.description === null
+            || recipe.ingredients.length === 0 || recipe.ingredients[0].name === "" || recipe.ingredients[0].name === undefined || recipe.ingredients[0].name === null
+            || recipe.steps.length === 0 || recipe.steps[0].description === "" || recipe.steps[0].description === undefined || recipe.steps[0].description === null)
+            ? false : true;
     }
 
     const handleOpenRecipe = (uuid) => {
+        //console.log('Open Recipe:', uuid);
         navigate('/browser/recipe/'+uuid);
     }
 
@@ -96,7 +98,7 @@ function Composer() {
         <h1 className="text-center mb-5">Composer</h1>
         <Container className="mb-5">
             <Row className="justify-content-center mb-3">
-                <ImageUploaderComposer handleChangeFunction={handleChangeImage} />
+                <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} />
             </Row>
 
             <Row className="justify-content-center mb-3">
@@ -112,7 +114,7 @@ function Composer() {
             <Row className="justify-content-center mb-3">
                 <Col xs="6" sm="6" md="6">
                     <FloatingLabel controlId="floatingCategory" label="Kategorie wählen...">
-                        <Form.Select placeholder="Kategorie wählen..." onChange={(e) => handleChangeCategory(e)} value={recipe.category}>
+                        <Form.Select placeholder="Kategorie wählen..." onChange={(e) => handleChangeCategory(e)} value={recipe.category==''?recipe.category:'Cocktail'}>
                             <option>Cocktail</option>
                             <option>Kaffee</option>
                             <option>Limonade</option>
@@ -165,8 +167,8 @@ function Composer() {
         <Container className="text-center mb-5">
             <Row className="justify-content-center mb-3">
                 <Col xs="8">
-                    <Button variant="primary" className="me-1" onClick={() => handleSave(false)}>Veröffentlichen</Button>
-                    <Button variant="secondary" onClick={() => handleSave(true)}>Entwurf speichern</Button>
+                    <Button variant="primary" className="me-1" disabled={!validateRecipe(recipe)} onClick={() => handleSave(false)}>Veröffentlichen</Button>
+                    <Button variant="secondary" disabled={!validateRecipe(recipe)} onClick={() => handleSave(true)}>Entwurf speichern</Button>
                 </Col>
             </Row>
             <Row className="justify-content-center mb-3">

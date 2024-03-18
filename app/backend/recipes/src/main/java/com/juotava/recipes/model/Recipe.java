@@ -80,4 +80,15 @@ public class Recipe {
     public void setCreatedBy(String auth0id) {
         this.createdBy = auth0id;
     }
+
+    public String toPrompt(){
+        String prompt = "Create an image of the following drink recipe in front of a dark gray studio background. Never write text. ";
+        prompt += "Title: " + this.title;
+        prompt += " Description: " + this.description;
+        prompt += " Ingredients: ";
+        for (int i = 0; i < this.ingredients.size(); i++) {
+            prompt += this.ingredients.get(i).getName()+", ";
+        }
+        return prompt;
+    }
 }

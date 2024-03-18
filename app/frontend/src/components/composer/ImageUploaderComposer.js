@@ -5,11 +5,24 @@ import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
 
 import imgplaceholder from '../../image-placeholder.jpeg';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { Modal, Spinner } from 'react-bootstrap';
+import { useAuth0 } from '@auth0/auth0-react';
+import { AuthenticatedRequestWrapperContext } from '../../App';
+import { baseUrlRecipes } from '../../config/config';
 
-function ImageUploaderComposer({handleChangeFunction}) {
+function ImageUploaderComposer({handleChangeFunction, recipe, validationFunction, isAuthenticated, getAccessTokenSilently, user}) {
+    const arw = useContext(AuthenticatedRequestWrapperContext);
+    //const [isAuthenticated, getAccessTokenSilently] = useAuth0();
 
     const [image, setImage] = useState();
+    const [genImage, setGenImage] = useState();
+    const [modalShow, setModalShow] = useState(false);
+    const [genSuccess, setGenSuccess] = useState('');
+
+    const handleModalClose = () => setModalShow(false);
+    const handleModalShow = () => setModalShow(true);
+
     const handleImageChangeUpload = async (e) => {
         let base64File = await convertToBase64(e.target.files[0]);
         setImage(base64File);
@@ -33,7 +46,23 @@ function ImageUploaderComposer({handleChangeFunction}) {
         });
     };
 
+    const handleGenerateImage = () => {
+        let tmp = {...recipe};
+        tmp.image = {prompt: '', base64data:''};
+        tmp.createdBy = user.sub;
+        console.log('Generate Image for recipe:');
+        console.log(tmp);
+        setGenSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/genimage', 'POST', JSON.stringify(tmp), setGenImage, setGenSuccess, true);
+    }
+
+    const handleImageChangeGen = (data) => {
+        setImage(genImage.base64data);
+        handleChangeFunction(genImage);
+    }
+
     return(
+        <>
         <Container className='text-center'>
             <Row>
                 <Col>
@@ -46,10 +75,64 @@ function ImageUploaderComposer({handleChangeFunction}) {
                 <input id='uploadInput' hidden type="file"
                         accept='image/*, capture=camera'
                         onChange={(e) => handleImageChangeUpload(e)} />
-                <Button variant="secondary">Generieren</Button>
+                <Button variant="secondary" onClick={handleModalShow}>Generieren</Button>
                 </Col>
             </Row>
         </Container>
+        <Modal show={modalShow} onHide={handleModalClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Rezepbild generieren</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Row>
+                    <p>
+                        {!validationFunction(recipe)? 
+                            'Bitte fülle zuerst alle Felder aus.' 
+                        : 
+                            'Drücke den Button um ein Bild für das Rezept zu generieren. Dies kann einige Sekunden dauern.'}
+                    </p>
+                </Row>
+                <Row className="justify-content-center mb-3">
+                        <Image src={genImage? genImage.base64data : imgplaceholder} style={{maxHeight: 250, maxWidth: 250}} className="mb-3" rounded />
+                </Row>
+                <Row>
+                    <p>
+                        {genSuccess === 'error' &&
+                            'Beim Generieren des Bildes ist ein Fehler aufgetreten. Das tut uns leid. Bitte versuche es erneut.'
+                        }
+                    </p>
+                </Row>
+            </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={handleModalClose}>
+                Abbrechen
+            </Button>
+            <Button variant="success" disabled={!validationFunction(recipe) || genSuccess == 'waiting'} onClick={handleGenerateImage}>
+               {genSuccess === '' && 
+                    'Generieren'
+                }
+                {(genSuccess === 'success' || genSuccess === 'error') &&
+                    'Erneut generieren'
+                }
+                {genSuccess === 'waiting' &&
+                <>
+                    Generiere Bild&nbsp;
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        />
+                </>
+                }
+            </Button>
+            <Button variant="primary" disabled={!genImage} onClick={()=> {handleImageChangeGen(); handleModalClose();}}>
+                Bild übernehmen
+            </Button>
+            </Modal.Footer>
+        </Modal>
+        </>
     );
 }
 
