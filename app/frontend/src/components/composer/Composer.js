@@ -102,7 +102,9 @@ function Composer() {
             <Row className="justify-content-center mb-3">
                 <Col xs="6" sm="6" md="6">
                     <FloatingLabel controlId="floatingTitle" label="Titel">
-                        <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}/>
+                        <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}
+                            maxLength={255}
+                        />
                     </FloatingLabel>
                 </Col>
                 <Col xs="2" sm="2" md="2">
@@ -130,7 +132,12 @@ function Composer() {
             <Row className="justify-content-center mb-3">
                 <Col xs="8" sm="8" md="8">
                     <FloatingLabel label="Beschreibung" className="mb-3">
-                        <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}/>
+                        <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}
+                            maxLength={500}
+                        />
+                        <Form.Text className="text-muted">
+                            {recipe.description.length}/500 characters
+                        </Form.Text>
                     </FloatingLabel>
                 </Col>
             </Row>

@@ -93,7 +93,9 @@ function User(props) {
             <Row className="justify-content-center mb-3">
                 <Col>
                     <FloatingLabel controlId="floatingUserName" label="Benutzername">
-                        <Form.Control placeholder="Benutzername" onChange={(e) => handleChangeUsername(e)} value={userSet.userName} />
+                        <Form.Control placeholder="Benutzername" onChange={(e) => handleChangeUsername(e)} value={userSet.userName}
+                            maxLength={50}
+                        />
                     </FloatingLabel>
                 </Col>
             </Row>
