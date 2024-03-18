@@ -136,7 +136,7 @@ function Composer() {
                             maxLength={500}
                         />
                         <Form.Text className="text-muted">
-                            {recipe.description.length}/500 characters
+                            {recipe.description?recipe.description.length:0}/500 characters
                         </Form.Text>
                     </FloatingLabel>
                 </Col>
