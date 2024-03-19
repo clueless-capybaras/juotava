@@ -14,9 +14,10 @@ public class Recipe {
     @Id
     @GeneratedValue
     private UUID uuid;
-
+    
     private String title;
 
+    @Column(length = 500)
     private String description;
 
     private String category;
@@ -79,5 +80,16 @@ public class Recipe {
 
     public void setCreatedBy(String auth0id) {
         this.createdBy = auth0id;
+    }
+
+    public String toPrompt(){
+        String prompt = "Create an image of the following drink recipe in front of a dark gray studio background. Some of the ingredients should be displayed decoratively around the drink. Never write text. ";
+        prompt += "Title: " + this.title;
+        prompt += " Description: " + this.description;
+        prompt += " Ingredients: ";
+        for (int i = 0; i < this.ingredients.size(); i++) {
+            prompt += this.ingredients.get(i).getName()+", ";
+        }
+        return prompt;
     }
 }

@@ -11,6 +11,8 @@ public class Image {
     @Id
     @GeneratedValue
     private UUID uuid;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String prompt;
     @Lob
     @Column(columnDefinition = "LONGTEXT")

@@ -38,7 +38,12 @@ function PrepList({handleFunction}) {
             <Row key={index} className="justify-content-center mb-3">
                 <Col xs="6" sm="6" md="6">
                     <FloatingLabel label={"Schritt " + (index + 1)}>
-                        <Form.Control as="textarea" rows="2" name="description" placeholder="Schritt" value={item.description} style={{height: "5rem"}} onChange={(event) => handleInputChange(event, index)} />
+                        <Form.Control as="textarea" rows="2" name="description" placeholder="Schritt" value={item.description} style={{height: "5rem"}} onChange={(event) => handleInputChange(event, index)}
+                            maxLength={255}
+                        />
+                        <Form.Text className="text-muted">
+                            {item.description.length}/255 characters
+                        </Form.Text>
                     </FloatingLabel>
                 </Col>
                 <Col xs="1" sm="1" md="1">

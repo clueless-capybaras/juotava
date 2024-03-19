@@ -1,14 +1,23 @@
 package com.juotava.recipes.service;
 
 import com.juotava.recipes.model.*;
+import com.juotava.recipes.model.dto.ImageRequest;
+import com.juotava.recipes.model.dto.ImageResposeSuccess;
 import com.juotava.recipes.repository.image.ImageRepository;
 import com.juotava.recipes.repository.ingredient.IngredientRepository;
 import com.juotava.recipes.repository.recipe.RecipeRepository;
 import com.juotava.recipes.repository.recipeList.RecipeListRepository;
 import com.juotava.recipes.repository.step.StepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +25,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class RecipesService {
+
+    @Qualifier("openaiRestTemplate")
+    @Autowired
+    private RestTemplate openaiRestTemplate;
+    @Value("${openai.model}")
+    private String model;
+    @Value("${openai.api.url}")
+    private String apiUrl;
+
+
     private final RecipeRepository recipeRepository;
     private final IngredientRepository ingredientRepository;
     private final StepRepository stepRepository;
@@ -159,5 +178,18 @@ public class RecipesService {
             System.out.println("Warning: List does not exist" + listId);
             return null;
         }
+    }
+
+    public Image generateImage(String prompt, String user){
+        ImageRequest request = new ImageRequest(prompt, model, 1, "hd", "b64_json", user);
+        ImageResposeSuccess response = openaiRestTemplate.postForObject(apiUrl, request, ImageResposeSuccess.class);
+
+        if (response == null || response.getData() == null || response.getData().isEmpty()) {
+            return null;
+        }
+        return new Image(
+                response.getData().get(0).getRevised_prompt(),
+                "data:image/png;base64,"+response.getData().get(0).getB64_json()
+        );
     }
 }

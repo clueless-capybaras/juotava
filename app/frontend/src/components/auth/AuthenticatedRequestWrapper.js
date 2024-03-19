@@ -20,33 +20,50 @@ class AuthenticatedRequestWrapper{
             });
             if(debug) { console.log(response); }
             let responseClone = response.clone();
+            let responseClone2 = response.clone();
+            let responseClone3 = response.clone();
             if (stateFunction !== undefined) {
                 try {
                     let data = await response.json();
+                    if (debug) { console.log(data); }
                     stateFunction(data);
                 } catch (error) {
-                    console.error(
-                        'Error while applying response to state in AuthenticatedRequestWrapper.request to '+backend+'/'+path+': ', error);
+                    let data = await responseClone3.text();
+                    if (debug) { console.log(data); }
+                    stateFunction(data);
                 }
             }
             try {
-                if (method === 'GET') {
+                if (method === 'GET') { // if the request is GET, it is 'success' if the response can be successfully parsed as JSON
                     console.log('GET');
-                    await responseClone.json();
+                    let res = await responseClone.json();
                     successFunction('success');
-                    console.log('success');
-                } else if (method === 'POST') {
-                    let res = await responseClone.text(); 
-                    if (res === 'true') {
+                    if (debug) { console.log("Request was successful, because of valid json:", res); }
+                } else if (method === 'POST') { // POST requests are 'success' if the response is 'true', a UUID or can be successfully parsed as JSON
+                    let res = await responseClone.text();
+                    if (res === 'true') { // if the response is 'true', it is 'success'
                         successFunction('success');
-                        console.log(res);
+                        if (debug) { console.log("Request was successful, because response was 'true'"); }
                         stateFunction(res);
-                    } else if (uuidRegex.test(res)) {
+                    } else if (uuidRegex.test(res)) { // if the response is a UUID, it is 'success'
                         successFunction('success');
-                        console.log(res);
+                        if (debug) { console.log("Request was successful, because "+res +" is a valid UUID"); }
                         stateFunction(res);
-                    } else {
-                        successFunction('error');
+                    } else { // if the response can be successfully parsed as JSON, it is 'success'
+                        if (res === 'false') { // if the response is 'false', it is 'error'
+                            if (debug) { console.log("Request was not successful, because response was 'false'"); }
+                            successFunction('error');
+                        } else {
+                            try {
+                                let data = await responseClone2.json();
+                                if(debug) { console.log("Request was successful, because of valid json:", data); }
+                                successFunction('success');
+                            }
+                            catch (error) { // if the response cannot be successfully parsed as JSON, it is 'error'
+                                console.log('Error in request: '+error);
+                                successFunction('error');
+                            }
+                        }
                     }
                 }
             } catch (error) {
