@@ -13,8 +13,7 @@ jobs:
         uses: actions/checkout@v4.1.1
       - name: Insert OpenAI API key to recipes backend
         run: |
-          cat app/backend/recipes/src/main/resources/application.properties
-          echo "openai.api.key=${{ secrets.OPENAI_KEY }}" >> app/backend/recipes/src/main/resources/application.properties
+          sed -i "s/dummykey/${{ secrets.OPENAI_KEY }}/g" app/backend/recipes/src/main/resources/application.properties
       - name: Compose down potentially running old version
         run: docker-compose -f app/docker-compose.yml down --remove-orphans --rmi all
       - name: Compose Up
