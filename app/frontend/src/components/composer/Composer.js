@@ -73,8 +73,6 @@ function Composer() {
         tmp.draft = draft;
         tmp.createdBy = user.sub;
         setRecipe((prevRecipe) => ({...prevRecipe, draft: draft, createdBy: user.sub}));
-        console.log('draft:', draft);
-        console.log('user:', user.sub);
         console.log('Saving Recipe:', tmp);
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmp), setUuid, setSaveRecipeSuccess, true);
     }
