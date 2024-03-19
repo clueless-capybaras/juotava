@@ -40,7 +40,9 @@ function IngredientList({handleFunction}) {
                 <Col xs="6" sm="6" md="6">
                     <InputGroup>
                         <FloatingLabel label={"Zutat " + (index + 1)}>
-                            <Form.Control name="name" value={item.name} placeholder="Zutat" onChange={(event) => handleInputChange(event, index)} />
+                            <Form.Control name="name" value={item.name} placeholder="Zutat" onChange={(event) => handleInputChange(event, index)} 
+                                maxLength={50}
+                            />
                         </FloatingLabel>
                         <FloatingLabel label="Menge">
                             <Form.Control name="amount" value={item.amount} placeholder="Menge" onChange={(event) => handleInputChange(event, index)} />
