@@ -53,15 +53,16 @@ class AuthenticatedRequestWrapper{
                         if (res === 'false') { // if the response is 'false', it is 'error'
                             if (debug) { console.log("Request was not successful, because response was 'false'"); }
                             successFunction('error');
-                        }
-                        try {
-                            let data = await responseClone2.json();
-                            if(debug) { console.log("Request was successful, because of valid json:", data); }
-                            successFunction('success');
-                        }
-                        catch (error) { // if the response cannot be successfully parsed as JSON, it is 'error'
-                            console.log('Error in request: '+error);
-                            successFunction('error');
+                        } else {
+                            try {
+                                let data = await responseClone2.json();
+                                if(debug) { console.log("Request was successful, because of valid json:", data); }
+                                successFunction('success');
+                            }
+                            catch (error) { // if the response cannot be successfully parsed as JSON, it is 'error'
+                                console.log('Error in request: '+error);
+                                successFunction('error');
+                            }
                         }
                     }
                 }
