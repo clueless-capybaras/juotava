@@ -4,8 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
 import {Button, Col, Container, Row} from 'react-bootstrap'
-import RecipeCard from './RecipeCard';
-import Recipe from '../general/Recipe';
+import RecipeCard from '../general/RecipeCard';
 
 function Browser(props) {
     const navigate = useNavigate();

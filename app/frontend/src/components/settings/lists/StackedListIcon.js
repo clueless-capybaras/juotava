@@ -1,4 +1,4 @@
-import { Image } from 'react-bootstrap';
+import { Container, Image } from 'react-bootstrap';
 
 function StackedListIcon(props){
     return(
@@ -30,14 +30,13 @@ function StackedListIcon(props){
         `}
         </style>
 
-        <div className="parent">
-            <Image className="image1" src={props.icon} rounded style={{maxWidth:'10rem'}}/>
-            <Image className="image2" src={props.icon} rounded style={{maxWidth:'10rem'}}/>
-            <Image className="image3" src={props.icon} rounded style={{maxWidth:'10rem'}}/>
-        </div>
-        <div className='parent'>
-            Listenname
-        </div>
+        <Container>
+            <div className="parent">
+                <Image className="image1" src={props.icon} rounded style={{maxWidth:'10rem'}}/>
+                <Image className="image2" src={props.icon} rounded style={{maxWidth:'10rem'}}/>
+                <Image className="image3" src={props.icon} rounded style={{maxWidth:'10rem'}}/>
+            </div>
+        </Container>
         </>
     )
 }
