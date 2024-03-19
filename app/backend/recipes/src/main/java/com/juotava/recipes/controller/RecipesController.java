@@ -85,6 +85,18 @@ public class RecipesController {
         }
     }
 
+    @PostMapping(path = "recipe/genimage")
+    public Image generateRecipeImage(@RequestBody Recipe recipe, Authentication authentication){
+        try {
+            String auth0uid = authentication.getName();
+            System.out.println("INFO: Generating image with prompt: "+recipe.toPrompt());
+            return this.recipesService.generateImage(recipe.toPrompt(), auth0uid);
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
     @GetMapping(path = "recipe/all")
     public List<Recipe> getAllRecipes(){
         return this.recipesService.getAllRecipes();
