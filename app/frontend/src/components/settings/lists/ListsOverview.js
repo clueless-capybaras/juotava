@@ -20,8 +20,8 @@ function Lists() {
 
     const [icon, setIcon] = useState();
 
-    const [savedLists, setSavedLists] = useState();
-    const [getListsSuccess, setGetListSuccess] = useState();
+    const [savedLists, setSavedLists] = useState([]);
+    const [getListsSuccess, setGetListSuccess] = useState('');
 
     useEffect(() => {
         if(false){
@@ -54,7 +54,7 @@ function Lists() {
     return(
         <>
         <Row>
-        {savedLists ? savedLists.map((list, index) => (
+        {(savedLists !== undefined && savedLists.length > 0) ? savedLists.map((list, index) => (
             <Col key={index} style={{maxWidth: '12.75rem'}}>
                 <Row className='mb-4'>
                     <StackedListIcon icon={icon} />
