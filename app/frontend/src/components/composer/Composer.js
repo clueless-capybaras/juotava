@@ -26,6 +26,7 @@ function Composer() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
     const [recipe, setRecipe] = useState(new Recipe(
         '', '', 'Cocktail', '', '', [], [], {prompt: '', basebase64data: ''}, ''
     ));
@@ -68,6 +69,10 @@ function Composer() {
     }
 
     const handleSave = (draft) => {
+        if (recipe.image === undefined || recipe.image.base64data === undefined || recipe.image.basebase64data === '') {
+            setShowModal(true);
+            return;
+        }
         setSaveRecipeSuccess("waiting");
         //setRecipe({...recipe, draft: draft, createdBy: user.sub});
         let tmp = {...recipe};
@@ -99,7 +104,7 @@ function Composer() {
             <Row className="justify-content-center">
                 <Col xs="12" sm="12" md="4">
                     <Row className="mb-3">
-                        <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} />
+                        <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} showModal={showModal} setShowModal={setShowModal} />
                     </Row>
                 </Col>
                 <Col xs="12" sm="9" md="4">
