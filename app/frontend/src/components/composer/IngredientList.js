@@ -11,8 +11,11 @@ function IngredientList({handleFunction}) {
 
     const [inputs, setInputs] = useState([{order: 0, name: "", amount: "", unit: "MILLILITRES"}]);
 
-    const handleAdd = () => {
-        setInputs([...inputs, {order: inputs.length, name: "", amount: "", unit: "MILLILITRES"}]);
+    const handleAdd = (index) => {
+        let tmp = [...inputs];
+        tmp.splice(index + 1, 0, {order: index + 1, name: "", amount: "", unit: "MILLILITRES"});
+        tmp.sort((a, b) => a.order - b.order);
+        setInputs(tmp);
     };
 
     const handleDelete = (index) => {
@@ -37,7 +40,7 @@ function IngredientList({handleFunction}) {
         <>
         {inputs.map((item, index) => (
             <Row key={index} className="justify-content-center mb-3">
-                <Col xs="6" sm="6" md="6">
+                <Col xs={12} sm={9} md={8}>
                     <InputGroup>
                         <FloatingLabel label={"Zutat " + (index + 1)}>
                             <Form.Control name="name" value={item.name} placeholder="Zutat" onChange={(event) => handleInputChange(event, index)} 
@@ -62,17 +65,11 @@ function IngredientList({handleFunction}) {
                                 <option value="TABLESPOONS">EL</option>
                             </Form.Select>
                         </FloatingLabel>
+                        {inputs.length > 1 && (
+                            <Button variant="danger" size="lg" onClick={() => handleDelete(index)}>-</Button>
+                        )}
+                        <Button variant="primary" size="lg" onClick={() => handleAdd(index)}>+</Button>
                     </InputGroup>
-                </Col>
-                <Col xs="1" sm="1" md="1">
-                    {inputs.length > 1 && (
-                        <Button variant="danger" size="lg" onClick={() => handleDelete(index)}>-</Button>
-                    )}
-                </Col>
-                <Col xs="1" sm="1" md="1">  
-                    {index === inputs.length - 1 && (
-                        <Button variant="primary" size="lg" onClick={() => handleAdd()}>+</Button>
-                    )}
                 </Col>
             </Row>
         ))}
