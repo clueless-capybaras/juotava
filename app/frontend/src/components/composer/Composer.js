@@ -19,6 +19,7 @@ import TagField from './TagField';
 import Recipe from '../../model/recipe';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import { baseUrlRecipes } from '../../config/config';
+import { InputGroup } from 'react-bootstrap';
 
 
 function Composer() {
@@ -95,50 +96,59 @@ function Composer() {
         <>
         <h1 className="text-center mb-5">Composer</h1>
         <Container fluid className="mb-5">
-            <Row className=" mb-3">
-                <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} />
-            </Row>
+            <Row className="justify-content-center">
+                <Col xs="12" sm="12" md="4">
+                    <Row className="mb-3">
+                        <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} />
+                    </Row>
+                </Col>
+                <Col xs="12" sm="9" md="4">
+                    <Row className="justify-content-center mb-3">
+                        <Col>
+                            <FloatingLabel controlId="floatingTitle" label="Titel">
+                                <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}
+                                    maxLength={255}
+                                />
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
 
-            <Row className="justify-content-center mb-3">
-                <Col xs="12" sm="9" md="8">
-                    <FloatingLabel controlId="floatingTitle" label="Titel">
-                        <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}
-                            maxLength={255}
-                        />
-                    </FloatingLabel>
-                </Col>
-            </Row>
+                    <Row className="mb-3">
+                        <Col>
+                            <InputGroup>
+                                <FloatingLabel controlId="floatingCategory" label="Kategorie">
+                                    <Form.Select placeholder="Kategorie" onChange={(e) => handleChangeCategory(e)} value={recipe.category==''?recipe.category:'Cocktail'}>
+                                        <option>Cocktail</option>
+                                        <option>Kaffee</option>
+                                        <option>Limonade</option>
+                                        <option>Saft</option>
+                                        <option>Smoothie</option>
+                                        <option>Tee</option>
+                                    </Form.Select>
+                                </FloatingLabel>
+                                <InputGroup.Checkbox id="nonAlcoholicCb" type="checkbox" label="alkoholfrei" onChange={(e) => handleChangeNonAlcoholic(e)}  value={recipe.nonAlcoholic}/>
+                                <InputGroup.Text onClick={() => document.getElementById("nonAlcoholicCb").click()}>alkoholfrei</InputGroup.Text>
+                            </InputGroup>
+                        </Col>
+                    </Row>
 
-            <Row className="justify-content-center mb-3">
-                <Col xs="12" sm="7" md="6">
-                    <FloatingLabel controlId="floatingCategory" label="Kategorie wählen...">
-                        <Form.Select placeholder="Kategorie wählen..." onChange={(e) => handleChangeCategory(e)} value={recipe.category==''?recipe.category:'Cocktail'}>
-                            <option>Cocktail</option>
-                            <option>Kaffee</option>
-                            <option>Limonade</option>
-                            <option>Saft</option>
-                            <option>Smoothie</option>
-                            <option>Tee</option>
-                        </Form.Select>
-                    </FloatingLabel>
-                </Col>
-                <Col xs="12" sm="2" md="2">
-                    <Form.Check type="checkbox" label="alkoholfrei" onChange={(e) => handleChangeNonAlcoholic(e)}  value={recipe.nonAlcoholic}/>
+                    <Row className="justify-content-center mb-3">
+                        <Col>
+                            <FloatingLabel label="Beschreibung" className="mb-3">
+                                <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}
+                                    maxLength={500}
+                                />
+                                <Form.Text className="text-muted">
+                                    {recipe.description?recipe.description.length:0}/500 Zeichen
+                                </Form.Text>
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
+            
 
-            <Row className="justify-content-center mb-3">
-                <Col xs="12" sm="9" md="8">
-                    <FloatingLabel label="Beschreibung" className="mb-3">
-                        <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}
-                            maxLength={500}
-                        />
-                        <Form.Text className="text-muted">
-                            {recipe.description?recipe.description.length:0}/500 Zeichen
-                        </Form.Text>
-                    </FloatingLabel>
-                </Col>
-            </Row>
+            
         
             <h3 className="text-center">Zutatenliste</h3>
             <IngredientList handleFunction={handleChangeIngredients} />
