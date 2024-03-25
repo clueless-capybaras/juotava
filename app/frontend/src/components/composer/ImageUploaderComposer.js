@@ -5,7 +5,7 @@ import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
 
 import imgplaceholder from '../../image-placeholder.jpeg';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Modal, Spinner } from 'react-bootstrap';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
@@ -59,6 +59,12 @@ function ImageUploaderComposer({handleChangeFunction, recipe, validationFunction
         setImage(genImage.base64data);
         handleChangeFunction(genImage);
     }
+
+    useEffect(() => {
+        if (recipe.image && recipe.image.base64data) {
+            setImage(recipe.image.base64data);
+        }
+    }, [recipe]);
 
     return(
         <>

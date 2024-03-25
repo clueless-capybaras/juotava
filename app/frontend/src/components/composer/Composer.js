@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
@@ -26,10 +26,12 @@ function Composer() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const navigate = useNavigate();
+    const { editUuid } = useParams();
     const [showModal, setShowModal] = useState(false);
     const [recipe, setRecipe] = useState(new Recipe(
         '', '', 'Cocktail', '', '', [], [], {prompt: '', basebase64data: ''}, ''
     ));
+    const [loadRecipeSuccess, setLoadRecipeSuccess] = useState("");
     const [saveRecipeSuccess, setSaveRecipeSuccess] = useState("");
     const [uuid, setUuid] = useState();
 
@@ -79,7 +81,7 @@ function Composer() {
         tmp.draft = draft;
         tmp.createdBy = user.sub;
         setRecipe((prevRecipe) => ({...prevRecipe, draft: draft, createdBy: user.sub}));
-        console.log('Saving Recipe:', tmp);
+        //console.log('Saving Recipe:', tmp);
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmp), setUuid, setSaveRecipeSuccess, true);
     }
 
@@ -97,100 +99,113 @@ function Composer() {
         navigate('/browser/recipe/'+uuid);
     }
 
+    useState(() => {
+        if (editUuid !== undefined) {
+            setLoadRecipeSuccess('waiting');
+            arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(editUuid), 'GET', undefined, setRecipe, setLoadRecipeSuccess, false);
+        }
+    }, []);
+
     return(
         <>
         <h1 className="text-center mb-5">Composer</h1>
-        <Container fluid className="mb-5">
-            <Row className="justify-content-center">
-                <Col xs="12" sm="12" md="4">
-                    <Row className="mb-3">
-                        <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} showModal={showModal} setShowModal={setShowModal} />
-                    </Row>
-                </Col>
-                <Col xs="12" sm="9" md="4">
-                    <Row className="justify-content-center mb-3">
-                        <Col>
-                            <FloatingLabel controlId="floatingTitle" label="Titel">
-                                <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}
-                                    maxLength={255}
-                                />
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-
-                    <Row className="mb-3">
-                        <Col>
-                            <InputGroup>
-                                <FloatingLabel controlId="floatingCategory" label="Kategorie">
-                                    <Form.Select placeholder="Kategorie" onChange={(e) => handleChangeCategory(e)} value={recipe.category==''?recipe.category:'Cocktail'}>
-                                        <option>Cocktail</option>
-                                        <option>Kaffee</option>
-                                        <option>Limonade</option>
-                                        <option>Saft</option>
-                                        <option>Smoothie</option>
-                                        <option>Tee</option>
-                                    </Form.Select>
+        {loadRecipeSuccess === 'waiting' ?
+            <h4 className="text-center my-5">
+                <Spinner animation="border" role="status" />
+            </h4>
+            : loadRecipeSuccess === 'error' ?
+            <h4 className="text-center my-5">
+                Beim Laden des Rezepts ist ein Fehler aufgetreten, das tut uns leid!
+            </h4>
+            : <>
+            <Container fluid className="mb-5">
+                <Row className="justify-content-center">
+                    <Col xs="12" sm="12" md="4">
+                        <Row className="mb-3">
+                            <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} showModal={showModal} setShowModal={setShowModal} />
+                        </Row>
+                    </Col>
+                    <Col xs="12" sm="9" md="4">
+                        <Row className="justify-content-center mb-3">
+                            <Col>
+                                <FloatingLabel controlId="floatingTitle" label="Titel">
+                                    <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}
+                                        maxLength={255}
+                                    />
                                 </FloatingLabel>
-                                <InputGroup.Checkbox id="nonAlcoholicCb" type="checkbox" label="alkoholfrei" onChange={(e) => handleChangeNonAlcoholic(e)}  value={recipe.nonAlcoholic}/>
-                                <InputGroup.Text onClick={() => document.getElementById("nonAlcoholicCb").click()}>alkoholfrei</InputGroup.Text>
-                            </InputGroup>
-                        </Col>
-                    </Row>
+                            </Col>
+                        </Row>
 
-                    <Row className="justify-content-center mb-3">
-                        <Col>
-                            <FloatingLabel label="Beschreibung" className="mb-3">
-                                <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}
-                                    maxLength={500}
-                                />
-                                <Form.Text className="text-muted">
-                                    {recipe.description?recipe.description.length:0}/500 Zeichen
-                                </Form.Text>
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-            
+                        <Row className="mb-3">
+                            <Col>
+                                <InputGroup>
+                                    <FloatingLabel controlId="floatingCategory" label="Kategorie">
+                                        <Form.Select placeholder="Kategorie" onChange={(e) => handleChangeCategory(e)} value={recipe.category!==''?recipe.category:'Cocktail'}>
+                                            <option>Cocktail</option>
+                                            <option>Kaffee</option>
+                                            <option>Limonade</option>
+                                            <option>Saft</option>
+                                            <option>Smoothie</option>
+                                            <option>Tee</option>
+                                        </Form.Select>
+                                    </FloatingLabel>
+                                    <InputGroup.Checkbox id="nonAlcoholicCb" type="checkbox" label="alkoholfrei" onChange={(e) => handleChangeNonAlcoholic(e)}  checked={recipe.nonAlcoholic}/>
+                                    <InputGroup.Text onClick={() => document.getElementById("nonAlcoholicCb").click()}>alkoholfrei</InputGroup.Text>
+                                </InputGroup>
+                            </Col>
+                        </Row>
 
-            
-        
-            <h3 className="text-center">Zutatenliste</h3>
-            <IngredientList handleFunction={handleChangeIngredients} />
+                        <Row className="justify-content-center mb-3">
+                            <Col>
+                                <FloatingLabel label="Beschreibung" className="mb-3">
+                                    <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}
+                                        maxLength={500}
+                                    />
+                                    <Form.Text className="text-muted">
+                                        {recipe.description?recipe.description.length:0}/500 Zeichen
+                                    </Form.Text>
+                                </FloatingLabel>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <h3 className="text-center">Zutatenliste</h3>
+                <IngredientList recipe={recipe} handleFunction={handleChangeIngredients} />
 
-            <h3 className="text-center">Zubereitung</h3>
-                 <PrepList handleFunction={handleChangeSteps} />
-        </Container>
+                <h3 className="text-center">Zubereitung</h3>
+                <PrepList recipe={recipe} handleFunction={handleChangeSteps} />
+            </Container>
 
-        {/*<Container className="text-center mb-5">
-            <Row className="justify-content-center mb-3">
-                <Col>
-                    <TagField />
-                </Col>
-            </Row>
-        </Container>*/}
+            {/*<Container className="text-center mb-5">
+                <Row className="justify-content-center mb-3">
+                    <Col>
+                        <TagField />
+                    </Col>
+                </Row>
+            </Container>*/}
 
-        <Container className="text-center mb-5">
-            <Row className="justify-content-center mb-3">
-                <Col xs="8">
-                    <Button variant="primary" className="me-1" disabled={!validateRecipe(recipe)} onClick={() => handleSave(false)}>Veröffentlichen</Button>
-                    <Button variant="secondary" disabled={!validateRecipe(recipe)} onClick={() => handleSave(true)}>Entwurf speichern</Button>
-                </Col>
-            </Row>
-            <Row className="justify-content-center mb-3">
-                <Col xs="8">
-                    {saveRecipeSuccess === "waiting" ? 
-                        <Spinner animation="border" role="status" />
-                    : null}
-                    {saveRecipeSuccess === "success" ? 
-                        handleOpenRecipe(uuid)
-                    : null}
-                    {saveRecipeSuccess === "error" ? 
-                        <div>Speichern fehlgeschlagen</div>
-                    : null}
-                </Col>
-            </Row>
-        </Container>
+            <Container className="text-center mb-5">
+                <Row className="justify-content-center mb-3">
+                    <Col xs="8">
+                        <Button variant="primary" className="me-1" disabled={!validateRecipe(recipe)} onClick={() => handleSave(false)}>Veröffentlichen</Button>
+                        <Button variant="secondary" disabled={!validateRecipe(recipe)} onClick={() => handleSave(true)}>Entwurf speichern</Button>
+                    </Col>
+                </Row>
+                <Row className="justify-content-center mb-3">
+                    <Col xs="8">
+                        {saveRecipeSuccess === "waiting" ? 
+                            <Spinner animation="border" role="status" />
+                        : null}
+                        {saveRecipeSuccess === "success" ? 
+                            handleOpenRecipe(uuid)
+                        : null}
+                        {saveRecipeSuccess === "error" ? 
+                            <div>Speichern fehlgeschlagen</div>
+                        : null}
+                    </Col>
+                </Row>
+            </Container>
+        </>}
         </>
     );
 }

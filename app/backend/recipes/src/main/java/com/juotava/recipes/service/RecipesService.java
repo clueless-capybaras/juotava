@@ -48,7 +48,13 @@ public class RecipesService {
     }
 
     public Recipe getRecipe(UUID uuid){
-        return  this.recipeRepository.findByUuid(uuid);
+        try {
+            return  this.recipeRepository.findByUuid(uuid);
+        } catch (Exception e){
+            System.out.println("ERROR: No recipe found with UUID: "+uuid);
+            return null;
+        }
+
     }
 
     public List<Recipe> getAllRecipes(){

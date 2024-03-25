@@ -34,12 +34,32 @@ function Recipe(props) {
         setPortions(event.target.value);
     }
 
+    const editRecipe = () => {
+        navigate('/composer/'+uuid);
+    }
+
     return (
     
         <>
-        <span className="material-icons mx-3" onClick={() => navigate(-1)} style={{cursor: "pointer"}}>
-            arrow_back_ios_new 
-        </span>
+        
+        <Container fluid>
+            <Row className='mb-3'>
+                <Col>
+                    <span className="material-icons mx-3" onClick={() => navigate(-1)} style={{cursor: "pointer"}}>
+                        arrow_back_ios_new 
+                    </span>
+                </Col>
+                <Col className="d-flex justify-content-end">
+                    {recipe && user && recipe.createdBy === user.sub ?
+                        <Button variant="primary" onClick={editRecipe} style={{display: 'inline-flex', alignItems: 'center'}}>
+                            <span style={{marginRight: '.5rem'}}>Bearbeiten</span> <span className="material-icons">edit</span>
+                        </Button>
+                    :
+                        null
+                    }
+                </Col>
+            </Row>
+        </Container>
         <Container>
         <Row className="mb-5">
             <Col lg={4} className="me-5">
