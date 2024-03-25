@@ -27,7 +27,7 @@ function Browser(props) {
 
     return (
         <>
-        <Container className='mb-5'>
+        <Container fluid className='mb-5'>
             <Row>
                 <Col sm='3'>Filter</Col>
                 <Col sm='8'>
@@ -52,7 +52,7 @@ function Browser(props) {
                         : (
                             recipeExcerpts.map((item, index) => {
                                 return(
-                                    <Row key={index} className="mb-3">
+                                    <Row key={index} className="mb-3" style={{margin: 0}}>
                                         <RecipeCard 
                                             id={item.uuid} 
                                             onClick={() => handleOpenRecipe(item.uuid)} 

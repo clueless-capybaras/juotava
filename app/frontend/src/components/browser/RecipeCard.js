@@ -1,3 +1,5 @@
+import './RecipeCard.css';
+
 import { useState } from 'react';
 import {Col, Container, Placeholder, Row, Card} from 'react-bootstrap';
 import TextTruncate from 'react-text-truncate';
@@ -12,25 +14,18 @@ function RecipeCard(props) {
     const [ingredients, setIngredients] = useState(props.recipeExcerpt.ingredients);
     const [image, setImage] = useState(props.recipeExcerpt.image);
 
+    const getIngredientsString = (ingred) => {
+        return ingred.map((ingr) => ingr.name).join(", ");
+    }
+
     
     return (
-        <>
-        <style>
-            {`
-                .card:hover {
-                    cursor: pointer;
-                    transform: scale(1.01);
-                }
-
-                .card {
-                    transition: transform 0.4s;
-                }
-            `}
-        </style>
         <Card onClick={props.onClick} style={{paddingLeft: 0, paddingRight: 0}}>
             <Row className='g-0'>
                 <Col sm='auto'>
-                    <Card.Img src={image.base64data} alt={image.prompt} style={{maxWidth:'11rem'}} />
+                    <div className="image-container">
+                        <Card.Img src={image.base64data} alt={image.prompt} />
+                    </div>
                 </Col>
                 <Col>
                     <Card.Body>
@@ -43,32 +38,38 @@ function RecipeCard(props) {
                                 text={description}
                             />
                         </Card.Text>
-                        <Card.Text className='text-muted'>
-                            {ingredients.map((ingr, index) => {
-                                return(
-                                    (index ? ", " : "") + ingr.name
-                                );
-                            })}
+                        <Card.Text className="text-muted">
+                            <TextTruncate
+                                line={1}
+                                element="span"
+                                text={getIngredientsString(ingredients)}
+                            />
+                            
                         </Card.Text>
                     </Card.Body>
                 </Col>
-                <Col sm='auto' className='text-center me-3 mt-3'>
-                    <span className="material-icons">
-                        favorite_border
-                    </span>
-                    <Card.Text className='text-muted'>
-                        420K
-                    </Card.Text>
-                    <span className="material-icons">
-                        star_border
-                    </span>
-                    <Card.Text>
-                        5
-                    </Card.Text>
+                <Col sm="2" className='text-center pb-2'>
+                    <Row>
+                        <Col xs="6" sm="12">
+                            <span className="material-icons mt-4">
+                                favorite_border
+                            </span>
+                            <Card.Text className='text-muted'>
+                                420K
+                            </Card.Text>
+                        </Col>
+                        <Col xs="6" sm="12" className='mt-4'>
+                            <span className="material-icons">
+                                star_border
+                            </span>
+                            <Card.Text>
+                                5
+                            </Card.Text>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
         </Card>
-        </>
     );
 }
 export default RecipeCard;
