@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router';
 
 import placeholderImage from '../../../image-placeholder.jpeg'
-import favoriteIcon from './favorite_border_black_48dp.svg'
+import favoriteIcon from '../../icons/favorite_border_black_48dp.svg'
 import { useState, useEffect, useContext } from "react";
 import { Col, FloatingLabel, Form, List, Row } from "react-bootstrap";
 
@@ -39,22 +39,19 @@ function Lists() {
         let tmpRecipeList = recipeList;
         tmpRecipeList.title = event.target.value;
         setRecipeList(tmpRecipeList);
-        console.log(recipeList);
     }
 
     const handleSave = (title) => {
-        setSaveRecipeListSuccess("Waiting");
+        setSaveRecipeListSuccess("waiting");
         let tmpRecipeList = recipeList;
         tmpRecipeList.title = title;
-        console.log('Saving RecipeList:', tmpRecipeList);
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/new', 'POST', )
     }
     
-
     return(
         <>
         <Row>
-        {(savedLists !== undefined && savedLists.length > 0) ? savedLists.map((list, index) => (
+        {(savedLists.length > 0) ? savedLists.map((list, index) => (
             <Col key={index} style={{maxWidth: '12.75rem'}}>
                 <Row className='mb-4'>
                     <StackedListIcon icon={icon} />

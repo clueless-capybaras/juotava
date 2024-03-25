@@ -139,7 +139,7 @@ public class RecipesController {
     @PostMapping(path = "list/new")
     public String addRecipeList(@RequestBody String title, Authentication authentication){
         String auth0id = authentication.getName();
-        return this.recipesService.createRecipeList(title, auth0id).toString();
+        return this.recipesService.createRecipeList(title, auth0id);
     }
 
     @PostMapping(path = "list/addrecipe/{listId}")

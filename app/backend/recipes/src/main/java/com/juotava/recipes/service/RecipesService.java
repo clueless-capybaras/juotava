@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.Console;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,23 +126,29 @@ public class RecipesService {
         return this.recipeListRepository.findByCreatedByAuth0id(auth0id);
     }
 
-    public UUID createRecipeList(String title, String auth0id) {
-        RecipeList recipeList = new RecipeList(title, auth0id);
-        this.recipeListRepository.save(recipeList);
-        return recipeList.getUuid();
+    public String createRecipeList(String title, String auth0id) {
+        try {
+            RecipeList recipeList = new RecipeList(title, auth0id);
+            this.recipeListRepository.save(recipeList);
+            return recipeList.getUuid().toString();
+        } catch (Exception e) {
+            System.out.println("Error: List title is too long and could not be saved");
+            return "false";
+        }
     }
 
     public boolean addRecipeToList(UUID listId, UUID recipeId, String auth0id) {
         try {
             RecipeList list = this.recipeListRepository.findByUuid(listId);
             if (!auth0id.equals(list.getCreatedBy())){
+                System.out.println("Error: List creator id (" + list.getCreatedBy().toString() + ") does not match auth0id (" + auth0id + ")");
                 return false;
             }
             list.addRecipeToList(this.recipeRepository.findByUuid(recipeId));
             this.recipeListRepository.save(list);
             return true;
         } catch (Exception e){
-            System.out.println(e);
+            System.out.println("Error: Recipe does not exist");
             return false;
         }
     }
@@ -160,7 +167,7 @@ public class RecipesService {
                 System.out.println("Info: Creating new Favorites List");
                 return true;
             } catch (Exception x){
-                System.out.println("Warning: Dumb action");
+                System.out.println("Error: Recipe does not exist");
                 return false;
             }
 

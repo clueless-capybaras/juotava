@@ -15,6 +15,7 @@ public class RecipeList {
     @GeneratedValue
     private UUID uuid;
 
+    @Column(length = 30)
     private String title;
 
     @ManyToMany
