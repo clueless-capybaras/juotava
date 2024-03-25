@@ -126,8 +126,9 @@ public class RecipesController {
     }
 
     @GetMapping(path = "recipe/{uuid}")
-    public Recipe getRecipe(@PathVariable UUID uuid){
-        return this.recipesService.getRecipe(uuid);
+    public Recipe getRecipe(@PathVariable UUID uuid, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getRecipe(uuid, auth0id);
     }
 
     @GetMapping(path = "list/my")

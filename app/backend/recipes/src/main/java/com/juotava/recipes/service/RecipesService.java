@@ -51,15 +51,17 @@ public class RecipesService {
         this.recipeListRepository = recipeListRepository;
     }
 
-    public Recipe getRecipe(UUID uuid){
+    public Recipe getRecipe(UUID uuid, String auth0id){
         try {
             Recipe recipe = this.recipeRepository.findByUuid(uuid);
-            if (recipe.isDraft()){
+            if (recipe.isDraft() && !recipe.getCreatedBy().equals(auth0id)){
+                System.out.println("ERROR: Recipe " + recipe.getUuid() + " is a draft and not owned by user "+ auth0id);
                 return null;
             } else {
                 return recipe;
             }
         } catch (Exception e){
+            System.out.println("ERROR: Could not find recipe with UUID: " + uuid);
             return null;
         }
     }
