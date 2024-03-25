@@ -4,7 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
 import {Button, Col, Container, Row, Spinner} from 'react-bootstrap'
-import RecipeCard from './RecipeCard';
+import RecipeCard from '../general/RecipeCard';
 import Recipe from '../general/Recipe';
 
 function Browser(props) {
@@ -26,7 +26,6 @@ function Browser(props) {
     });
 
     return (
-        <>
         <Container fluid className='mb-5'>
             <Row>
                 <Col sm='3'>Filter</Col>
@@ -65,7 +64,6 @@ function Browser(props) {
                 </Col>
             </Row>
         </Container>
-        </>
     );
 }
 export default Browser;
