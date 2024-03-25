@@ -42,10 +42,10 @@ function Recipe(props) {
         </span>
         <Container>
         <Row className="mb-5">
-            <Col xs="3" className="me-5">
+            <Col lg={4} className="me-5">
                 <Image src={recipe? recipe.image.base64data : placeholderimage} style={{maxWidth: "20rem"}} rounded />
             </Col>
-            <Col xs="6">
+            <Col lg={7}>
                 <Row>
                     <h2 className="text-start">
                         {recipe ? 

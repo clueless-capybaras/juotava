@@ -11,17 +11,16 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import { baseUrlRecipes } from '../../config/config';
 
-function ImageUploaderComposer({handleChangeFunction, recipe, validationFunction, isAuthenticated, getAccessTokenSilently, user}) {
+function ImageUploaderComposer({handleChangeFunction, recipe, validationFunction, isAuthenticated, getAccessTokenSilently, user, showModal, setShowModal}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     //const [isAuthenticated, getAccessTokenSilently] = useAuth0();
 
     const [image, setImage] = useState();
     const [genImage, setGenImage] = useState();
-    const [modalShow, setModalShow] = useState(false);
     const [genSuccess, setGenSuccess] = useState('');
 
-    const handleModalClose = () => setModalShow(false);
-    const handleModalShow = () => setModalShow(true);
+    const handleModalClose = () => setShowModal(false);
+    const handleModalShow = () => setShowModal(true);
 
     const handleImageChangeUpload = async (e) => {
         let base64File = await convertToBase64(e.target.files[0]);
@@ -79,7 +78,7 @@ function ImageUploaderComposer({handleChangeFunction, recipe, validationFunction
                 </Col>
             </Row>
         </Container>
-        <Modal show={modalShow} onHide={handleModalClose}>
+        <Modal show={showModal} onHide={handleModalClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Rezepbild generieren</Modal.Title>
             </Modal.Header>

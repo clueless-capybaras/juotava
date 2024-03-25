@@ -19,12 +19,14 @@ import TagField from './TagField';
 import Recipe from '../../model/recipe';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import { baseUrlRecipes } from '../../config/config';
+import { InputGroup } from 'react-bootstrap';
 
 
 function Composer() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
     const [recipe, setRecipe] = useState(new Recipe(
         '', '', 'Cocktail', '', '', [], [], {prompt: '', basebase64data: ''}, ''
     ));
@@ -67,6 +69,10 @@ function Composer() {
     }
 
     const handleSave = (draft) => {
+        if (recipe.image === undefined || recipe.image.base64data === undefined || recipe.image.basebase64data === '') {
+            setShowModal(true);
+            return;
+        }
         setSaveRecipeSuccess("waiting");
         //setRecipe({...recipe, draft: draft, createdBy: user.sub});
         let tmp = {...recipe};
@@ -94,71 +100,66 @@ function Composer() {
     return(
         <>
         <h1 className="text-center mb-5">Composer</h1>
-        <Container className="mb-5">
-            <Row className="justify-content-center mb-3">
-                <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} />
-            </Row>
+        <Container fluid className="mb-5">
+            <Row className="justify-content-center">
+                <Col xs="12" sm="12" md="4">
+                    <Row className="mb-3">
+                        <ImageUploaderComposer handleChangeFunction={handleChangeImage} recipe={recipe} validationFunction={validateRecipe} isAuthenticated={isAuthenticated} getAccessTokenSilently={getAccessTokenSilently} user={user} showModal={showModal} setShowModal={setShowModal} />
+                    </Row>
+                </Col>
+                <Col xs="12" sm="9" md="4">
+                    <Row className="justify-content-center mb-3">
+                        <Col>
+                            <FloatingLabel controlId="floatingTitle" label="Titel">
+                                <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}
+                                    maxLength={255}
+                                />
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
 
-            <Row className="justify-content-center mb-3">
-                <Col xs="6" sm="6" md="6">
-                    <FloatingLabel controlId="floatingTitle" label="Titel">
-                        <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={recipe.title}
-                            maxLength={255}
-                        />
-                    </FloatingLabel>
-                </Col>
-                <Col xs="2" sm="2" md="2">
+                    <Row className="mb-3">
+                        <Col>
+                            <InputGroup>
+                                <FloatingLabel controlId="floatingCategory" label="Kategorie">
+                                    <Form.Select placeholder="Kategorie" onChange={(e) => handleChangeCategory(e)} value={recipe.category==''?recipe.category:'Cocktail'}>
+                                        <option>Cocktail</option>
+                                        <option>Kaffee</option>
+                                        <option>Limonade</option>
+                                        <option>Saft</option>
+                                        <option>Smoothie</option>
+                                        <option>Tee</option>
+                                    </Form.Select>
+                                </FloatingLabel>
+                                <InputGroup.Checkbox id="nonAlcoholicCb" type="checkbox" label="alkoholfrei" onChange={(e) => handleChangeNonAlcoholic(e)}  value={recipe.nonAlcoholic}/>
+                                <InputGroup.Text onClick={() => document.getElementById("nonAlcoholicCb").click()}>alkoholfrei</InputGroup.Text>
+                            </InputGroup>
+                        </Col>
+                    </Row>
+
+                    <Row className="justify-content-center mb-3">
+                        <Col>
+                            <FloatingLabel label="Beschreibung" className="mb-3">
+                                <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}
+                                    maxLength={500}
+                                />
+                                <Form.Text className="text-muted">
+                                    {recipe.description?recipe.description.length:0}/500 Zeichen
+                                </Form.Text>
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
+            
 
-            <Row className="justify-content-center mb-3">
-                <Col xs="6" sm="6" md="6">
-                    <FloatingLabel controlId="floatingCategory" label="Kategorie wählen...">
-                        <Form.Select placeholder="Kategorie wählen..." onChange={(e) => handleChangeCategory(e)} value={recipe.category==''?recipe.category:'Cocktail'}>
-                            <option>Cocktail</option>
-                            <option>Kaffee</option>
-                            <option>Limonade</option>
-                            <option>Saft</option>
-                            <option>Smoothie</option>
-                            <option>Tee</option>
-                        </Form.Select>
-                    </FloatingLabel>
-                </Col>
-                <Col xs="2" sm="2" md="2">
-                    <Form.Check type="checkbox" label="alkoholfrei" onChange={(e) => handleChangeNonAlcoholic(e)}  value={recipe.nonAlcoholic}/>
-                </Col>
-            </Row>
-
-            <Row className="justify-content-center mb-3">
-                <Col xs="8" sm="8" md="8">
-                    <FloatingLabel label="Beschreibung" className="mb-3">
-                        <Form.Control as="textarea" placeholder="Beschreibung" style={{height: "5rem"}} onChange={(e) => handleChangeDescription(e)} value={recipe.description}
-                            maxLength={500}
-                        />
-                        <Form.Text className="text-muted">
-                            {recipe.description?recipe.description.length:0}/500 characters
-                        </Form.Text>
-                    </FloatingLabel>
-                </Col>
-            </Row>
-        </Container>
-
-        <Container className="mb-5">
+            
+        
             <h3 className="text-center">Zutatenliste</h3>
-            <Row className="justify-content-center mb-3">
-                <Col>
-                    <IngredientList handleFunction={handleChangeIngredients} />
-                </Col>
-            </Row>
-        </Container>
+            <IngredientList handleFunction={handleChangeIngredients} />
 
-        <Container className="mb-5">
             <h3 className="text-center">Zubereitung</h3>
-            <Row className="justify-content-center mb-3">
-                <Col>
                  <PrepList handleFunction={handleChangeSteps} />
-                </Col>
-            </Row>
         </Container>
 
         {/*<Container className="text-center mb-5">
