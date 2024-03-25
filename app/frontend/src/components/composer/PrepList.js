@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { InputGroup } from 'react-bootstrap';
 
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -10,8 +11,11 @@ function PrepList({handleFunction}) {
 
     const [inputs, setInputs] = useState([{order: 0, description: ""}]);
 
-    const handleAdd = () => {
-        setInputs([...inputs, {order: inputs.length, description: ""}]);
+    const handleAdd = (index) => {
+        let tmp = [...inputs];
+        tmp.splice(index + 1, 0, {order: index + 1, description: ""});
+        tmp.sort((a, b) => a.order - b.order);
+        setInputs(tmp);
     };
 
     const handleDelete = (index) => {
@@ -36,25 +40,22 @@ function PrepList({handleFunction}) {
         <>
         {inputs.map((item, index) => (
             <Row key={index} className="justify-content-center mb-3">
-                <Col xs="6" sm="6" md="6">
-                    <FloatingLabel label={"Schritt " + (index + 1)}>
-                        <Form.Control as="textarea" rows="2" name="description" placeholder="Schritt" value={item.description} style={{height: "5rem"}} onChange={(event) => handleInputChange(event, index)}
-                            maxLength={255}
-                        />
-                        <Form.Text className="text-muted">
-                            {item.description.length}/255 characters
-                        </Form.Text>
-                    </FloatingLabel>
-                </Col>
-                <Col xs="1" sm="1" md="1">
-                    {inputs.length > 1 && (
-                        <Button variant="danger" size="lg" onClick={() => handleDelete(index)}>-</Button>
-                    )}
-                </Col>
-                <Col xs="1" sm="1" md="1">  
-                    {index === inputs.length - 1 && (
-                        <Button variant="primary" size="lg" onClick={() => handleAdd()}>+</Button>
-                    )}
+                <Col xs="12" sm="9" md="8">
+                    <InputGroup>
+                        <FloatingLabel label={"Schritt " + (index + 1)}>
+                            <Form.Control as="textarea" rows="2" name="description" placeholder="Schritt" value={item.description} style={{height: "5rem"}} onChange={(event) => handleInputChange(event, index)}
+                                maxLength={255}
+                            />
+                            
+                        </FloatingLabel>
+                        {inputs.length > 1 && (
+                            <Button variant="danger" size="lg" onClick={() => handleDelete(index)}>-</Button>
+                        )}
+                        <Button variant="primary" size="lg" onClick={() => handleAdd(index)}>+</Button>
+                    </InputGroup>
+                    <Form.Text className="text-muted">
+                        {item.description.length}/255 Zeichen
+                    </Form.Text>
                 </Col>
             </Row>
         ))}
