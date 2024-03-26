@@ -103,8 +103,9 @@ public class RecipesController {
     }
 
     @GetMapping(path = "recipeexcerpt/all")
-    public List<RecipeExcerpt> getAllRecipeExcerpts() { 
-        return this.recipesService.getAllRecipeExcerpts(); 
+    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication) {
+        String auth0id = authentication.getName();
+        return this.recipesService.getAllRecipeExcerpts(auth0id);
     }
 
     @GetMapping(path = "recipe/my")
@@ -130,5 +131,32 @@ public class RecipesController {
         return this.recipesService.getRecipe(uuid);
     }
 
+    //
+    // FILTERS
+    //
+
+    @PostMapping(path = "filter/save")
+    public String saveFilter(@RequestBody Filter filter, Authentication authentication) {
+        try {
+            String auth0uid = authentication.getName();
+            if (!auth0uid.equals(filter.getCorrespondingUser())){
+                System.out.println("ERROR: User id "+filter.getCorrespondingUser()+" does not match with sending user "+auth0uid);
+                return "false";
+            }
+            this.recipesService.setCurrentUserToFilter(filter, auth0uid);
+            this.recipesService.saveFilter(filter);
+            System.out.println("INFO: Saved Filter: " + filter.getUuid());
+            return filter.getUuid().toString();
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return "false";
+        }
+    }
+
+    @GetMapping(path = "filter/my")
+    public Filter getMyFilter(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getFilterByUser(auth0id);
+    }
 
 }

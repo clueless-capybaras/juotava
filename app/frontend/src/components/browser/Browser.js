@@ -5,7 +5,7 @@ import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
 import {Button, Col, Container, Row, Spinner} from 'react-bootstrap'
 import RecipeCard from './RecipeCard';
-import Recipe from '../general/Recipe';
+import Filter from './filter/Filter';
 
 function Browser(props) {
     const navigate = useNavigate();
@@ -29,7 +29,9 @@ function Browser(props) {
         <>
         <Container fluid className='mb-5'>
             <Row>
-                <Col sm='3'>Filter</Col>
+                <Col sm='3'>
+                    <Filter />
+                </Col>
                 <Col sm='8'>
                     {loadRecipeExcerptsSuccess === 'waiting' ?
                         <h4 className="text-center my-5">

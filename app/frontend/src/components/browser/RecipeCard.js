@@ -18,6 +18,21 @@ function RecipeCard(props) {
         return ingred.map((ingr) => ingr.name).join(", ");
     }
 
+    const getIngredientsString = (ingred) => {
+        return ingred.map((ingr) => ingr.name).join(", ");
+    }
+
+    const [ingrString, setIngrString] = useState("");
+
+    useEffect(() => {
+        let tempIngredients = "";
+        ingredients.map((ingredient, key) => {
+            tempIngredients += key ? ", " : "";
+            tempIngredients += ingredient.name;
+        });
+        console.log(tempIngredients);
+        setIngrString(tempIngredients);
+    }, [ingredients]);
     
     return (
         <Card onClick={props.onClick} style={{paddingLeft: 0, paddingRight: 0}}>
