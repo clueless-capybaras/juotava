@@ -37,37 +37,30 @@ function Composer() {
 
     const handleChangeImage = (data) => {
         setRecipe({...recipe, image: data})
-        //console.log(recipe);
     }
 
     const handleChangeTitle = (event) => {
         setRecipe({...recipe, title: event.target.value});
-        //console.log(recipe);
     }
 
     const handleChangeCategory = (event) => {
         setRecipe({...recipe, category: event.target.value});
-        //console.log(recipe);
     }
 
     const handleChangeNonAlcoholic = (event) => {
         setRecipe({...recipe, nonAlcoholic: event.target.checked});
-        //console.log(recipe);
     }
 
     const handleChangeDescription = (event) => {
         setRecipe({...recipe, description: event.target.value});
-        //console.log(recipe);
     }
 
     const handleChangeIngredients = (data) => {
         setRecipe({...recipe, ingredients: data});
-        //console.log(recipe);
     }
 
     const handleChangeSteps = (data) => {
         setRecipe({...recipe, steps: data});
-        //console.log(recipe);
     }
 
     const handleSave = (draft) => {
@@ -76,12 +69,10 @@ function Composer() {
             return;
         }
         setSaveRecipeSuccess("waiting");
-        //setRecipe({...recipe, draft: draft, createdBy: user.sub});
         let tmp = {...recipe};
         tmp.draft = draft;
         tmp.createdBy = user.sub;
         setRecipe((prevRecipe) => ({...prevRecipe, draft: draft, createdBy: user.sub}));
-        //console.log('Saving Recipe:', tmp);
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmp), setUuid, setSaveRecipeSuccess, true);
     }
 
@@ -95,7 +86,6 @@ function Composer() {
     }
 
     const handleOpenRecipe = (uuid) => {
-        //console.log('Open Recipe:', uuid);
         navigate('/browser/recipe/'+uuid);
     }
 
