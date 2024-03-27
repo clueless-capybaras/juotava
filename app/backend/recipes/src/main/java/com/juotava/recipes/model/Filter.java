@@ -1,27 +1,36 @@
 package com.juotava.recipes.model;
 
 import com.juotava.recipes.model.enums.Category;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Getter
+@Entity
 public class Filter {
 
+    @Setter
     private String correspondingUser;
+    @Id
+    @GeneratedValue
     private UUID uuid;
-    private boolean nonAlcoholic;
+    private boolean showNonAlcOnly;
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
     private List<Category> categories;
 
     public Filter(boolean nonAlcoholic, List<Category> categories) {
-        this.nonAlcoholic = nonAlcoholic;
+        this.showNonAlcOnly = nonAlcoholic;
         this.categories = categories;
     }
 
     public Filter() {
-        this.nonAlcoholic = false;
+        this.categories = new ArrayList<>();
+        this.showNonAlcOnly = false;
         this.categories.add(Category.COCKTAIL);
         this.categories.add(Category.COFFEE);
         this.categories.add(Category.JUICE);
@@ -32,14 +41,6 @@ public class Filter {
     }
 
     public boolean compareToCategories(String category) {
-        boolean match = this.categories.stream().anyMatch(c -> c.toString() == category);
-
-        if(match) return true;
-        else return false;
+        return this.categories.stream().anyMatch(c -> c.toString().equals(category));
     }
-
-    public void setCorrespondingUser(String auth0id) {
-        this.correspondingUser = auth0id;
-    }
-
 }

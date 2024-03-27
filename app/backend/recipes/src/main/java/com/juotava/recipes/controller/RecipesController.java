@@ -138,12 +138,12 @@ public class RecipesController {
     @PostMapping(path = "filter/save")
     public String saveFilter(@RequestBody Filter filter, Authentication authentication) {
         try {
-            String auth0uid = authentication.getName();
-            if (!auth0uid.equals(filter.getCorrespondingUser())){
-                System.out.println("ERROR: User id "+filter.getCorrespondingUser()+" does not match with sending user "+auth0uid);
+            String auth0id = authentication.getName();
+            if (!auth0id.equals(filter.getCorrespondingUser())){
+                System.out.println("ERROR: User id "+filter.getCorrespondingUser()+" does not match with sending user "+auth0id);
                 return "false";
             }
-            this.recipesService.setCurrentUserToFilter(filter, auth0uid);
+            filter.setCorrespondingUser(auth0id);
             this.recipesService.saveFilter(filter);
             System.out.println("INFO: Saved Filter: " + filter.getUuid());
             return filter.getUuid().toString();

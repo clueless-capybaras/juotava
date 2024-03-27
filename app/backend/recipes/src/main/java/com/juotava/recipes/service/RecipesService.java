@@ -76,17 +76,14 @@ public class RecipesService {
 
     public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id) {
         Filter filter = getFilterByUser(auth0id);
-        List<RecipeExcerpt> tempList = new ArrayList<>();
-
         //Filter
-        getAllRecipes().stream()
-            .filter(recipe -> (filter.isNonAlcoholic() == recipe.isNonAlcoholic())
+        return getAllRecipes().stream()
+            .filter(recipe -> (
+                    (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
                 && (filter.compareToCategories(recipe.getCategory()))
-            )
-            .map(recipe -> tempList.add(parseToExcerpt(recipe)))
+            ))
+            .map(this::parseToExcerpt)
             .collect(Collectors.toList());
-
-        return(tempList);
     }
 
     //
@@ -150,31 +147,21 @@ public class RecipesService {
 
     public void saveFilter(Filter filter) { this.filterRepository.save(filter); }
 
-    public void setCurrentUserToFilter(Filter filter, String auth0id){
-        filter.setCorrespondingUser(auth0id);
+    public Filter getFilterByUser(String auth0id) {
+        try {
+
+            Filter filter = filterRepository.findByCorrespondingUserAuth0id(auth0id);
+            if (filter == null) {
+                throw new Exception("Cannot find Filter");
+            }
+            return filter;
+        } catch (Exception e) {
+            Filter filter = new Filter();
+            filter.setCorrespondingUser(auth0id);
+            this.filterRepository.save(filter);
+            return filter;
+        }
     }
-
-    public Filter getFilterByUser(String auth0id) { return filterRepository.findByCorrespondingUserAuth0id(auth0id); }
-
-    /*public List<RecipeExcerpt> filterByAlc(Filter filter) {
-        List<RecipeExcerpt> tempList = new ArrayList<>();
-        return getAllRecipeExcerpts().stream()
-            .filter(excerpt -> excerpt.isNonAlcoholic() == filter.isNonAlcoholic())
-            .collect(Collectors.toList());
-    }
-
-    public List<RecipeExcerpt> filterByCategory(Filter filter) {
-        return getAllRecipeExcerpts().stream()
-            .filter(excerpt -> filter.compareToCategories(excerpt.getCategory()))
-            .collect(Collectors.toList());
-    }
-
-    public List<RecipeExcerpt> filterByAlcAndCategory(Filter filter) {
-        return getAllRecipeExcerpts().stream()
-            .filter(excerpt -> filter.compareToCategories(excerpt.getCategory())
-                && ( excerpt.isNonAlcoholic() == filter.isNonAlcoholic() ))
-            .collect(Collectors.toList());
-    }*/
 
     public RecipeExcerpt parseToExcerpt(Recipe recipe) {
         return new RecipeExcerpt(recipe.getUuid(), recipe.getTitle(), recipe.getCategory(), recipe.isNonAlcoholic(), recipe.getDescription(), recipe.getIngredients(), recipe.getImage());
