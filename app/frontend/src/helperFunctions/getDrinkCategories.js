@@ -1,12 +1,13 @@
 export function getDrinkCategories() {
     return (
         [
-            { id: "coc", label: "Cocktail" },
-            { id: "cof", label: "Kaffee" },
-            { id: "lem", label: "Limonade" },
-            { id: "jui", label: "Saft" },
-            { id: "smo", label: "Smoothie" },
-            { id: "tea", label: "Tee" }
+            { id: "COCKTAIL", label: "Cocktail" },
+            { id: "COFFEE", label: "Kaffee" },
+            { id: "JUICE", label: "Saft" },
+            { id: "LEMONADE", label: "Limonade" },
+            { id: "MILKSHAKE", label: "Milchshake" },
+            { id: "SMOOTHIE", label: "Smoothie" },
+            { id: "TEA", label: "Tee" }
         ]
     );
 }

@@ -1,8 +1,8 @@
 export default class FilterModel {
     constructor(
-        showNonAlcoholicOnly, categories
+        showNonAlcOnly, categories
     ) {
-        this.showNonAlcoholicOnly = showNonAlcoholicOnly;
+        this.showNonAlcOnly = showNonAlcOnly;
         this.categories = categories;
     }
 }

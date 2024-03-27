@@ -4,6 +4,7 @@ import { useState } from 'react';
 import {Col, Container, Placeholder, Row, Card} from 'react-bootstrap';
 import TextTruncate from 'react-text-truncate';
 import placeholderImage from '../../image-placeholder.jpeg'
+import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
 
 function RecipeCard(props) {
     const [uuid, setUuid] = useState(props.recipeExcerpt.uuid);
@@ -31,7 +32,7 @@ function RecipeCard(props) {
                 <Col>
                     <Card.Body>
                         <Card.Title>{title}</Card.Title>
-                        <Card.Subtitle className='text-muted mb-2'>{category}{nonAlcoholic ? <strong> (✅ alkoholfrei)</strong> : null}</Card.Subtitle>
+                        <Card.Subtitle className='text-muted mb-2'>{getDrinkCategories().find(c => c.id === category).label}{nonAlcoholic ? <strong> (✅ alkoholfrei)</strong> : null}</Card.Subtitle>
                         <Card.Text>
                             <TextTruncate
                                 line={2}

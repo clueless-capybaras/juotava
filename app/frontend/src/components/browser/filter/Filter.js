@@ -9,7 +9,7 @@ import FilterModel from '../../../model/filterModel';
 import CheckboxDropdown from './CheckboxDropwdown';
 import { getDrinkCategories } from '../../../helperFunctions/getDrinkCategories';
 
-function Filter({loadRecipeExcerptsSuccess}) {
+function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const [filterSuccess, setFilterSuccess] = useState('');
@@ -24,22 +24,28 @@ function Filter({loadRecipeExcerptsSuccess}) {
     useEffect(() => {
         setFilterSuccess('waiting');
         if(loadRecipeExcerptsSuccess === 'success') {
-            arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, true);
+            arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
         }
 
     }, [loadRecipeExcerptsSuccess]);
 
-    const handleChangeNonAlcoholicOnly = (event) => {
-        let temp = filter;
-        temp.showNonAlcoholicOnly = event.target.checked;
-        setFilter({...temp});
+    const handleChangeNonAlcOnly = (event) => {
+        let temp = {...filter};
+        temp.showNonAlcOnly = event.target.checked;
+        setFilter(temp);
         saveFilter(temp);
     }
 
     const [saveFilterSuccess, setSaveFilterSuccess] = useState('');
+    const saveFilterSuccessHandler = (msg) => {
+        setSaveFilterSuccess(msg);
+        if (msg === 'success') {
+            triggerRefresh();
+        }
+    }
     const saveFilter = (newFilter) => {
         setSaveFilterSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/save', 'POST', JSON.stringify(newFilter), null, setSaveFilterSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/save', 'POST', JSON.stringify(newFilter), undefined, saveFilterSuccessHandler, false);
     }
 
     return (
@@ -49,6 +55,7 @@ function Filter({loadRecipeExcerptsSuccess}) {
         {/* Filter by category */}
         {filterSuccess === 'waiting' ?
             <h4 className="text-center my-5">
+                Lade Filter <br />
                 <Spinner animation="border" role="status" />
             </h4>
         : null}
@@ -57,21 +64,13 @@ function Filter({loadRecipeExcerptsSuccess}) {
                 Filter konnten nicht gefunden werden.
             </h4>
         : null}
-        {filterSuccess === 'success' && filter == null ?
-        "Fehler"
-        :
-        <>
-        <Row className="mb-2">
-            <Col>
-            </Col>
-        </Row>
+        {filterSuccess === 'success' ?
         <Row>
-            <Form.Check type="checkbox" label="alkoholfrei" checked={filter.showNonAlcoholicOnly} onChange={(event) => handleChangeNonAlcoholicOnly(event)} />
+            <Form.Check type="checkbox" label="alkoholfrei" checked={filter.showNonAlcOnly} onChange={(event) => handleChangeNonAlcOnly(event)} />
             <Form.Check type="checkbox" label="vegan" disabled />
             <Form.Check type="checkbox" label="laktosefrei" disabled />
         </Row>
-        </>
-        
+        : null
         }       
         </Container>
     );

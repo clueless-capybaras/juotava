@@ -9,6 +9,7 @@ import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders
 import CreatorCard from './CreatorCard';
 
 import placeholderimage from '../../image-placeholder.jpeg';
+import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
 
 function Recipe(props) {
     const navigate = useNavigate();
@@ -76,7 +77,7 @@ function Recipe(props) {
                 <Row className="mb-3">
                     <h3 className="text-muted">
                         {recipe ? 
-                            recipe.category
+                            getDrinkCategories().find((category) => category.id === recipe.category).label
                         : generatePlaceholders(1, 4, 6)}
                         {recipe ?
                             (recipe.nonAlcoholic ? <strong> (✅ alkoholfrei)</strong> : "")
