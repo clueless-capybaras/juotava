@@ -70,12 +70,12 @@ public class RecipesController {
     @PostMapping(path = "recipe/save")
     public String saveRecipe(@RequestBody Recipe recipe, Authentication authentication){
         try {
-            String auth0uid = authentication.getName();
-            if (!auth0uid.equals(recipe.getCreatedBy())){
-                System.out.println("ERROR: User id "+recipe.getCreatedBy()+" does not match with sending user "+auth0uid);
+            String auth0id = authentication.getName();
+            if (!auth0id.equals(recipe.getCreatedBy())){
+                System.out.println("ERROR: User id "+recipe.getCreatedBy()+" does not match with sending user "+auth0id);
                 return "false";
             }
-            this.recipesService.setCurrentUserToRecipe(recipe, auth0uid);
+            this.recipesService.setCurrentUserToRecipe(recipe, auth0id);
             this.recipesService.saveRecipe(recipe);
             System.out.println("INFO: Saved Recipe: " + recipe.getUuid());
             return recipe.getUuid().toString();
@@ -127,10 +127,42 @@ public class RecipesController {
     }
 
     @GetMapping(path = "recipe/{uuid}")
-    public Recipe getRecipe(@PathVariable UUID uuid){
-        return this.recipesService.getRecipe(uuid);
+    public Recipe getRecipe(@PathVariable UUID uuid, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getRecipe(uuid, auth0id);
     }
 
+    @GetMapping(path = "list/my")
+    public List<RecipeList> getMyRecipeLists(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getRecipeListsByUser(auth0id);
+    }
+
+    @PostMapping(path = "list/new")
+    public String addRecipeList(@RequestBody String title, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.createRecipeList(title, auth0id);
+    }
+
+    @PostMapping(path = "list/addrecipe/{listId}")
+    public boolean addRecipeToList(@PathVariable UUID listId, @RequestBody String recipeId, Authentication authentication){
+        UUID recipeUuid = UUID.fromString(recipeId);
+        String auth0id = authentication.getName();
+        return this.recipesService.addRecipeToList(listId, recipeUuid, auth0id);
+    }
+
+    @PostMapping(path = "list/addfavorite")
+    public boolean addRecipeToList(@RequestBody String recipeId, Authentication authentication){
+        UUID recipeUuid = UUID.fromString(recipeId);
+        String auth0id = authentication.getName();
+        return this.recipesService.addRecipeToFavorite(recipeUuid, auth0id);
+    }
+
+    @GetMapping(path = "list/{listId}")
+    public RecipeList getRecipeList(@PathVariable UUID listId, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getRecipeList(listId, auth0id);
+    }
     //
     // FILTERS
     //

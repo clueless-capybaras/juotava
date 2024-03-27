@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { InputGroup } from 'react-bootstrap';
 
 import Button from 'react-bootstrap/Button';
@@ -7,7 +7,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
-function PrepList({handleFunction}) {
+function PrepList({recipe, handleFunction}) {
 
     const [inputs, setInputs] = useState([{order: 0, description: ""}]);
 
@@ -35,6 +35,12 @@ function PrepList({handleFunction}) {
         setInputs(onChangeValue);
         handleFunction(onChangeValue);
     }
+
+    useEffect(() => {
+        if (recipe.steps && recipe.steps.length > 0) {
+            setInputs(recipe.steps);
+        }
+    }, [recipe]);
 
     return(
         <>
