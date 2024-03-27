@@ -30,7 +30,7 @@ function Browser(props) {
         <Container fluid className='mb-5'>
             <Row>
                 <Col sm='3'>
-                    <Filter />
+                    <Filter loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} />
                 </Col>
                 <Col sm='8'>
                     {loadRecipeExcerptsSuccess === 'waiting' ?
