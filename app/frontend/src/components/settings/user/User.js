@@ -38,7 +38,6 @@ function User(props) {
     }
 
     const handleChangeUsername = (event) => {
-        //console.log(event.target.value);
         const newUsername = event.target.value;
         setUserSet(prevUserSet => ({
             ...prevUserSet,
@@ -47,7 +46,6 @@ function User(props) {
     }
 
     const handleChangeShowUsername = (event) => {
-        //console.log(event.target.checked);
         const newShowUsername = event.target.checked;
         setUserSet(prevUserSet => ({
             ...prevUserSet,
@@ -61,7 +59,7 @@ function User(props) {
     const [saveUserSuccess, setSaveUserSuccess] = useState();
     const handleSave = () => {
         setSaveUserSuccess("waiting");
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/save', 'POST', JSON.stringify(userSet), undefined, setSaveUserSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/save', 'POST', JSON.stringify(userSet), undefined, setSaveUserSuccess, false);
     }
 
     const [userSet, setUserSet] = useState(
@@ -74,7 +72,7 @@ function User(props) {
     const [userSetSuccess, setUserSetSuccess] = useState();
     useEffect(() => {
         setUserSetSuccess("waiting");
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/my', 'GET', undefined, setUserSet, setUserSetSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlUser, 'user/my', 'GET', undefined, setUserSet, setUserSetSuccess, false);
     }, []);
     
     
