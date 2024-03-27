@@ -156,7 +156,7 @@ public class RecipesController {
     @GetMapping(path = "filter/my")
     public Filter getMyFilter(Authentication authentication){
         String auth0id = authentication.getName();
-        return this.recipesService.getFilterByUser(auth0id);
+        return this.recipesService.getFilterByUser(auth0id, true);
     }
 
 }

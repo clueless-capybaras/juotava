@@ -75,7 +75,7 @@ public class RecipesService {
     }
 
     public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id) {
-        Filter filter = getFilterByUser(auth0id);
+        Filter filter = getFilterByUser(auth0id, false);
         //Filter
         return getAllRecipes().stream()
             .filter(recipe -> (
@@ -147,7 +147,8 @@ public class RecipesService {
 
     public void saveFilter(Filter filter) { this.filterRepository.save(filter); }
 
-    public Filter getFilterByUser(String auth0id) {
+    public Filter getFilterByUser(String auth0id, boolean createNew) {
+
         try {
 
             Filter filter = filterRepository.findByCorrespondingUserAuth0id(auth0id);
@@ -158,7 +159,7 @@ public class RecipesService {
         } catch (Exception e) {
             Filter filter = new Filter();
             filter.setCorrespondingUser(auth0id);
-            this.filterRepository.save(filter);
+            if (createNew) { this.filterRepository.save(filter); }
             return filter;
         }
     }
