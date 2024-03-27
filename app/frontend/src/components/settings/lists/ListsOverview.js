@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router';
 import placeholderImage from '../../../image-placeholder.jpeg'
 import favoriteIcon from '../../../icons/favorite_border_black_48dp.svg'
 import { useState, useEffect, useContext } from "react";
-import { Col, FloatingLabel, Form, Row, Spinner } from "react-bootstrap";
+import { Button, Col, FloatingLabel, Form, Row, Spinner } from "react-bootstrap";
 
 import StackedListIcon from "./StackedListIcon";
 import RecipeList from "../../../model/recipeList";
+import ListsModal from "./ListsModal";
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 import { baseUrlRecipes } from '../../../config/config';
 
@@ -22,6 +23,7 @@ function Lists() {
 
     const [icon, setIcon] = useState();
 
+    const [modalShow, setModalShow] = useState(false);
     const [savedLists, setSavedLists] = useState([]);
 
     useEffect(() => {
@@ -53,34 +55,40 @@ function Lists() {
     return(
         <>
         <Row>
-            {loadRecipeListSuccess === 'waiting' ? 
-                <h4 className="text-center my-5">
-                    Lade Listen <br />
-                    <Spinner animation="border" role="status" />
-                </h4>
-            : ''
-            }
-            {loadRecipeListSuccess === 'error' ?
-                <h4 className="text-center my-5">
-                    Beim Laden der Listen ist ein Fehler aufgetreten, das tut uns leid!
-                </h4>
-            : ''
-            }
-            {loadRecipeListSuccess === 'success' ?
-                (savedLists.length > 0) ? savedLists.map((list, index) => (
-                    <Col key={index} style={{maxWidth: '12.75rem'}}>
-                        <Row className='mb-4'>
-                            <StackedListIcon icon={icon} />
-                        </Row>
-                        <Row className='justify-content-center text-center'>
-                            <FloatingLabel controlId="floatingTitle" label="Titel">
-                                <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={list.title}/>
-                            </FloatingLabel>
-                        </Row>
-                    </Col>
-                )) : 'Es sind bisher keine Listen erstellt worden'
-            : ''
-            }
+            <Col>
+                {loadRecipeListSuccess === 'waiting' ? 
+                    <h4 className="text-center my-5">
+                        Lade Listen <br />
+                        <Spinner animation="border" role="status" />
+                    </h4>
+                : ''
+                }
+                {loadRecipeListSuccess === 'error' ?
+                    <h4 className="text-center my-5">
+                        Beim Laden der Listen ist ein Fehler aufgetreten, das tut uns leid!
+                    </h4>
+                : ''
+                }
+                {loadRecipeListSuccess === 'success' ?
+                    (savedLists.length > 0) ? savedLists.map((list, index) => (
+                        <Col key={index} style={{maxWidth: '12.75rem'}}>
+                            <Row className='mb-4'>
+                                <StackedListIcon icon={icon} />
+                            </Row>
+                            <Row className='justify-content-center text-center'>
+                                <FloatingLabel controlId="floatingTitle" label="Titel">
+                                    <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={list.title}/>
+                                </FloatingLabel>
+                            </Row>
+                        </Col>
+                    )) : 'Es sind bisher keine Listen erstellt worden'
+                : ''
+                }
+            </Col>
+            <Col>
+                <Button variant="primary" size="lg" onClick={() => setModalShow(true)}>+</Button>
+                <ListsModal show={modalShow} onHide={() => setModalShow(false)} />
+            </Col>
         </Row>
         </>
     )
