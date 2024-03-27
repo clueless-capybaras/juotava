@@ -35,7 +35,6 @@ class AuthenticatedRequestWrapper{
             }
             try {
                 if (method === 'GET') { // if the request is GET, it is 'success' if the response can be successfully parsed as JSON
-                    console.log('GET');
                     let res = await responseClone.json();
                     successFunction('success');
                     if (debug) { console.log("Request was successful, because of valid json:", res); }
