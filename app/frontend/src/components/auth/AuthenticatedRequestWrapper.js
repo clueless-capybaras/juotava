@@ -44,11 +44,9 @@ class AuthenticatedRequestWrapper{
                     if (res === 'true') { // if the response is 'true', it is 'success'
                         successFunction('success');
                         if (debug) { console.log("Request was successful, because response was 'true'"); }
-                        stateFunction(res);
                     } else if (uuidRegex.test(res)) { // if the response is a UUID, it is 'success'
                         successFunction('success');
                         if (debug) { console.log("Request was successful, because "+res +" is a valid UUID"); }
-                        stateFunction(res);
                     } else { // if the response can be successfully parsed as JSON, it is 'success'
                         if (res === 'false') { // if the response is 'false', it is 'error'
                             if (debug) { console.log("Request was not successful, because response was 'false'"); }
