@@ -71,9 +71,6 @@ function Browser(props) {
                         )}
                 </Col>
             </Row>
-            <Row>
-                <Button onClick={() => console.log(recipeExcerpts)}>log</Button>
-            </Row>
         </Container>
     );
 }

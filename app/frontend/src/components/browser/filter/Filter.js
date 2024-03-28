@@ -85,16 +85,24 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
 
     return (
         <Container>
-        <h4>Filter</h4>
+        <h4 className="mb-4">Filter</h4>
 
         {/* Filter by category */}
         {filterSuccess === 'waiting' ?
-            <Row>
-                <Dropdown>
-                    <Dropdown.Toggle variant="primary" disabled>Kategorien</Dropdown.Toggle>
-                </Dropdown>
-                <Form.Check type="checkbox" label="alkoholfrei" disabled />
+            <>
+            <Row className="mb-2">
+                <Col>
+                    <Dropdown>
+                        <Dropdown.Toggle variant="primary" disabled>Kategorien</Dropdown.Toggle>
+                    </Dropdown>
+                </Col>
             </Row>
+            <Row>
+                <Col>
+                    <Form.Check type="checkbox" label="alkoholfrei" disabled />
+                </Col>
+            </Row>
+            </>
         : null}
         {filterSuccess === 'error' ?
             <h4 className="text-center my-5">
@@ -102,33 +110,41 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
             </h4>
         : null}
         {filterSuccess === 'success' ?
+        <>
+        <Row className="mb-2">
+            <Col>
+                <Dropdown>
+                    <Dropdown.Toggle variant="primary">Kategorien</Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        {getDrinkCategories().map((category, index) => {
+                            return (
+                                <Form.Check key={index} 
+                                    type="checkbox" 
+                                    id={category.id}
+                                    label={category.label} 
+                                    checked={filter.categories.includes(category.id) ? true : false}
+                                    onChange={(event) => handleChangeCategory(event)}
+                                    className="ms-2" />
+                            )
+                        })
+                        }
+                        <Dropdown.Divider />
+                        <ButtonGroup>
+                            <Button variant="link" onClick={handleShowAllCategories}>Alle</Button>
+                            <Button variant="link" onClick={handleShowNoCategories}>Keine</Button>
+                        </ButtonGroup>
+                    </Dropdown.Menu>
+                </Dropdown>
+            </Col>
+        </Row>
         <Row>
-            <Dropdown>
-                <Dropdown.Toggle variant="primary">Kategorien</Dropdown.Toggle>
-                <Dropdown.Menu>
-                    {getDrinkCategories().map((category, index) => {
-                        return (
-                            <Form.Check key={index} 
-                                type="checkbox" 
-                                id={category.id}
-                                label={category.label} 
-                                checked={filter.categories.includes(category.id) ? true : false}
-                                onChange={(event) => handleChangeCategory(event)}
-                                className="ms-2" />
-                        )
-                    })
-                    }
-                    <Dropdown.Divider />
-                    <ButtonGroup>
-                        <Button variant="link" onClick={handleShowAllCategories}>Alle</Button>
-                        <Button variant="link" onClick={handleShowNoCategories}>Keine</Button>
-                    </ButtonGroup>
-                </Dropdown.Menu>
-            </Dropdown>
-            <Form.Check type="checkbox" label="alkoholfrei" checked={filter.showNonAlcOnly} onChange={(event) => handleChangeNonAlcOnly(event)} />
+            <Col>
+                <Form.Check type="checkbox" label="alkoholfrei" checked={filter.showNonAlcOnly} onChange={(event) => handleChangeNonAlcOnly(event)} />
+            </Col>
             {/*<Form.Check type="checkbox" label="vegan" disabled />
             <Form.Check type="checkbox" label="laktosefrei" disabled />*/}
         </Row>
+        </>
         : null} 
         </Container>
     );
