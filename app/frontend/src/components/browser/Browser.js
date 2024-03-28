@@ -5,7 +5,7 @@ import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
 import {Button, Col, Container, Row, Spinner} from 'react-bootstrap'
 import RecipeCard from '../general/RecipeCard';
-import Recipe from '../general/Recipe';
+import Filter from './filter/Filter';
 
 function Browser(props) {
     const navigate = useNavigate();
@@ -16,10 +16,15 @@ function Browser(props) {
     const [loadRecipeExcerptsSuccess, setLoadRecipeExcerptsSuccess] = useState('');
 
     // send Request: RecipeExcerpts
+    const [refresh, setRefresh] = useState(0);
+    // triggers in Filter when filter is saved
+    const triggerRefresh = () => {
+        setRefresh(refresh + 1);
+    }
     useEffect(() => {
-        setLoadRecipeExcerptsSuccess('waiting')
+        setLoadRecipeExcerptsSuccess('waiting');
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, true);
-    }, []);
+    }, [refresh]);
 
     const handleOpenRecipe = ((uuid) => {
         navigate('/browser/recipe/'+uuid);
@@ -28,7 +33,9 @@ function Browser(props) {
     return (
         <Container fluid className='mb-5'>
             <Row>
-                <Col sm='3'>Filter</Col>
+                <Col sm='3'>
+                    <Filter loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} triggerRefresh={triggerRefresh} />
+                </Col>
                 <Col sm='8'>
                     {loadRecipeExcerptsSuccess === 'waiting' ?
                         <h4 className="text-center my-5">
@@ -52,10 +59,11 @@ function Browser(props) {
                             recipeExcerpts.map((item, index) => {
                                 return(
                                     <Row key={index} className="mb-3" style={{margin: 0}}>
+                                        {item.title}
                                         <RecipeCard 
                                             id={item.uuid} 
-                                            onClick={() => handleOpenRecipe(item.uuid)} 
-                                            recipeExcerpt={item}
+                                            handleClick={() => handleOpenRecipe(item.uuid)} 
+                                            excerpt={item}
                                         />
                                     </Row>
                                 );

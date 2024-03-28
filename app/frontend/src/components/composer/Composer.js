@@ -20,6 +20,7 @@ import Recipe from '../../model/recipe';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import { baseUrlRecipes } from '../../config/config';
 import { InputGroup } from 'react-bootstrap';
+import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
 
 
 function Composer() {
@@ -29,7 +30,7 @@ function Composer() {
     const { editUuid } = useParams();
     const [showModal, setShowModal] = useState(false);
     const [recipe, setRecipe] = useState(new Recipe(
-        '', '', 'Cocktail', '', '', [], [], {prompt: '', basebase64data: ''}, ''
+        '', '', 'COCKTAIL', '', '', [], [], {prompt: '', basebase64data: ''}, ''
     ));
     const [loadRecipeSuccess, setLoadRecipeSuccess] = useState("");
     const [saveRecipeSuccess, setSaveRecipeSuccess] = useState("");
@@ -130,13 +131,10 @@ function Composer() {
                             <Col>
                                 <InputGroup>
                                     <FloatingLabel controlId="floatingCategory" label="Kategorie">
-                                        <Form.Select placeholder="Kategorie" onChange={(e) => handleChangeCategory(e)} value={recipe.category!==''?recipe.category:'Cocktail'}>
-                                            <option>Cocktail</option>
-                                            <option>Kaffee</option>
-                                            <option>Limonade</option>
-                                            <option>Saft</option>
-                                            <option>Smoothie</option>
-                                            <option>Tee</option>
+                                        <Form.Select placeholder="Kategorie" onChange={(e) => handleChangeCategory(e)} value={recipe.category!==''?recipe.category:'COCKTAIL'}>
+                                            {getDrinkCategories().map((category, key) => {
+                                                return <option key={key} value={category.id}>{category.label}</option>
+                                            })}
                                         </Form.Select>
                                     </FloatingLabel>
                                     <InputGroup.Checkbox id="nonAlcoholicCb" type="checkbox" label="alkoholfrei" onChange={(e) => handleChangeNonAlcoholic(e)}  checked={recipe.nonAlcoholic}/>

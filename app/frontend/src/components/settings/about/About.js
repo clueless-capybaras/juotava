@@ -12,6 +12,8 @@ function About(props) {
         <h1>Über</h1>
         
         <Container className="mb-5">
+            <Card>
+            <Card.Body>
             <h2>Features</h2>
             <Row>
                 <Col>
@@ -104,8 +106,12 @@ function About(props) {
                     </Accordion>
                 </Col>
             </Row>
+            </Card.Body>
+            </Card>
         </Container>
-        <Container className="mb-5">
+        <Container className="">
+            <Card>
+            <Card.Body>
             <h2>Devs</h2>
             <Row>
                 <Col>
@@ -128,6 +134,8 @@ function About(props) {
                     </Row>
                 </Col>
             </Row>
+            </Card.Body>
+            </Card>
         </Container>
         </>
 

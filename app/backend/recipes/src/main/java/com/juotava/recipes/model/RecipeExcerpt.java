@@ -48,14 +48,4 @@ public class RecipeExcerpt {
         this.ingredients.sort(Comparator.comparingInt(Ingredient::getOrder));
         return ingredients;
     }
-
-    public void addIngredient(Ingredient ingredient) {
-        ingredient.setOrder(this.ingredients.size());
-        this.ingredients.add(ingredient);
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
 }
