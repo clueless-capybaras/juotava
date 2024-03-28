@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
-import {Col, Container, Row, Spinner} from 'react-bootstrap'
+import {Button, Col, Container, Row, Spinner} from 'react-bootstrap'
 import RecipeCard from '../general/RecipeCard';
 import Filter from './filter/Filter';
 
@@ -23,7 +23,7 @@ function Browser(props) {
     }
     useEffect(() => {
         setLoadRecipeExcerptsSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, false);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, true);
     }, [refresh]);
 
     const handleOpenRecipe = ((uuid) => {
@@ -59,16 +59,20 @@ function Browser(props) {
                             recipeExcerpts.map((item, index) => {
                                 return(
                                     <Row key={index} className="mb-3" style={{margin: 0}}>
+                                        {item.title}
                                         <RecipeCard 
                                             id={item.uuid} 
-                                            onClick={() => handleOpenRecipe(item.uuid)} 
-                                            recipeExcerpt={item}
+                                            handleClick={() => handleOpenRecipe(item.uuid)} 
+                                            excerpt={item}
                                         />
                                     </Row>
                                 );
                             })
                         )}
                 </Col>
+            </Row>
+            <Row>
+                <Button onClick={() => console.log(recipeExcerpts)}>log</Button>
             </Row>
         </Container>
     );

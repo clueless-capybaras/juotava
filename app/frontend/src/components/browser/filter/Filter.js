@@ -21,11 +21,11 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
     const [filterSuccess, setFilterSuccess] = useState('');
     useEffect(() => {
         setFilterSuccess('waiting');
-        if(loadRecipeExcerptsSuccess === 'success') {
-            arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
-        }
 
-    }, [loadRecipeExcerptsSuccess]);
+            arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
+        
+
+    }, []);
 
     const handleChangeNonAlcOnly = (event) => {
         let temp = {...filter};
@@ -46,7 +46,7 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
                 }
             });
         }
-        console.log(temp);
+        console.log("Handler: ",temp);
         setFilter(temp);
         saveFilter(temp);
     }
@@ -79,6 +79,7 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
     }
     const saveFilter = (newFilter) => {
         setSaveFilterSuccess('waiting');
+        console.log("Filter Post: ",newFilter);
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/save', 'POST', JSON.stringify(newFilter), undefined, saveFilterSuccessHandler, false);
     }
 
