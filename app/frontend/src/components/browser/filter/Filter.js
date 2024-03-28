@@ -3,24 +3,22 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 import {baseUrlRecipes } from '../../../config/config';
 
-import { Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Container, Dropdown, Form, Row, Spinner } from 'react-bootstrap';
 
 import FilterModel from '../../../model/filterModel';
-import CheckboxDropdown from './CheckboxDropwdown';
 import { getDrinkCategories } from '../../../helperFunctions/getDrinkCategories';
 
 function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
-    const [filterSuccess, setFilterSuccess] = useState('');
-
+    
     const [filter, setFilter] = useState(
         new FilterModel(
-            '', false, [/*getDrinkCategories().map((category) => category.label)*/]
+            '', false, []
         )
     );
-
-    // Checkbox Dropdown Category Items
+            
+    const [filterSuccess, setFilterSuccess] = useState('');
     useEffect(() => {
         setFilterSuccess('waiting');
         if(loadRecipeExcerptsSuccess === 'success') {
@@ -32,6 +30,42 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
     const handleChangeNonAlcOnly = (event) => {
         let temp = {...filter};
         temp.showNonAlcOnly = event.target.checked;
+        setFilter(temp);
+        saveFilter(temp);
+    }
+
+    const handleChangeCategory = (event) => {
+        let temp = {...filter};
+        if (event.target.checked) {
+            temp.categories.push(event.target.id);
+            temp.categories.sort();
+        } else {
+            temp.categories.map((category, index) => {
+                if (category === event.target.id) {
+                    temp.categories.splice(index, 1);
+                }
+            });
+        }
+        console.log(temp);
+        setFilter(temp);
+        saveFilter(temp);
+    }
+
+    const handleShowAllCategories = () => {
+        let temp = {...filter};
+        getDrinkCategories().map((category) => {
+            if (!temp.categories.includes(category.id)) {
+                temp.categories.push(category.id);
+            }
+        });
+        temp.categories.sort();
+        setFilter(temp);
+        saveFilter(temp);
+    }
+
+    const handleShowNoCategories = () => {
+        let temp = {...filter};
+        temp.categories = [];
         setFilter(temp);
         saveFilter(temp);
     }
@@ -54,10 +88,12 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
 
         {/* Filter by category */}
         {filterSuccess === 'waiting' ?
-            <h4 className="text-center my-5">
-                Lade Filter <br />
-                <Spinner animation="border" role="status" />
-            </h4>
+            <Row>
+                <Dropdown>
+                    <Dropdown.Toggle variant="primary" disabled>Kategorien</Dropdown.Toggle>
+                </Dropdown>
+                <Form.Check type="checkbox" label="alkoholfrei" disabled />
+            </Row>
         : null}
         {filterSuccess === 'error' ?
             <h4 className="text-center my-5">
@@ -66,12 +102,33 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
         : null}
         {filterSuccess === 'success' ?
         <Row>
+            <Dropdown>
+                <Dropdown.Toggle variant="primary">Kategorien</Dropdown.Toggle>
+                <Dropdown.Menu>
+                    {getDrinkCategories().map((category, index) => {
+                        return (
+                            <Form.Check key={index} 
+                                type="checkbox" 
+                                id={category.id}
+                                label={category.label} 
+                                checked={filter.categories.includes(category.id) ? true : false}
+                                onChange={(event) => handleChangeCategory(event)}
+                                className="ms-2" />
+                        )
+                    })
+                    }
+                    <Dropdown.Divider />
+                    <ButtonGroup>
+                        <Button variant="link" onClick={handleShowAllCategories}>Alle</Button>
+                        <Button variant="link" onClick={handleShowNoCategories}>Keine</Button>
+                    </ButtonGroup>
+                </Dropdown.Menu>
+            </Dropdown>
             <Form.Check type="checkbox" label="alkoholfrei" checked={filter.showNonAlcOnly} onChange={(event) => handleChangeNonAlcOnly(event)} />
-            <Form.Check type="checkbox" label="vegan" disabled />
-            <Form.Check type="checkbox" label="laktosefrei" disabled />
+            {/*<Form.Check type="checkbox" label="vegan" disabled />
+            <Form.Check type="checkbox" label="laktosefrei" disabled />*/}
         </Row>
-        : null
-        }       
+        : null} 
         </Container>
     );
 }

@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
-import {Button, Col, Container, Row, Spinner} from 'react-bootstrap'
+import {Col, Container, Row, Spinner} from 'react-bootstrap'
 import RecipeCard from '../general/RecipeCard';
-import Recipe from '../general/Recipe';
 import Filter from './filter/Filter';
 
 function Browser(props) {
@@ -23,8 +22,8 @@ function Browser(props) {
         setRefresh(refresh + 1);
     }
     useEffect(() => {
-        setLoadRecipeExcerptsSuccess('waiting')
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, true);
+        setLoadRecipeExcerptsSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, false);
     }, [refresh]);
 
     const handleOpenRecipe = ((uuid) => {
