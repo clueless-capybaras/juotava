@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Filter {
 
     @Setter
+    @Column(unique = true)
     private String correspondingUser;
     @Id
     @GeneratedValue
