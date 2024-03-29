@@ -105,11 +105,24 @@ public class RecipesService {
     // SETTERS
     //
 
-    public void saveRecipe(Recipe recipe){
-        recipe.getIngredients().forEach(this.ingredientRepository::save);
-        recipe.getSteps().forEach(this.stepRepository::save);
-        this.imageRepository.save(recipe.getImage());
-        this.recipeRepository.save(recipe);
+    public boolean saveRecipe(Recipe recipe){
+        try {
+            Recipe existing = this.recipeRepository.findByUuid(recipe.getUuid());
+            if (!recipe.getCreatedBy().equals(existing.getCreatedBy())){
+                System.out.println("ERROR: Recipe "+ recipe.getUuid()+" exists but does not belong to user "+recipe.getCreatedBy());
+                return false;
+            }
+            throw new Exception("");
+        } catch (Exception e){
+            recipe.getIngredients().forEach(this.ingredientRepository::save);
+            recipe.getSteps().forEach(this.stepRepository::save);
+            this.imageRepository.save(recipe.getImage());
+            this.recipeRepository.save(recipe);
+            System.out.println("INFO: Saved Recipe "+ recipe.getUuid());
+            return true;
+        }
+
+
     }
 
     public void addIngredientToRecipe(Recipe recipe, Ingredient ingredient){
