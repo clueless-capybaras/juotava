@@ -258,7 +258,7 @@ public class RecipesService {
         // Encode byte[] to base64 string
         byte[] imageBytes = bos.toByteArray();
         return Base64.getEncoder().encodeToString(imageBytes);
-
+    }
     //
     //  FILTERS
     //
