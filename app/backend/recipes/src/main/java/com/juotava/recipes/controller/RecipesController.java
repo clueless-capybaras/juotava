@@ -28,40 +28,6 @@ public class RecipesController {
         return "hello world";
     }
 
-    @GetMapping(path = "/test")
-    public Recipe addDemoRecipe(Authentication authentication){
-        String auth0uid = authentication.getName();
-        Recipe recipe = new Recipe("Demo Recipe", "This is a demo recipe!", "Dairy", true);
-        this.recipesService.addIngredientToRecipe(recipe, new Ingredient(
-                "Water", 100, Unit.MILLILITRES
-        ));
-        this.recipesService.addIngredientToRecipe(recipe, new Ingredient(
-                "Milk", 50, Unit.MILLILITRES
-        ));
-        this.recipesService.addIngredientToRecipe(recipe, new Ingredient(
-                "Sugar", 1, Unit.TEASPOONS
-        ));
-        this.recipesService.addStepToRecipe(recipe, new Step(
-            "Fill water into a cup"
-        ));
-        this.recipesService.addStepToRecipe(recipe, new Step(
-                "Add cute latte art with milk"
-        ));
-        this.recipesService.addStepToRecipe(recipe, new Step(
-                "place the sugar inside a straw"
-        ));
-        this.recipesService.addStepToRecipe(recipe, new Step(
-                "Finished, ready to drink 🍷"
-        ));
-        this.recipesService.setImageOfRecipe(recipe, new Image(
-                "picture of a drink", "This is an image"
-        ));
-        this.recipesService.setCreatedByOfRecipe(recipe, auth0uid);
-        this.recipesService.saveRecipe(recipe);
-        System.out.println(recipe.getUuid());
-        return recipe;
-    }
-
     /*
         Endpoints /recipe/*
         Interact with recipes
@@ -76,9 +42,13 @@ public class RecipesController {
                 return "false";
             }
             this.recipesService.setCurrentUserToRecipe(recipe, auth0id);
-            this.recipesService.saveRecipe(recipe);
-            System.out.println("INFO: Saved Recipe: " + recipe.getUuid());
-            return recipe.getUuid().toString();
+            boolean success = this.recipesService.saveRecipe(recipe);
+            if (success){
+                return recipe.getUuid().toString();
+            } else {
+                throw new Exception("ERROR: Recipe not saved!");
+            }
+
         } catch (Exception ex){
             System.out.println(ex.getMessage());
             return "false";
@@ -169,20 +139,9 @@ public class RecipesController {
 
     @PostMapping(path = "filter/save")
     public String saveFilter(@RequestBody Filter filter, Authentication authentication) {
-        try {
-            String auth0id = authentication.getName();
-            if (!auth0id.equals(filter.getCorrespondingUser())){
-                System.out.println("ERROR: User id "+filter.getCorrespondingUser()+" does not match with sending user "+auth0id);
-                return "false";
-            }
-            filter.setCorrespondingUser(auth0id);
-            this.recipesService.saveFilter(filter);
-            System.out.println("INFO: Saved Filter: " + filter.getUuid());
-            return filter.getUuid().toString();
-        } catch (Exception ex){
-            System.out.println(ex.getMessage());
-            return "false";
-        }
+        String auth0id = authentication.getName();
+        boolean success = this.recipesService.saveFilter(filter, auth0id);
+        return success? filter.getUuid().toString():"false";
     }
 
     @GetMapping(path = "filter/my")

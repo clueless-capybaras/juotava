@@ -113,11 +113,24 @@ public class RecipesService {
     // SETTERS
     //
 
-    public void saveRecipe(Recipe recipe){
-        recipe.getIngredients().forEach(this.ingredientRepository::save);
-        recipe.getSteps().forEach(this.stepRepository::save);
-        this.imageRepository.save(recipe.getImage());
-        this.recipeRepository.save(recipe);
+    public boolean saveRecipe(Recipe recipe){
+        try {
+            Recipe existing = this.recipeRepository.findByUuid(recipe.getUuid());
+            if (!recipe.getCreatedBy().equals(existing.getCreatedBy())){
+                System.out.println("ERROR: Recipe "+ recipe.getUuid()+" exists but does not belong to user "+recipe.getCreatedBy());
+                return false;
+            }
+            throw new Exception("");
+        } catch (Exception e){
+            recipe.getIngredients().forEach(this.ingredientRepository::save);
+            recipe.getSteps().forEach(this.stepRepository::save);
+            this.imageRepository.save(recipe.getImage());
+            this.recipeRepository.save(recipe);
+            System.out.println("INFO: Saved Recipe "+ recipe.getUuid());
+            return true;
+        }
+
+
     }
 
     public void addIngredientToRecipe(Recipe recipe, Ingredient ingredient){
@@ -263,7 +276,27 @@ public class RecipesService {
     //  FILTERS
     //
 
-    public void saveFilter(Filter filter) { this.filterRepository.save(filter); }
+    public boolean saveFilter(Filter filter, String auth0id) {
+        if (!auth0id.equals(filter.getCorrespondingUser())){
+            System.out.println("ERROR: Filter correspondingUser "+filter.getCorrespondingUser()+" does not match with sending user "+ auth0id);
+            return false;
+        }
+        try {
+            Filter existing = this.filterRepository.findByUuid(filter.getUuid());
+            if (!existing.getCorrespondingUser().equals(filter.getCorrespondingUser())) {
+                System.out.println("ERROR: Filter " + filter.getUuid() + " exists but does not belong to user " + auth0id);
+                return false;
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e){
+            this.filterRepository.save(filter);
+            System.out.println("INFO: Saved filter "+ filter.getUuid());
+            return true;
+        }
+
+
+    }
 
     public Filter getFilterByUser(String auth0id, boolean createNew) {
 
