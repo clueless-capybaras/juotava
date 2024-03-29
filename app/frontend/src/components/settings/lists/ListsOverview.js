@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import placeholderImage from '../../../image-placeholder.jpeg'
 import favoriteIcon from '../../../icons/favorite_border_black_48dp.svg'
 import { useState, useEffect, useContext } from "react";
-import { Button, Col, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Container, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
 
 import StackedListIcon from "./StackedListIcon";
 import RecipeList from "../../../model/recipeList";
@@ -89,20 +89,23 @@ function Lists() {
     }
     
     return(
-        <>
+        <Container>
         <Row>
-            <Col>
                 {loadRecipeListSuccess === 'waiting' ? 
-                    <h4 className="text-center my-5">
-                        Lade Listen <br />
-                        <Spinner animation="border" role="status" />
-                    </h4>
+                    <Col>
+                        <h4 className="text-center my-5">
+                            Lade Listen <br />
+                            <Spinner animation="border" role="status" />
+                        </h4>
+                    </Col>
                 : ''
                 }
                 {loadRecipeListSuccess === 'error' ?
-                    <h4 className="text-center my-5">
-                        Beim Laden der Listen ist ein Fehler aufgetreten, das tut uns leid!
-                    </h4>
+                    <Col>
+                        <h4 className="text-center my-5">
+                            Beim Laden der Listen ist ein Fehler aufgetreten, das tut uns leid!
+                        </h4>
+                    </Col>
                 : ''
                 }
                 {loadRecipeListSuccess === 'success' ?
@@ -112,11 +115,11 @@ function Lists() {
                                 <StackedListIcon icon={icon} />
                             </Row>
                             <Row className='justify-content-center text-center'>
-                                <Col>
+                                <Col sm='8'>
                                     {list.title}
                                 </Col>
-                                <Col>
-                                    <Button variant='secondary' size='sm' onClick={() => handleEditList(list.title, list.uuid)}>
+                                <Col sm='4'>
+                                    <Button variant='link' size='sm' onClick={() => handleEditList(list.title, list.uuid)}>
                                         <span className='material-icons'>
                                             edit
                                         </span>
@@ -127,7 +130,6 @@ function Lists() {
                     )) : 'Es sind bisher keine Listen erstellt worden'
                 : ''
                 }
-            </Col>
             <Col>
                 <Button variant="primary" size="lg" onClick={handleNewList}>+</Button>
             </Col>
@@ -144,11 +146,14 @@ function Lists() {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Row className='justify-content-center text-center'>
+                    <Row>
                         <Col>
                             <FloatingLabel controlId="floatingTitle" label="Titel">
-                                <Form.Control placeholder="Titel" value={modalData} onChange={(event) => handleTitleInput(event)}/>
+                                <Form.Control placeholder="Titel" value={modalData} maxLength={30} onChange={(event) => handleTitleInput(event)}/>
                             </FloatingLabel>
+                            <Form.Text className="text-muted">
+                                {modalData?modalData.length:0}/30 Zeichen
+                            </Form.Text>
                         </Col>
                     </Row>
                 </Modal.Body>
@@ -158,7 +163,7 @@ function Lists() {
                 </Modal.Footer>
             </Modal>
         </Row>
-        </>
+        </Container>
     )
 }
 

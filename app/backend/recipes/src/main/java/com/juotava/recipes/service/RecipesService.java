@@ -204,11 +204,12 @@ public class RecipesService {
 
     public boolean changeRecipeList(UUID listId, String newTitle, String auth0id) {
         try {
-            RecipeList list = this.recipeListRepository.findByUuid(listId);
-            if (!auth0id.equals(list.getCreatedBy())){
+            RecipeList recipeList = this.recipeListRepository.findByUuid(listId);
+            if (!auth0id.equals(recipeList.getCreatedBy())){
                 return false;
             }
-            list.setTitle(newTitle);
+            recipeList.setTitle(newTitle);
+            this.recipeListRepository.save(recipeList);
             return true;
         } catch (Exception e){
             System.out.println("Warning: List does not exist" + listId);
