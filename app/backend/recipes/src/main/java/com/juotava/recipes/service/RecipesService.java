@@ -4,6 +4,7 @@ import com.juotava.recipes.model.*;
 import com.juotava.recipes.model.Image;
 import com.juotava.recipes.model.dto.ImageRequest;
 import com.juotava.recipes.model.dto.ImageResposeSuccess;
+import com.juotava.recipes.repository.filter.FilterRepository;
 import com.juotava.recipes.repository.image.ImageRepository;
 import com.juotava.recipes.repository.ingredient.IngredientRepository;
 import com.juotava.recipes.repository.recipe.RecipeRepository;
@@ -49,15 +50,21 @@ public class RecipesService {
     private final StepRepository stepRepository;
     private final ImageRepository imageRepository;
     private final RecipeListRepository recipeListRepository;
+    private final FilterRepository filterRepository;
 
     @Autowired
-    public RecipesService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, StepRepository stepRepository, ImageRepository imageRepository, RecipeListRepository recipeListRepository) {
+    public RecipesService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, StepRepository stepRepository, ImageRepository imageRepository, RecipeListRepository recipeListRepository, FilterRepository filterRepository) {
         this.recipeRepository = recipeRepository;
         this.ingredientRepository = ingredientRepository;
         this.stepRepository = stepRepository;
         this.imageRepository = imageRepository;
         this.recipeListRepository = recipeListRepository;
+        this.filterRepository = filterRepository;
     }
+
+    //
+    //  GETTERS
+    //
 
     public Recipe getRecipe(UUID uuid, String auth0id){
         try {
@@ -90,13 +97,21 @@ public class RecipesService {
         return this.recipeRepository.findPublishedByCreatedByAuth0id(auth0id);
     }
 
-    public List<RecipeExcerpt> getAllRecipeExcerpts() {
-        List<RecipeExcerpt> tempList = new ArrayList<>();
-        getAllRecipes().stream()
-                .map(elt -> tempList.add(new RecipeExcerpt(elt.getUuid(), elt.getTitle(), elt.getCategory(), elt.isNonAlcoholic(), elt.getDescription(), elt.getIngredients(), elt.getImage())))
-                .collect(Collectors.toList());
-        return(tempList);
+    public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id) {
+        Filter filter = getFilterByUser(auth0id, false);
+        //Filter
+        return getAllRecipes().stream()
+            .filter(recipe -> (
+                    (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
+                && (filter.compareToCategories(recipe.getCategory()))
+            ))
+            .map(this::parseToExcerpt)
+            .collect(Collectors.toList());
     }
+
+    //
+    // SETTERS
+    //
 
     public void saveRecipe(Recipe recipe){
         recipe.getIngredients().forEach(this.ingredientRepository::save);
@@ -197,6 +212,10 @@ public class RecipesService {
         }
     }
 
+    //
+    //  GENERATION
+    //
+
     public Image generateImage(String prompt, String user){
         ImageRequest request = new ImageRequest(prompt, model, 1, "hd", "b64_json", user);
         ImageResposeSuccess response = openaiRestTemplate.postForObject(apiUrl, request, ImageResposeSuccess.class);
@@ -239,5 +258,31 @@ public class RecipesService {
         // Encode byte[] to base64 string
         byte[] imageBytes = bos.toByteArray();
         return Base64.getEncoder().encodeToString(imageBytes);
+
+    //
+    //  FILTERS
+    //
+
+    public void saveFilter(Filter filter) { this.filterRepository.save(filter); }
+
+    public Filter getFilterByUser(String auth0id, boolean createNew) {
+
+        try {
+
+            Filter filter = filterRepository.findByCorrespondingUserAuth0id(auth0id);
+            if (filter == null) {
+                throw new Exception("Cannot find Filter");
+            }
+            return filter;
+        } catch (Exception e) {
+            Filter filter = new Filter();
+            filter.setCorrespondingUser(auth0id);
+            if (createNew) { this.filterRepository.save(filter); }
+            return filter;
+        }
+    }
+
+    public RecipeExcerpt parseToExcerpt(Recipe recipe) {
+        return new RecipeExcerpt(recipe.getUuid(), recipe.getTitle(), recipe.getCategory(), recipe.isNonAlcoholic(), recipe.getDescription(), recipe.getIngredients(), recipe.getImage());
     }
 }

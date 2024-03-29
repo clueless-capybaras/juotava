@@ -1,48 +1,48 @@
 import './RecipeCard.css';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {Col, Container, Placeholder, Row, Card} from 'react-bootstrap';
 import TextTruncate from 'react-text-truncate';
 import placeholderImage from '../../image-placeholder.jpeg'
+import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
 
-function RecipeCard(props) {
-    const [uuid, setUuid] = useState(props.recipeExcerpt.uuid);
-    const [title, setTitle] = useState(props.recipeExcerpt.title);
-    const [category, setCategory] = useState(props.recipeExcerpt.category);
-    const [nonAlcoholic, setNonAlcoholic] = useState(props.recipeExcerpt.nonAlcoholic);
-    const [description, setDescription] = useState(props.recipeExcerpt.description);
-    const [ingredients, setIngredients] = useState(props.recipeExcerpt.ingredients);
-    const [image, setImage] = useState(props.recipeExcerpt.image);
+function RecipeCard({excerpt, handleClick}) {
+    const [recipeExcerpt, setRecipeExcerpt] = useState(excerpt);
+
+    useEffect(() => {
+        setRecipeExcerpt(excerpt);
+    }, [excerpt]);
 
     const getIngredientsString = (ingred) => {
         return ingred.map((ingr) => ingr.name).join(", ");
     }
 
+    const [ingrString, setIngrString] = useState("");
     
     return (
-        <Card onClick={props.onClick} style={{paddingLeft: 0, paddingRight: 0}}>
+        <Card onClick={handleClick} style={{paddingLeft: 0, paddingRight: 0}}>
             <Row className='g-0'>
                 <Col sm='auto'>
                     <div className="image-container">
-                        <Card.Img src={image.base64data} alt={image.prompt} />
+                        <Card.Img src={recipeExcerpt.image.base64data} alt={recipeExcerpt.image.prompt} />
                     </div>
                 </Col>
                 <Col>
                     <Card.Body>
-                        <Card.Title>{title}</Card.Title>
-                        <Card.Subtitle className='text-muted mb-2'>{category}{nonAlcoholic ? <strong> (✅ alkoholfrei)</strong> : null}</Card.Subtitle>
+                        <Card.Title>{recipeExcerpt.title}</Card.Title>
+                        <Card.Subtitle className='text-muted mb-2'>{getDrinkCategories().find(c => c.id === recipeExcerpt.category).label}{recipeExcerpt.nonAlcoholic ? <strong> (✅ alkoholfrei)</strong> : null}</Card.Subtitle>
                         <Card.Text>
                             <TextTruncate
                                 line={2}
                                 element="span"
-                                text={description}
+                                text={recipeExcerpt.description}
                             />
                         </Card.Text>
                         <Card.Text className="text-muted">
                             <TextTruncate
                                 line={1}
                                 element="span"
-                                text={getIngredientsString(ingredients)}
+                                text={getIngredientsString(recipeExcerpt.ingredients)}
                             />
                             
                         </Card.Text>

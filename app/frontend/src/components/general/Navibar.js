@@ -8,7 +8,7 @@ import LogInIndicator from '../auth/LogInIndicator';
 
 function Navibar(props) {
     return (
-      <Navbar sticky="top" key={false} bg="dark" variant="dark" className="mb-3 justify-content-between">
+      <Navbar sticky="top" key={false} bg="primary" variant="dark" className="mb-3 justify-content-between">
         <Nav>
           <Nav.Link as={NavLink} to='/' style={{textDecoration: 'none', color: 'white'}}>
             <img src={logo} alt="Logo" style={{height: '30px', width: '30px'}} className="d-inline-block align-top"/>
