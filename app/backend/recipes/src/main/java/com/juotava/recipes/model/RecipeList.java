@@ -35,4 +35,8 @@ public class RecipeList {
     public void addRecipeToList(Recipe recipe) {
         this.recipes.add(recipe);
     }
+
+    public void setTitle(String newTitle) {
+        this.title = newTitle;
+    }
 }

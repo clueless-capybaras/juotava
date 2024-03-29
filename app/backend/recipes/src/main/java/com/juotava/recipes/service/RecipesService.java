@@ -201,4 +201,18 @@ public class RecipesService {
                 "data:image/png;base64,"+response.getData().get(0).getB64_json()
         );
     }
+
+    public boolean changeRecipeList(UUID listId, String newTitle, String auth0id) {
+        try {
+            RecipeList list = this.recipeListRepository.findByUuid(listId);
+            if (!auth0id.equals(list.getCreatedBy())){
+                return false;
+            }
+            list.setTitle(newTitle);
+            return true;
+        } catch (Exception e){
+            System.out.println("Warning: List does not exist" + listId);
+            return false;
+        }
+    }
 }

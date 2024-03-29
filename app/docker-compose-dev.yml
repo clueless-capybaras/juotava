@@ -10,6 +10,8 @@ services:
       - /app/node_modules
       - ./frontend:/app
     restart: unless-stopped
+    environment:
+      - WATCHPACK_POLLING=true
 
   backend-recipe:
     container_name: backend-recipes
