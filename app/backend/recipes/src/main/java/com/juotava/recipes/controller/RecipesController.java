@@ -125,15 +125,22 @@ public class RecipesController {
      */
 
     @GetMapping(path = "list/my")
-    public List<RecipeList> getMyRecipeLists(Authentication authentication){
+    public List<RecipeListExcerpt> getMyRecipeLists(Authentication authentication){
         String auth0id = authentication.getName();
-        return this.recipesService.getRecipeListsByUser(auth0id);
+        List<RecipeListExcerpt> recipeListExcerpts = this.recipesService.getRecipeListsByUser(auth0id);
+        return recipeListExcerpts;
     }
 
     @PostMapping(path = "list/new")
     public String addRecipeList(@RequestBody String title, Authentication authentication){
         String auth0id = authentication.getName();
         return this.recipesService.createRecipeList(title, auth0id);
+    }
+
+    @PostMapping(path = "list/save/{listId}")
+    public boolean saveRecipeChanges(@PathVariable UUID listId, @RequestBody String newTitle, Authentication authentication) {
+        String auth0Id = authentication.getName();
+        return this.recipesService.changeRecipeList(listId, newTitle, auth0Id);
     }
 
     @PostMapping(path = "list/addrecipe/{listId}")

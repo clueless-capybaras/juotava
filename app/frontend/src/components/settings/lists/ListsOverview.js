@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import placeholderImage from '../../../image-placeholder.jpeg'
 import favoriteIcon from '../../../icons/favorite_border_black_48dp.svg'
 import { useState, useEffect, useContext } from "react";
-import { Col, FloatingLabel, Form, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Container, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
 
 import StackedListIcon from "./StackedListIcon";
 import RecipeList from "../../../model/recipeList";
@@ -15,14 +15,33 @@ function Lists() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const navigate = useNavigate();
-    const [recipeList, setRecipeList] = useState(new RecipeList());
+    const [recipeListId, setRecipeListId] = useState();
 
     const [loadRecipeListSuccess, setLoadRecipeListSuccess] = useState("");
     const [saveRecipeListSuccess, setSaveRecipeListSuccess] = useState("");
 
+    const [updateRecipeListSuccess, setUpdateRecipeListSuccess] = useState(false);
+
     const [icon, setIcon] = useState();
 
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const [modalData, setModalData] = useState("");
+
     const [savedLists, setSavedLists] = useState([]);
+    const [editMode, setEditMode] = useState(false);
+
+    const handleTitleInput = (event) => {
+        setModalData(event.target.value);
+    }
+
+    const validateSaveButton = () => {
+        if (modalData !== undefined && modalData.trim() !== "") {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     useEffect(() => {
         if(false){
@@ -30,59 +49,121 @@ function Lists() {
         } else{
             setIcon(placeholderImage);
         }
-      }, []);
+        if (saveRecipeListSuccess === "success" || saveRecipeListSuccess === "") {
+            setLoadRecipeListSuccess('waiting');
+            arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/my', 'GET', undefined, setSavedLists, setLoadRecipeListSuccess, true);   
+        }
+      }, [saveRecipeListSuccess]);
 
-    useEffect(() => {
-        setLoadRecipeListSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/my', 'GET', undefined, setSavedLists, setLoadRecipeListSuccess, true)
-    }, []);
+    const handleNewList = () => {
+        setEditMode(false);
+        setModalData("");
+        setShow(true);
+    };
 
-    const handleChangeTitle = (event) => {
-        let tmpRecipeList = recipeList;
-        tmpRecipeList.title = event.target.value;
-        setRecipeList(tmpRecipeList);
+    const handleEditList = (title, uuid) => {
+        setEditMode(true);
+        setModalData(title);
+        setRecipeListId(uuid);
+        setShow(true);
     }
 
-    const handleSave = (title) => {
+    const handleUpdate = () => {
         setSaveRecipeListSuccess("waiting");
-        let tmpRecipeList = recipeList;
-        tmpRecipeList.title = title;
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/new', 'POST', )
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/save/' + recipeListId, 'POST', modalData, undefined, setSaveRecipeListSuccess, true);
+        setShow(false);
+    }
+
+    const handleNew = () => {
+        setSaveRecipeListSuccess("waiting");
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/new', 'POST', modalData, undefined, setSaveRecipeListSuccess, false);
+        setShow(false);
+    }
+
+    const handleSave = () => {
+        if(editMode){
+            handleUpdate();
+        } else {
+            handleNew();
+        }
     }
     
     return(
-        <>
+        <Container>
         <Row>
-            {loadRecipeListSuccess === 'waiting' ? 
-                <h4 className="text-center my-5">
-                    Lade Listen <br />
-                    <Spinner animation="border" role="status" />
-                </h4>
-            : ''
-            }
-            {loadRecipeListSuccess === 'error' ?
-                <h4 className="text-center my-5">
-                    Beim Laden der Listen ist ein Fehler aufgetreten, das tut uns leid!
-                </h4>
-            : ''
-            }
-            {loadRecipeListSuccess === 'success' ?
-                (savedLists.length > 0) ? savedLists.map((list, index) => (
-                    <Col key={index} style={{maxWidth: '12.75rem'}}>
-                        <Row className='mb-4'>
-                            <StackedListIcon icon={icon} />
-                        </Row>
-                        <Row className='justify-content-center text-center'>
-                            <FloatingLabel controlId="floatingTitle" label="Titel">
-                                <Form.Control placeholder="Titel" onChange={(e) => handleChangeTitle(e)} value={list.title}/>
-                            </FloatingLabel>
-                        </Row>
+                {loadRecipeListSuccess === 'waiting' ? 
+                    <Col>
+                        <h4 className="text-center my-5">
+                            Lade Listen <br />
+                            <Spinner animation="border" role="status" />
+                        </h4>
                     </Col>
-                )) : 'Es sind bisher keine Listen erstellt worden'
-            : ''
-            }
+                : ''
+                }
+                {loadRecipeListSuccess === 'error' ?
+                    <Col>
+                        <h4 className="text-center my-5">
+                            Beim Laden der Listen ist ein Fehler aufgetreten, das tut uns leid!
+                        </h4>
+                    </Col>
+                : ''
+                }
+                {loadRecipeListSuccess === 'success' ?
+                    (savedLists.length > 0) ? savedLists.map((list, index) => (
+                        <Col key={index} style={{maxWidth: '12.75rem'}}>
+                            <Row className='mb-4'>
+                                <StackedListIcon thumbnails={list.thumbnails} />
+                            </Row>
+                            <Row className='justify-content-center text-center'>
+                                <Col sm='8'>
+                                    {list.title}
+                                </Col>
+                                <Col sm='4'>
+                                    <Button variant='link' size='sm' onClick={() => handleEditList(list.title, list.uuid)}>
+                                        <span className='material-icons'>
+                                            edit
+                                        </span>
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Col>
+                    )) : 'Es sind bisher keine Listen erstellt worden'
+                : ''
+                }
+            <Col>
+                <Button variant="primary" size="lg" onClick={handleNewList}>+</Button>
+            </Col>
+            <Modal
+                show={show} 
+                onHide={handleClose}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                    Listentitel ändern
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Row>
+                        <Col>
+                            <FloatingLabel controlId="floatingTitle" label="Titel">
+                                <Form.Control placeholder="Titel" value={modalData} maxLength={30} onChange={(event) => handleTitleInput(event)}/>
+                            </FloatingLabel>
+                            <Form.Text className="text-muted">
+                                {modalData?modalData.length:0}/30 Zeichen
+                            </Form.Text>
+                        </Col>
+                    </Row>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>Abbrechen</Button>
+                    <Button variant="primary" disabled={!validateSaveButton()} onClick={handleSave}>Speichern</Button>
+                </Modal.Footer>
+            </Modal>
         </Row>
-        </>
+        </Container>
     )
 }
 
