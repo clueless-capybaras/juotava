@@ -22,7 +22,7 @@ function CreatorCard({createdBy}) {
         <Row className="d-flex align-items-center">
             <Col style={{maxWidth: "5rem"}}>
                 <Image
-                    src={creator ? creator.image.base64data : placeholderimage}
+                    src={(creator && creator.image && creator.image.base64data) ? creator.image.base64data : placeholderimage}
                     style={{maxWidth: "4rem", maxHeight: "4rem"}}
                     roundedCircle
                 />
