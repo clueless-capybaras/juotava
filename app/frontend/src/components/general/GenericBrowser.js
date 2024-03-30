@@ -1,24 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useAuth0 } from '@auth0/auth0-react';
-import { AuthenticatedRequestWrapperContext } from '../../App';
-import {baseUrlRecipes } from '../../config/config';
 
 import { Col, Row, Spinner } from 'react-bootstrap';
 
 import RecipeCard from './RecipeCard';
 
-function GenericBrowser({refresh}) {
-    const arw = useContext(AuthenticatedRequestWrapperContext);
-    const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
-
-    const [recipeExcerpts, setRecipeExcerpts] = useState([]);
-    const [loadRecipeExcerptsSuccess, setLoadRecipeExcerptsSuccess] = useState('');
-    useEffect(() => {
-        setLoadRecipeExcerptsSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, false);
-    }, [refresh]);
-
+function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess}) {
     const navigate = useNavigate();
     const handleOpenRecipe = ((uuid) => {
         navigate('/browser/recipe/'+uuid);

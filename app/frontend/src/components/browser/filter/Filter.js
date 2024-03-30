@@ -14,14 +14,15 @@ function Filter({triggerRefresh}) {
     
     const [filter, setFilter] = useState(
         new FilterModel(
-            '', false, []
+            false, []
         )
     );
             
     const [filterSuccess, setFilterSuccess] = useState('');
     useEffect(() => {
         setFilterSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
+        console.log("Before: ",filter);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, true);
         
 
     }, []);
@@ -103,6 +104,7 @@ function Filter({triggerRefresh}) {
         {filterSuccess === 'error' ?
             <h4 className="text-center my-5">
                 Filter konnten nicht gefunden werden.
+                <Button onClick={() => console.log("After: ",filter)}>Debug</Button>
             </h4>
         : null}
         {filterSuccess === 'success' ?
