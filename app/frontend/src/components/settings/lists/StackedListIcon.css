@@ -2,7 +2,14 @@
     position: relative;
     top: 0;
     left: 0;
+    transition: transform 0.4s;
 }
+
+.parent:hover {
+    cursor: pointer;
+    transform: scale(1.01);
+}
+
 .image1 {
     position: relative;
     top: 0;
