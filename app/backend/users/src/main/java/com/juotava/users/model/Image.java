@@ -26,7 +26,11 @@ public class Image {
     }
 
     public String getBase64data() {
-        return new String(this.base64data);
+        try {
+            return new String(this.base64data);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void setBase64data(String base64data) {
