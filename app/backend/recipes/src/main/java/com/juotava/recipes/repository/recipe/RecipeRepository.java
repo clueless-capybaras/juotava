@@ -28,7 +28,7 @@ public class RecipeRepository {
     }
 
     public List<Recipe> findPublishedByCreatedByAuth0id(String auth0id){
-        return this.springRecipeRepository.findByCreatedByAndDraftTrue(auth0id);
+        return this.springRecipeRepository.findByCreatedByAndDraftFalse(auth0id);
     }
 
     public List<Recipe> findAllPublished(){
