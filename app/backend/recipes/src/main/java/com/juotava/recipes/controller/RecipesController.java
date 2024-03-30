@@ -103,7 +103,7 @@ public class RecipesController {
     }
 
     @GetMapping(path = "list/my")
-    public List<RecipeList> getMyRecipeLists(Authentication authentication){
+    public List<RecipeListExcerpt> getMyRecipeLists(Authentication authentication){
         String auth0id = authentication.getName();
         return this.recipesService.getRecipeListsByUser(auth0id);
     }

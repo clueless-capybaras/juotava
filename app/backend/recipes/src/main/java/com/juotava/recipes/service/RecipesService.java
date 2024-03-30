@@ -160,8 +160,10 @@ public class RecipesService {
         recipe.setCreatedBy(auth0id);
     }
 
-    public List<RecipeList> getRecipeListsByUser(String auth0id) {
-        return this.recipeListRepository.findByCreatedByAuth0id(auth0id);
+    public List<RecipeListExcerpt> getRecipeListsByUser(String auth0id) {
+        List<RecipeList> recipeLists = this.recipeListRepository.findByCreatedByAuth0id(auth0id);
+        List<RecipeListExcerpt> recipeListExcerpts = recipeLists.stream().map((RecipeListExcerpt::new)).toList();
+        return recipeListExcerpts;
     }
 
     public String createRecipeList(String title, String auth0id) {
