@@ -27,7 +27,7 @@ public class RecipeListExcerpt {
             try {
                 images.add(recipes.get(i).getImage());
             } catch (Exception e){
-                images.add(new Image());
+                images.add(new Image(""));
             }
         }
         this.thumbnails = images;

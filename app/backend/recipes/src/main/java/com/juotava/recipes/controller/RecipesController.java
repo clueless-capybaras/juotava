@@ -105,7 +105,8 @@ public class RecipesController {
     @GetMapping(path = "list/my")
     public List<RecipeListExcerpt> getMyRecipeLists(Authentication authentication){
         String auth0id = authentication.getName();
-        return this.recipesService.getRecipeListsByUser(auth0id);
+        List<RecipeListExcerpt> recipeListExcerpts = this.recipesService.getRecipeListsByUser(auth0id);
+        return recipeListExcerpts;
     }
 
     @PostMapping(path = "list/new")
