@@ -38,7 +38,7 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess}) {
                             <RecipeCard 
                                 id={excerpt.uuid} 
                                 handleClick={() => handleOpenRecipe(excerpt.uuid)} 
-                                excerpt={excerpt}
+                                recipeExcerpt={excerpt}
                             />
                         </Col>
                     </Row>

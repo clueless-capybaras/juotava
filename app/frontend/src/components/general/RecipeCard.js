@@ -1,23 +1,16 @@
 import './RecipeCard.css';
 
-import { useEffect, useState } from 'react';
 import {Col, Container, Placeholder, Row, Card} from 'react-bootstrap';
 import TextTruncate from 'react-text-truncate';
-import placeholderImage from '../../image-placeholder.jpeg'
+import LinesEllipsis from 'react-lines-ellipsis';
+
 import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
 
-function RecipeCard({excerpt, handleClick}) {
-    const [recipeExcerpt, setRecipeExcerpt] = useState(excerpt);
-
-    useEffect(() => {
-        setRecipeExcerpt(excerpt);
-    }, [excerpt]);
+function RecipeCard({recipeExcerpt, handleClick}) {
 
     const getIngredientsString = (ingred) => {
         return ingred.map((ingr) => ingr.name).join(", ");
     }
-
-    const [ingrString, setIngrString] = useState("");
     
     return (
         <Card onClick={handleClick} style={{paddingLeft: 0, paddingRight: 0}}>
@@ -32,19 +25,22 @@ function RecipeCard({excerpt, handleClick}) {
                         <Card.Title>{recipeExcerpt.title}</Card.Title>
                         <Card.Subtitle className='text-muted mb-2'>{getDrinkCategories().find(c => c.id === recipeExcerpt.category).label}{recipeExcerpt.nonAlcoholic ? <strong> (✅ alkoholfrei)</strong> : null}</Card.Subtitle>
                         <Card.Text>
-                            <TextTruncate
-                                line={2}
-                                element="span"
+                            <LinesEllipsis
                                 text={recipeExcerpt.description}
+                                maxLine='2'
+                                ellipsis='...'
+                                trimRight
+                                basedOn='letters'
                             />
                         </Card.Text>
                         <Card.Text className="text-muted">
-                            <TextTruncate
-                                line={1}
-                                element="span"
+                            <LinesEllipsis
                                 text={getIngredientsString(recipeExcerpt.ingredients)}
+                                maxLine='1'
+                                ellipsis='...'
+                                trimRight
+                                basedOn='letters'
                             />
-                            
                         </Card.Text>
                     </Card.Body>
                 </Col>
