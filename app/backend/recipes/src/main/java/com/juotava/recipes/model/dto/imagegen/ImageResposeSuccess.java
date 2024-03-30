@@ -1,4 +1,4 @@
-package com.juotava.recipes.model.dto;
+package com.juotava.recipes.model.dto.imagegen;
 
 import lombok.Getter;
 import lombok.Setter;

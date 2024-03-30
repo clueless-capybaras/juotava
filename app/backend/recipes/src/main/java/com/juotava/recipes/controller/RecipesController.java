@@ -156,4 +156,13 @@ public class RecipesController {
         return this.recipesService.getFilterByUser(auth0id, true);
     }
 
+    //
+    // Drink of the day
+    //
+
+    @GetMapping(path = "drinkoftheday")
+    public DrinkOfTheDay getDrinkOfTheDay(){
+        return this.recipesService.getDrinkOfTheDay();
+    }
+
 }
