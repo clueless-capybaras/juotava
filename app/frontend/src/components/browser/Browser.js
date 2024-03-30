@@ -59,7 +59,6 @@ function Browser(props) {
                             recipeExcerpts.map((item, index) => {
                                 return(
                                     <Row key={index} className="mb-3" style={{margin: 0}}>
-                                        {item.title}
                                         <RecipeCard 
                                             id={item.uuid} 
                                             handleClick={() => handleOpenRecipe(item.uuid)} 
