@@ -112,7 +112,7 @@ function Lists() {
                     (savedLists.length > 0) ? savedLists.map((list, index) => (
                         <Col key={index} style={{maxWidth: '12.75rem'}}>
                             <Row className='mb-4'>
-                                <StackedListIcon icon={icon} />
+                                <StackedListIcon thumbnails={list.thumbnails} />
                             </Row>
                             <Row className='justify-content-center text-center'>
                                 <Col sm='8'>
