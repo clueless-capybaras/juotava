@@ -318,4 +318,19 @@ public class RecipesService {
     public RecipeExcerpt parseToExcerpt(Recipe recipe) {
         return new RecipeExcerpt(recipe.getUuid(), recipe.getTitle(), recipe.getCategory(), recipe.isNonAlcoholic(), recipe.getDescription(), recipe.getIngredients(), recipe.getImage());
     }
+
+    public boolean changeRecipeList(UUID listId, String newTitle, String auth0id) {
+        try {
+            RecipeList recipeList = this.recipeListRepository.findByUuid(listId);
+            if (!auth0id.equals(recipeList.getCreatedBy())){
+                return false;
+            }
+            recipeList.setTitle(newTitle);
+            this.recipeListRepository.save(recipeList);
+            return true;
+        } catch (Exception e){
+            System.out.println("Warning: List does not exist" + listId);
+            return false;
+        }
+    }
 }

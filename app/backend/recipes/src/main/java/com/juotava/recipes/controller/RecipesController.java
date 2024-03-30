@@ -114,6 +114,12 @@ public class RecipesController {
         return this.recipesService.createRecipeList(title, auth0id);
     }
 
+    @PostMapping(path = "list/save/{listId}")
+    public boolean saveRecipeChanges(@PathVariable UUID listId, @RequestBody String newTitle, Authentication authentication) {
+        String auth0Id = authentication.getName();
+        return this.recipesService.changeRecipeList(listId, newTitle, auth0Id);
+    }
+
     @PostMapping(path = "list/addrecipe/{listId}")
     public boolean addRecipeToList(@PathVariable UUID listId, @RequestBody String recipeId, Authentication authentication){
         UUID recipeUuid = UUID.fromString(recipeId);
