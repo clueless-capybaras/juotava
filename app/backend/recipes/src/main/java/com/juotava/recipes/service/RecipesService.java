@@ -7,6 +7,7 @@ import com.juotava.recipes.model.dto.imagegen.ImageResposeSuccess;
 import com.juotava.recipes.model.dto.textgen.Message;
 import com.juotava.recipes.model.dto.textgen.TextRequest;
 import com.juotava.recipes.model.dto.textgen.TextResponseSuccess;
+import com.juotava.recipes.model.dto.weather.WeatherResponseSuccess;
 import com.juotava.recipes.repository.drinkOfTheDay.DrinkOfTheDayRepository;
 import com.juotava.recipes.repository.filter.FilterRepository;
 import com.juotava.recipes.repository.image.ImageRepository;
@@ -17,6 +18,7 @@ import com.juotava.recipes.repository.step.StepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,6 +40,9 @@ public class RecipesService {
     @Qualifier("openaiRestTemplate")
     @Autowired
     private RestTemplate openaiRestTemplate;
+    @Autowired
+    private RestTemplate weatherApiRestTemplate;
+
     @Value("${openai.model.images}")
     private String imageModel;
     @Value("${openai.api.url.images}")
@@ -46,6 +51,10 @@ public class RecipesService {
     private String textModel;
     @Value("${openai.api.url.text}")
     private String textApiUrl;
+    @Value("${weatherapi.api.url}")
+    private String weatherApiUrl;
+    @Value("${weatherapi.api.location}")
+    private String weatherApiLocation;
 
 
 
@@ -292,7 +301,9 @@ public class RecipesService {
             List<Recipe> recipes = this.recipeRepository.findAllPublished();
             if (!recipes.isEmpty()){
                 DrinkOfTheDay drinkOfTheDay = this.generateDrinkOfTheDay(LocalDate.now(), recipes);
-                this.drinkOfTheDayRepository.save(drinkOfTheDay);
+                if (drinkOfTheDay != null){
+                    this.drinkOfTheDayRepository.save(drinkOfTheDay);
+                }
                 return drinkOfTheDay;
             } else {
                 System.out.println("ERROR: There are no recipes from which a drink of the day could be chosen");
@@ -303,30 +314,50 @@ public class RecipesService {
     }
 
     public DrinkOfTheDay generateDrinkOfTheDay(LocalDate date, List<Recipe> recipes){
+        String weather = "";
+        if (date.equals(LocalDate.now())){
+            weather = requestTodaysWeather();
+        }
+
         String recipesString = recipes.stream().map(Recipe::toRecipeOfTheDayString).collect(Collectors.joining(","));
         TextRequest request = new TextRequest(textModel);
-        request.addMessage(new Message("system", "You are a deciding machine. I will give you a list of Recipes in the format <ID: XXX, Title: YYY, Description: ZZZ>, a date and some weather data. Based on these information you must decide on which Recipe you choose as the drink of the day. Keep in mind that some drinks are better fitted in certain seasons or temperatures. Consider Holidays or special Events. Give a sound reasoning text in German. You answer must under all circumstances follow: <ID: XXX, REASON: YYY>. Do not write any additional text!"));
+        request.addMessage(new Message("system", "You are a deciding machine. I will give you a list of Recipes in the format <ID: XXX, Title: YYY, Description: ZZZ>, a date and some weather data. Based on these information you must decide on which Recipe you choose as the drink of the day. Keep in mind that some drinks are better fitted in certain seasons or temperatures. Consider Holidays or special Events. Give a sound reasoning text in German. Include some Trivia in the reasoning. Do not mention exact numbers on weather data in the reasoning. You answer must under all circumstances follow: <ID: XXX, REASON: YYY>. Do not write any additional text!"));
         request.addMessage(new Message("user",
-                "Today is "+date.toString() +
-                "The recipes are: ( "+ recipesString +")"
+                "Today is "+date.toString() +" " +
+                        weather + " " +
+                        "The recipes are: ( "+ recipesString +")"
         ));
 
-        TextResponseSuccess response = openaiRestTemplate.postForObject(textApiUrl, request, TextResponseSuccess.class);
-        if (response == null || response.getChoices() == null || response.getChoices().isEmpty()){
-            return null;
-        }
-        try {
-            DrinkOfTheDay drinkOfTheDay = new DrinkOfTheDay(
-                    date, response.getChoices().get(0).getMessage().getContent()
-            );
-            drinkOfTheDay.setRecipe(
-                    this.recipeRepository.findByUuid(drinkOfTheDay.getParsedRecipeUuid())
-            );
-            return  drinkOfTheDay;
-        } catch (Exception e){
-            System.out.println("ERROR: Ein Drink des Tages konnte nicht generiert werden. Vermutlich hatte GPT keine Lust 🥲");
+        for (int i = 0; i < 3; i++) {
+            try {
+                TextResponseSuccess response = openaiRestTemplate.postForObject(textApiUrl, request, TextResponseSuccess.class);
+                if (response == null || response.getChoices() == null || response.getChoices().isEmpty()){
+                    return null;
+                }
+                DrinkOfTheDay drinkOfTheDay = new DrinkOfTheDay(
+                        date, response.getChoices().get(0).getMessage().getContent()
+                );
+                drinkOfTheDay.setRecipe(
+                        this.recipeRepository.findByUuid(drinkOfTheDay.getParsedRecipeUuid())
+                );
+                return  drinkOfTheDay;
+            } catch (Exception e){
+                System.out.println("ERROR: Versuch "+(i+1)+". Ein Drink des Tages konnte nicht generiert werden. Vermutlich hatte GPT keine Lust 🥲");
+            }
         }
         return null;
+    }
+
+    public String requestTodaysWeather(){
+        try {
+            WeatherResponseSuccess response = weatherApiRestTemplate.getForObject(weatherApiUrl, WeatherResponseSuccess.class);
+            if (response == null || response.getForecast().getForecastday().get(0).getDay() == null){
+                return null;
+            }
+            return response.getForecast().getForecastday().get(0).getDay().toString();
+        } catch (Exception e){
+            return null;
+        }
     }
 
     //
