@@ -72,12 +72,6 @@ public class RecipesController {
         return this.recipesService.getAllRecipes();
     }
 
-    @GetMapping(path = "recipeexcerpt/all")
-    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication) {
-        String auth0id = authentication.getName();
-        return this.recipesService.getAllRecipeExcerpts(auth0id);
-    }
-
     @GetMapping(path = "recipe/my")
     public List<Recipe> getMyRecipes(Authentication authentication){
         String auth0id = authentication.getName();
@@ -101,6 +95,34 @@ public class RecipesController {
         String auth0id = authentication.getName();
         return this.recipesService.getRecipe(uuid, auth0id);
     }
+
+    /*
+        Endpoints /recipeexcerpt/*
+        Interact with recipe excerpts
+     */
+
+    @GetMapping(path = "recipeexcerpt/all")
+    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication) {
+        String auth0id = authentication.getName();
+        return this.recipesService.getAllRecipeExcerpts(auth0id);
+    }
+
+    @GetMapping(path = "recipeexcerpt/mydrafted")
+    public List<RecipeExcerpt> getMyDraftedRecipeExcerpts(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getDraftedRecipeExcerptsByUser(auth0id);
+    }
+
+    @GetMapping(path = "recipeexcerpt/mypublished")
+    public List<RecipeExcerpt> getMyPublishedRecipeExcerpts(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getPublishedRecipeExcerptsByUser(auth0id);
+    }
+
+    /*
+        Endpoints /list/*
+        Interact with lists
+     */
 
     @GetMapping(path = "list/my")
     public List<RecipeList> getMyRecipeLists(Authentication authentication){
@@ -133,9 +155,10 @@ public class RecipesController {
         String auth0id = authentication.getName();
         return this.recipesService.getRecipeList(listId, auth0id);
     }
-    //
-    // FILTERS
-    //
+    /*
+        Endpoints /filter/*
+        Interact with filters
+     */
 
     @PostMapping(path = "filter/save")
     public String saveFilter(@RequestBody Filter filter, Authentication authentication) {
