@@ -321,7 +321,7 @@ public class RecipesService {
 
         String recipesString = recipes.stream().map(Recipe::toRecipeOfTheDayString).collect(Collectors.joining(","));
         TextRequest request = new TextRequest(textModel);
-        request.addMessage(new Message("system", "You are a deciding machine. I will give you a list of Recipes in the format <ID: XXX, Title: YYY, Description: ZZZ>, a date and some weather data. Based on these information you must decide on which Recipe you choose as the drink of the day. Keep in mind that some drinks are better fitted in certain seasons or temperatures. Consider Holidays or special Events. Give a sound reasoning text in German. Include some Trivia in the reasoning. Do not mention exact numbers on weather data in the reasoning. You answer must under all circumstances follow: <ID: XXX, REASON: YYY>. Do not write any additional text!"));
+        request.addMessage(new Message("system", "You are a deciding machine. I will give you a list of Recipes in the format <ID: XXX, Title: YYY, Description: ZZZ>, a date and some weather data. Based on these information you must decide on which Recipe you choose as the drink of the day. Keep in mind that some drinks are better fitted in certain seasons or temperatures. Consider Holidays or special Events. Give a sound reasoning text in German. Use the colloquial 'Du'. Include some Trivia in the reasoning. Do not mention exact numbers on weather data in the reasoning. You answer must under all circumstances follow: <ID: XXX, REASON: YYY>. Do not write any additional text!"));
         request.addMessage(new Message("user",
                 "Today is "+date.toString() +" " +
                         weather + " " +
