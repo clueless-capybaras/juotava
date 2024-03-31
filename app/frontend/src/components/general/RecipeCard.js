@@ -20,6 +20,7 @@ function RecipeCard({excerpt, handleClick}) {
     const [ingrString, setIngrString] = useState("");
     
     return (
+        recipeExcerpt !== undefined &&
         <Card onClick={handleClick} style={{paddingLeft: 0, paddingRight: 0}}>
             <Row className='g-0'>
                 <Col sm='auto'>
