@@ -5,6 +5,7 @@ import { AuthenticatedRequestWrapperContext } from '../../App';
 import { useAuth0 } from '@auth0/auth0-react';
 import { baseUrlRecipes } from '../../config/config';
 import RecipeCard from '../general/RecipeCard';
+import { useNavigate } from 'react-router-dom';
 
 function Home(props) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
@@ -12,6 +13,7 @@ function Home(props) {
     const [loadDrinkOfTheDaySuccess, setLoadDrinkOfTheDaySuccess] = useState('');
     const [showLoadingMessage, setShowLoadingMessage] = useState(false);
     const [drinkOfTheDay, setDrinkOfTheDay] = useState();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoadDrinkOfTheDaySuccess('waiting');
@@ -47,7 +49,7 @@ function Home(props) {
                     <Col xs={12} sm={8}>
                         <Row className="justify-content-center mb-5">
                             <Col>
-                                <RecipeCard excerpt={drinkOfTheDay?.recipe} />
+                                <RecipeCard handleClick={() => navigate('/browser/recipe/'+drinkOfTheDay?.recipe.uuid)} excerpt={drinkOfTheDay?.recipe} />
                             </Col>
                         </Row>
                         <Row className="justify-content-center mb-5">
