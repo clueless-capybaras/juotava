@@ -109,6 +109,18 @@ public class RecipesService {
             .collect(Collectors.toList());
     }
 
+    public List<RecipeExcerpt> getDraftedRecipeExcerptsByUser(String auth0id){
+        return getDraftedRecipesByUser(auth0id).stream()
+                .map(this::parseToExcerpt)
+                .collect(Collectors.toList());
+    }
+
+    public List<RecipeExcerpt> getPublishedRecipeExcerptsByUser(String auth0id){
+        return getPublishedRecipesByUser(auth0id).stream()
+                .map(this::parseToExcerpt)
+                .collect(Collectors.toList());
+    }
+
     //
     // SETTERS
     //

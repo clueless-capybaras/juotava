@@ -8,23 +8,20 @@ import { Button, ButtonGroup, Col, Container, Dropdown, Form, Row, Spinner } fro
 import FilterModel from '../../../model/filterModel';
 import { getDrinkCategories } from '../../../helperFunctions/getDrinkCategories';
 
-function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
+function Filter({triggerRefresh}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     
     const [filter, setFilter] = useState(
         new FilterModel(
-            '', false, []
+            false, []
         )
     );
             
     const [filterSuccess, setFilterSuccess] = useState('');
     useEffect(() => {
         setFilterSuccess('waiting');
-
-            arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
-        
-
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
     }, []);
 
     const handleChangeNonAlcOnly = (event) => {
@@ -46,7 +43,6 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
                 }
             });
         }
-        console.log("Handler: ",temp);
         setFilter(temp);
         saveFilter(temp);
     }
@@ -79,7 +75,6 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
     }
     const saveFilter = (newFilter) => {
         setSaveFilterSuccess('waiting');
-        console.log("Filter Post: ",newFilter);
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/save', 'POST', JSON.stringify(newFilter), undefined, saveFilterSuccessHandler, false);
     }
 
@@ -87,7 +82,6 @@ function Filter({loadRecipeExcerptsSuccess, triggerRefresh}) {
         <Container>
         <h4 className="mb-4">Filter</h4>
 
-        {/* Filter by category */}
         {filterSuccess === 'waiting' ?
             <>
             <Row className="mb-2">
