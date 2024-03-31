@@ -21,10 +21,7 @@ function Filter({triggerRefresh}) {
     const [filterSuccess, setFilterSuccess] = useState('');
     useEffect(() => {
         setFilterSuccess('waiting');
-        console.log("Before: ",filter);
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, true);
-        
-
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
     }, []);
 
     const handleChangeNonAlcOnly = (event) => {
@@ -104,7 +101,6 @@ function Filter({triggerRefresh}) {
         {filterSuccess === 'error' ?
             <h4 className="text-center my-5">
                 Filter konnten nicht gefunden werden.
-                <Button onClick={() => console.log("After: ",filter)}>Debug</Button>
             </h4>
         : null}
         {filterSuccess === 'success' ?

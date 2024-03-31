@@ -15,7 +15,7 @@ function MyRecipes() {
     const [loadRecipeExcerptsSuccess, setLoadRecipeExcerptsSuccess] = useState('');
     useEffect(() => {
         setLoadRecipeExcerptsSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/mypublished', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/mypublished', 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, false);
     }, []);
 
 
@@ -24,7 +24,6 @@ function MyRecipes() {
         <Row>
             <Col>
                 <GenericBrowser recipeExcerpts={recipeExcerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} />
-                <Button onClick={() => console.log(recipeExcerpts)}>Log</Button>
             </Col>
         </Row>
     );
