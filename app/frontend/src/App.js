@@ -23,9 +23,9 @@ function App() {
           <Navibar cyClass="cy-navBarNav"/>
           <ErrorModal />
           <Routes>
-            <Route path='/' element={<Home />}/>
-            <Route path='/browser' element={<Browser />}/>
-            <Route path='/browser/recipe/:uuid' element={ <Recipe /> } />
+            <Route path='/' element={<AuthGuard component={Home}/>}/>
+            <Route path='/browser' element={<AuthGuard component={Browser}/>}/>
+            <Route path='/browser/recipe/:uuid' element={<AuthGuard component={Recipe}/>} />
             <Route path='/composer/:editUuid?' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<AuthGuard component={Bartinder} />}/>
             <Route path='/settings' element={<AuthGuard component={Settings}/>}/>
