@@ -340,7 +340,7 @@ public class RecipesService {
                 );
                 return  drinkOfTheDay;
             } catch (Exception e){
-                System.out.println("ERROR: Versuch "+(i+1)+". Ein Drink des Tages konnte nicht generiert werden. Vermutlich hatte GPT keine Lust 🥲");
+                System.out.println("ERROR: Attempt "+(i+1)+". A drink of the day could not be generated. This is most likely due to GPT giving a non-conforming answer.");
             }
         }
         return null;
