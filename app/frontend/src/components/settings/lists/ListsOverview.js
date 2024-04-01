@@ -7,7 +7,7 @@ import { useState, useEffect, useContext } from "react";
 import { Button, Col, Container, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
 
 import StackedListIcon from "./StackedListIcon";
-import RecipeList from "../../../model/recipeList";
+import List from "./List";
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 import { baseUrlRecipes } from '../../../config/config';
 
@@ -87,6 +87,10 @@ function Lists() {
             handleNew();
         }
     }
+
+    const handleOpenList = (uuid) => {
+        navigate('/settings/lists/' + uuid);
+    }
     
     return(
         <Container>
@@ -111,7 +115,7 @@ function Lists() {
                 {loadRecipeListSuccess === 'success' ?
                     (savedLists.length > 0) ? savedLists.map((list, index) => (
                         <Col key={index} style={{maxWidth: '12.75rem'}}>
-                            <Row className='mb-4'>
+                            <Row className='mb-4' onClick={() => handleOpenList(list.uuid)}>
                                 <StackedListIcon thumbnails={list.thumbnails} />
                             </Row>
                             <Row className='justify-content-center text-center'>

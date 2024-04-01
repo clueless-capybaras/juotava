@@ -252,6 +252,19 @@ public class RecipesService {
         }
     }
 
+    public List<RecipeExcerpt> getRecipeExcerptsFromList(UUID listId, String auth0id) {
+        try {
+            RecipeList list = this.recipeListRepository.findByUuid(listId);
+            if (!auth0id.equals(list.getCreatedBy())){
+                return null;
+            }
+            return list.getRecipes().stream().map(this::parseToExcerpt).toList();
+        } catch (Exception e){
+            System.out.println("Warning: List does not exist" + listId);
+            return null;
+        }
+    }
+
     //
     //  GENERATION
     //
