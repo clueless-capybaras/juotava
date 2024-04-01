@@ -49,7 +49,7 @@ function Home(props) {
                     <Col xs={12} sm={8}>
                         <Row className="justify-content-center mb-5">
                             <Col>
-                                <RecipeCard handleClick={() => navigate('/browser/recipe/'+drinkOfTheDay?.recipe.uuid)} excerpt={drinkOfTheDay?.recipe} />
+                                <RecipeCard handleClick={() => navigate('/browser/recipe/'+drinkOfTheDay?.recipe.uuid)} recipeExcerpt={drinkOfTheDay?.recipe} />
                             </Col>
                         </Row>
                         <Row className="justify-content-center mb-5">
