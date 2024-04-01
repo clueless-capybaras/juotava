@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ImageResposeSuccess {
+public class ImageResponseSuccess {
     private int created;
     private List<Data> data;
 }

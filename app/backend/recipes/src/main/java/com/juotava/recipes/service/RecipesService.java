@@ -3,7 +3,7 @@ package com.juotava.recipes.service;
 import com.juotava.recipes.model.*;
 import com.juotava.recipes.model.Image;
 import com.juotava.recipes.model.dto.imagegen.ImageRequest;
-import com.juotava.recipes.model.dto.imagegen.ImageResposeSuccess;
+import com.juotava.recipes.model.dto.imagegen.ImageResponseSuccess;
 import com.juotava.recipes.model.dto.textgen.Message;
 import com.juotava.recipes.model.dto.textgen.TextRequest;
 import com.juotava.recipes.model.dto.textgen.TextResponseSuccess;
@@ -18,7 +18,6 @@ import com.juotava.recipes.repository.step.StepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,7 +27,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
@@ -246,7 +244,7 @@ public class RecipesService {
 
     public Image generateImage(String prompt, String user){
         ImageRequest request = new ImageRequest(prompt, imageModel, 1, "hd", "b64_json", user);
-        ImageResposeSuccess response = openaiRestTemplate.postForObject(imageApiUrl, request, ImageResposeSuccess.class);
+        ImageResponseSuccess response = openaiRestTemplate.postForObject(imageApiUrl, request, ImageResponseSuccess.class);
 
         if (response == null || response.getData() == null || response.getData().isEmpty()) {
             return null;
