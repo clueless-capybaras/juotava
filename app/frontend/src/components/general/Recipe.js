@@ -87,7 +87,7 @@ function Recipe(props) {
                             <span className="material-icons">playlist_add</span>
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {(lists && lists.length>0 && recipe) ?
+                            {(lists && lists.length>1 && recipe) ?
                                 lists.map((list, index) => {
                                     if(list.title === 'Favoriten'){
                                         return null;
