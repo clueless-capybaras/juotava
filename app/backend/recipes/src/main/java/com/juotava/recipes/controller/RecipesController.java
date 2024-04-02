@@ -102,9 +102,10 @@ public class RecipesController {
      */
 
     @GetMapping(path = "recipeexcerpt/all")
-    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication) {
+    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication, @RequestParam(required = false) String search) {
         String auth0id = authentication.getName();
-        return this.recipesService.getAllRecipeExcerpts(auth0id);
+        List<RecipeExcerpt> excerpts = this.recipesService.getAllRecipeExcerpts(auth0id, search);
+        return excerpts;
     }
 
     @GetMapping(path = "recipeexcerpt/mydrafted")

@@ -27,10 +27,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.Console;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Base64;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,16 +95,26 @@ public class RecipesService {
         return this.recipeRepository.findPublishedByCreatedByAuth0id(auth0id);
     }
 
-    public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id) {
+    public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id, String search) {
         Filter filter = getFilterByUser(auth0id, false);
         //Filter
-        return getAllRecipes().stream()
-            .filter(recipe -> (
-                    (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
-                && (filter.compareToCategories(recipe.getCategory()))
-            ))
-            .map(this::parseToExcerpt)
-            .collect(Collectors.toList());
+        List<Recipe> recipes = new ArrayList<>(getAllRecipes().stream()
+                .filter(recipe -> (
+                        (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
+                                && (filter.compareToCategories(recipe.getCategory()))
+                                && (search == null || recipe.searchRecipe(search.toLowerCase()))
+                ))
+
+                .toList());
+        if(search != null) {
+            recipes.sort((r1, r2) ->
+                    r1.getPrio()<r2.getPrio() ? 1 :
+                            r1.getPrio()>r2.getPrio() ? -1 :
+                                    0
+                    );
+        }
+
+        return recipes.stream().map(this::parseToExcerpt).collect(Collectors.toList());
     }
 
     public List<RecipeExcerpt> getDraftedRecipeExcerptsByUser(String auth0id){

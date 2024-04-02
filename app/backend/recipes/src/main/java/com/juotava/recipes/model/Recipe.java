@@ -37,6 +37,8 @@ public class Recipe {
     @OneToOne
     private Image image;
 
+    private Integer prio;
+
     public Recipe(String title, String description, String category, boolean nonAlcoholic) {
         this.title = title;
         this.description = description;
@@ -91,5 +93,27 @@ public class Recipe {
             prompt += this.ingredients.get(i).getName()+", ";
         }
         return prompt;
+    }
+
+    public String toString() {
+        String text = "";
+        text += this.title+"; ";
+        text += this.category+"; ";
+        text += this.description+"; ";
+        for (Ingredient ingredient : this.ingredients) {
+            text += ingredient.getName()+", ";
+        }
+        return text.toLowerCase();
+    }
+
+    public boolean searchRecipe(String search){
+        List<String> decodedQuery = List.of(search.split(" "));
+        this.prio = 0;
+        for (String string : decodedQuery) {
+            if (this.toString().contains(string)) {
+                this.prio++;
+            }
+        }
+        return prio > 0;
     }
 }
