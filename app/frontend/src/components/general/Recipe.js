@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
-import { Badge, Button, Col, Container, FloatingLabel, Form, Image, ListGroup, Row, Table } from 'react-bootstrap';
+import { Badge, Button, Col, Container, Dropdown, FloatingLabel, Form, Image, ListGroup, Row, Table, Toast, ToastContainer } from 'react-bootstrap';
 import { unitToString } from '../../helperFunctions/unitToString';
 import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders';
 import CreatorCard from './CreatorCard';
@@ -18,18 +18,26 @@ function Recipe(props) {
 
     const [recipe, setRecipe] = useState();
     const [portions, setPortions] = useState(1);
-    const [loadRecipeSuccess, setLoadRecipeSuccess] = useState();
+    const [loadRecipeSuccess, setLoadRecipeSuccess] = useState('');
+    const [loadListsSuccess, setLoadListsSuccess] = useState('');
+    const [lists, setLists] = useState();
+    const [addRecipeToListSuccess, setAddRecipeToListSuccess] = useState('');
+
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [listTitle, setListTitle] = useState('');
 
     // get UUID from URL to request the recipe
     const { uuid } = useParams();
     // send request for specific recipe
     useEffect(() => {
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipe, setLoadRecipeSuccess, true);
+        setLoadRecipeSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipe, setLoadRecipeSuccess, false);
+        setLoadListsSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/my', 'GET', undefined, setLists, setLoadListsSuccess, false);
     }, []);
 
     const [tags, setTags] = useState(['SampleTag', 'AnotherTag', 'Tasty']);
-
-    const logIngr = () => { console.log(recipe) }
 
     const handleChangePortions = (event) => {
         setPortions(event.target.value);
@@ -39,10 +47,26 @@ function Recipe(props) {
         navigate('/composer/'+uuid);
     }
 
+    const handleAddToList = (listId, newListTitle) => {
+        setListTitle(newListTitle);
+        setAddRecipeToListSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/addrecipe/' + encodeURIComponent(listId), 'POST', recipe.uuid, undefined, afterRequest, false); 
+    }
+
+    const afterRequest = (successString) => {
+        setAddRecipeToListSuccess(successString);
+        if(successString === 'success') {
+            setToastMessage('Rezept zur Liste hinzugefügt.');
+            setShowToast(true);
+        }
+        if (successString === 'error') {
+            setToastMessage('Das Rezept befindet sich schon in der Liste.');
+            setShowToast(true);
+        }
+    }
+
     return (
-    
         <>
-        
         <Container fluid>
             <Row className='mb-3'>
                 <Col>
@@ -52,12 +76,37 @@ function Recipe(props) {
                 </Col>
                 <Col className="d-flex justify-content-end">
                     {recipe && user && recipe.createdBy === user.sub ?
-                        <Button variant="primary" onClick={editRecipe} style={{display: 'inline-flex', alignItems: 'center'}}>
+                        <Button variant="primary" onClick={editRecipe} className='text-white' style={{display: 'inline-flex', alignItems: 'center'}}>
                             <span style={{marginRight: '.5rem'}}>Bearbeiten</span> <span className="material-icons">edit</span>
                         </Button>
                     :
                         null
                     }
+                    <Dropdown className="d-inline mx-2">
+                        <Dropdown.Toggle id="dropdown-autoclose-true" className='d-flex align-items-center text-white'>
+                            <span className="material-icons">playlist_add</span>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            {(lists && lists.length>0 && recipe) ?
+                                lists.map((list, index) => {
+                                    if(list.title === 'Favoriten'){
+                                        return null;
+                                    }
+                                    return (
+                                        <Dropdown.Item key={index} onClick={() => handleAddToList(list.uuid, list.title)}>{list.title}</Dropdown.Item>
+                                    );
+                                }) : 'Keine Listen existent'
+                            }
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <ToastContainer position='bottom-end' className='mb-3 me-3'>
+                        <Toast bg="secondary" show={showToast} delay={3000} autohide onClose={() => setShowToast(false)}>
+                            <Toast.Header>
+                                <strong className="me-auto">{listTitle}</strong>
+                            </Toast.Header>
+                            <Toast.Body>{toastMessage}</Toast.Body>
+                        </Toast>
+                    </ToastContainer>
                 </Col>
             </Row>
         </Container>

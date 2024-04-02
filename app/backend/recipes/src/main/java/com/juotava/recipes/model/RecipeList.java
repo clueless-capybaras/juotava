@@ -39,4 +39,8 @@ public class RecipeList {
     public void setTitle(String newTitle) {
         this.title = newTitle;
     }
+
+    public void removeRecipeFromList(Recipe recipeId) {
+        this.recipes.remove(recipeId);
+    }
 }
