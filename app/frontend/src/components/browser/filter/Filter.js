@@ -3,7 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 import {baseUrlRecipes } from '../../../config/config';
 
-import { Button, ButtonGroup, Col, Container, Dropdown, Form, Row, Spinner } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Container, Dropdown, FloatingLabel, Form, InputGroup, Row, Spinner } from 'react-bootstrap';
 
 import FilterModel from '../../../model/filterModel';
 import { getDrinkCategories } from '../../../helperFunctions/getDrinkCategories';
@@ -17,12 +17,20 @@ function Filter({triggerRefresh}) {
             false, []
         )
     );
-            
+          
+    //
+    //  GET Filter
+    //
+
     const [filterSuccess, setFilterSuccess] = useState('');
     useEffect(() => {
         setFilterSuccess('waiting');
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
     }, []);
+
+    //
+    //  Change Filter
+    //
 
     const handleChangeNonAlcOnly = (event) => {
         let temp = {...filter};
@@ -80,8 +88,7 @@ function Filter({triggerRefresh}) {
 
     return (
         <Container>
-        <h4 className="mb-4">Filter</h4>
-
+        {/* Filter by category */}
         {filterSuccess === 'waiting' ?
             <>
             <Row className="mb-2">
@@ -100,7 +107,7 @@ function Filter({triggerRefresh}) {
         : null}
         {filterSuccess === 'error' ?
             <h4 className="text-center my-5">
-                Filter konnten nicht gefunden werden.
+                Hoppla! Filter scheinen gerade nicht verfügbar zu sein...
             </h4>
         : null}
         {filterSuccess === 'success' ?
