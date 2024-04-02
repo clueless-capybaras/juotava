@@ -14,6 +14,9 @@ jobs:
       - name: Insert OpenAI API key to recipes backend
         run: |
           sed -i "s/dummykey/${{ secrets.OPENAI_KEY }}/g" app/backend/recipes/src/main/resources/application.properties
+      - name: Insert WeatherAPI key to recipes backend
+        run: |
+          sed -i "s/dummyweatherkey/${{ secrets.WEATHERAPI_KEY }}/g" app/backend/recipes/src/main/resources/application.properties
       - name: Compose down potentially running old version
         run: docker-compose -f app/docker-compose.yml down --remove-orphans --rmi all
       - name: Compose Up

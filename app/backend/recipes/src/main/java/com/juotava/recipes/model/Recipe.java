@@ -95,6 +95,12 @@ public class Recipe {
         return prompt;
     }
 
+    public String toRecipeOfTheDayString(){
+        return "<ID: "+ this.uuid +
+                ", Title: " + this.title +
+                ", Description: " + this.description + ">";
+    }
+
     public String toString() {
         String text = "";
         text += this.title+"; ";

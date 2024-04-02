@@ -2,8 +2,13 @@ package com.juotava.recipes.service;
 
 import com.juotava.recipes.model.*;
 import com.juotava.recipes.model.Image;
-import com.juotava.recipes.model.dto.ImageRequest;
-import com.juotava.recipes.model.dto.ImageResposeSuccess;
+import com.juotava.recipes.model.dto.imagegen.ImageRequest;
+import com.juotava.recipes.model.dto.imagegen.ImageResponseSuccess;
+import com.juotava.recipes.model.dto.textgen.Message;
+import com.juotava.recipes.model.dto.textgen.TextRequest;
+import com.juotava.recipes.model.dto.textgen.TextResponseSuccess;
+import com.juotava.recipes.model.dto.weather.WeatherResponseSuccess;
+import com.juotava.recipes.repository.drinkOfTheDay.DrinkOfTheDayRepository;
 import com.juotava.recipes.repository.filter.FilterRepository;
 import com.juotava.recipes.repository.image.ImageRepository;
 import com.juotava.recipes.repository.ingredient.IngredientRepository;
@@ -13,10 +18,7 @@ import com.juotava.recipes.repository.step.StepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
@@ -24,10 +26,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Console;
 import java.io.IOException;
-import java.net.URI;
+import java.time.LocalDate;
 import java.util.*;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,10 +39,22 @@ public class RecipesService {
     @Qualifier("openaiRestTemplate")
     @Autowired
     private RestTemplate openaiRestTemplate;
-    @Value("${openai.model}")
-    private String model;
-    @Value("${openai.api.url}")
-    private String apiUrl;
+    @Autowired
+    private RestTemplate weatherApiRestTemplate;
+
+    @Value("${openai.model.images}")
+    private String imageModel;
+    @Value("${openai.api.url.images}")
+    private String imageApiUrl;
+    @Value("${openai.model.text}")
+    private String textModel;
+    @Value("${openai.api.url.text}")
+    private String textApiUrl;
+    @Value("${weatherapi.api.url}")
+    private String weatherApiUrl;
+    @Value("${weatherapi.api.location}")
+    private String weatherApiLocation;
+
 
 
     private final RecipeRepository recipeRepository;
@@ -49,15 +63,17 @@ public class RecipesService {
     private final ImageRepository imageRepository;
     private final RecipeListRepository recipeListRepository;
     private final FilterRepository filterRepository;
+    private final DrinkOfTheDayRepository drinkOfTheDayRepository;
 
     @Autowired
-    public RecipesService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, StepRepository stepRepository, ImageRepository imageRepository, RecipeListRepository recipeListRepository, FilterRepository filterRepository) {
+    public RecipesService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, StepRepository stepRepository, ImageRepository imageRepository, RecipeListRepository recipeListRepository, FilterRepository filterRepository, DrinkOfTheDayRepository drinkOfTheDayRepository) {
         this.recipeRepository = recipeRepository;
         this.ingredientRepository = ingredientRepository;
         this.stepRepository = stepRepository;
         this.imageRepository = imageRepository;
         this.recipeListRepository = recipeListRepository;
         this.filterRepository = filterRepository;
+        this.drinkOfTheDayRepository = drinkOfTheDayRepository;
     }
 
     //
@@ -252,8 +268,8 @@ public class RecipesService {
     //
 
     public Image generateImage(String prompt, String user){
-        ImageRequest request = new ImageRequest(prompt, model, 1, "hd", "b64_json", user);
-        ImageResposeSuccess response = openaiRestTemplate.postForObject(apiUrl, request, ImageResposeSuccess.class);
+        ImageRequest request = new ImageRequest(prompt, imageModel, 1, "hd", "b64_json", user);
+        ImageResponseSuccess response = openaiRestTemplate.postForObject(imageApiUrl, request, ImageResponseSuccess.class);
 
         if (response == null || response.getData() == null || response.getData().isEmpty()) {
             return null;
@@ -294,6 +310,79 @@ public class RecipesService {
         byte[] imageBytes = bos.toByteArray();
         return Base64.getEncoder().encodeToString(imageBytes);
     }
+
+    public DrinkOfTheDay getDrinkOfTheDay(){
+        try {
+            DrinkOfTheDay drinkOfTheDay = this.drinkOfTheDayRepository.findByDateToday();
+            if (drinkOfTheDay != null){
+                return drinkOfTheDay;
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e){
+            System.out.println("INFO: No drink of the day for today, creating new ...");
+            List<Recipe> recipes = this.recipeRepository.findAllPublished();
+            if (!recipes.isEmpty()){
+                DrinkOfTheDay drinkOfTheDay = this.generateDrinkOfTheDay(LocalDate.now(), recipes);
+                if (drinkOfTheDay != null){
+                    this.drinkOfTheDayRepository.save(drinkOfTheDay);
+                }
+                return drinkOfTheDay;
+            } else {
+                System.out.println("ERROR: There are no recipes from which a drink of the day could be chosen");
+                return null;
+            }
+        }
+
+    }
+
+    public DrinkOfTheDay generateDrinkOfTheDay(LocalDate date, List<Recipe> recipes){
+        String weather = "";
+        if (date.equals(LocalDate.now())){
+            weather = requestTodaysWeather();
+        }
+
+        String recipesString = recipes.stream().map(Recipe::toRecipeOfTheDayString).collect(Collectors.joining(","));
+        TextRequest request = new TextRequest(textModel);
+        request.addMessage(new Message("system", "You are a deciding machine. I will give you a list of Recipes in the format <ID: XXX, Title: YYY, Description: ZZZ>, a date and some weather data. Based on these information you must decide on which Recipe you choose as the drink of the day. Keep in mind that some drinks are better fitted in certain seasons or temperatures. Consider Holidays or special Events. Give a sound reasoning text in German. Use the colloquial 'Du'. Include some Trivia in the reasoning. Do not mention exact numbers on weather data in the reasoning. Your answer must under all circumstances follow: <ID: XXX, REASON: YYY>. Do not write any additional text!"));
+        request.addMessage(new Message("user",
+                "Today is "+date.toString() +" " +
+                        weather + " " +
+                        "The recipes are: ( "+ recipesString +")"
+        ));
+
+        for (int i = 0; i < 3; i++) {
+            try {
+                TextResponseSuccess response = openaiRestTemplate.postForObject(textApiUrl, request, TextResponseSuccess.class);
+                if (response == null || response.getChoices() == null || response.getChoices().isEmpty()){
+                    return null;
+                }
+                DrinkOfTheDay drinkOfTheDay = new DrinkOfTheDay(
+                        date, response.getChoices().get(0).getMessage().getContent()
+                );
+                drinkOfTheDay.setRecipe(
+                        this.recipeRepository.findByUuid(drinkOfTheDay.getParsedRecipeUuid())
+                );
+                return  drinkOfTheDay;
+            } catch (Exception e){
+                System.out.println("ERROR: Attempt "+(i+1)+". A drink of the day could not be generated. This is most likely due to GPT giving a non-conforming answer.");
+            }
+        }
+        return null;
+    }
+
+    public String requestTodaysWeather(){
+        try {
+            WeatherResponseSuccess response = weatherApiRestTemplate.getForObject(weatherApiUrl, WeatherResponseSuccess.class);
+            if (response == null || response.getForecast().getForecastday().get(0).getDay() == null){
+                return null;
+            }
+            return response.getForecast().getForecastday().get(0).getDay().toString();
+        } catch (Exception e){
+            return null;
+        }
+    }
+
     //
     //  FILTERS
     //

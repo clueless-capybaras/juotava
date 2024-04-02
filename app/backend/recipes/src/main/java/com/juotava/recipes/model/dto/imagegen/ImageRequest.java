@@ -1,4 +1,4 @@
-package com.juotava.recipes.model.dto;
+package com.juotava.recipes.model.dto.imagegen;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.juotava.recipes.model.Recipe;
