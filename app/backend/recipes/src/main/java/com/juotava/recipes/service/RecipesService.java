@@ -186,6 +186,11 @@ public class RecipesService {
     }
 
     public List<RecipeListExcerpt> getRecipeListsByUser(String auth0id) {
+        if(this.recipeListRepository.getFavoritesList(auth0id) == null){
+            RecipeList favoriteList = new RecipeList("Favoriten", auth0id);
+            this.recipeListRepository.save(favoriteList);
+            System.out.println("Info: Creating new Favorites List");
+        }
         List<RecipeList> recipeLists = this.recipeListRepository.findByCreatedByAuth0id(auth0id);
         List<RecipeListExcerpt> recipeListExcerpts = recipeLists.stream().map((RecipeListExcerpt::new)).toList();
         return recipeListExcerpts;
