@@ -209,6 +209,10 @@ public class RecipesService {
                 System.out.println("Error: List creator id (" + list.getCreatedBy().toString() + ") does not match auth0id (" + auth0id + ")");
                 return false;
             }
+            if (list.getRecipes().stream().anyMatch(recipe -> recipe.getUuid().equals(recipeId))){
+                System.out.println("Error: Recipe already in list");
+                return false;
+            }
             list.addRecipeToList(this.recipeRepository.findByUuid(recipeId));
             this.recipeListRepository.save(list);
             return true;
@@ -249,6 +253,21 @@ public class RecipesService {
         } catch (Exception e){
             System.out.println("Warning: List does not exist" + listId);
             return null;
+        }
+    }
+
+    public boolean removeRecipeFromList(UUID listId, UUID recipeId, String auth0id) {
+        try {
+            RecipeList list = this.recipeListRepository.findByUuid(listId);
+            if (!auth0id.equals(list.getCreatedBy())){
+                return false;
+            }
+            list.removeRecipeFromList(this.recipeRepository.findByUuid(recipeId));
+            this.recipeListRepository.save(list);
+            return true;
+        } catch (Exception e){
+            System.out.println("Warning: List does not exist" + listId);
+            return false;
         }
     }
 

@@ -162,6 +162,15 @@ public class RecipesController {
         String auth0id = authentication.getName();
         return this.recipesService.getRecipeList(listId, auth0id);
     }
+
+    // Draft
+    @PostMapping(path = "list/{listId}/remove")
+    public boolean removeRecipeFromList(@PathVariable UUID listId, @RequestBody String recipeId, Authentication authentication){
+        UUID recipeUuid = UUID.fromString(recipeId);
+        String auth0id = authentication.getName();
+        return this.recipesService.removeRecipeFromList(listId, recipeUuid, auth0id);
+    }
+
     /*
         Endpoints /filter/*
         Interact with filters
