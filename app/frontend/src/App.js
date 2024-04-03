@@ -34,7 +34,7 @@ function App() {
             <Route path='/composer/:editUuid?' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<AuthGuard component={Bartinder} />}/>
             <Route path='/settings' element={<AuthGuard component={Settings}/>}/>
-            <Route path='/settings/lists/:uuid' element={<AuthGuard component={List}/>}/>
+            <Route path='/settings/list/:uuid' element={<AuthGuard component={List}/>}/>
             <Route path='*' element={<h1>404</h1>} />
           </Routes>
         </BrowserRouter>
