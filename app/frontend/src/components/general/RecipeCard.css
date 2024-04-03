@@ -18,3 +18,28 @@
 .card {
     transition: transform 0.4s;
 }
+
+.favButton {
+    cursor: pointer;
+    transition: color 0.3s ease forwards;
+}
+
+.favButton:hover {
+    color: red;
+}
+
+.favButton:active {
+    animation: click 0.3s ease forwards;
+}
+
+@keyframes click {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
