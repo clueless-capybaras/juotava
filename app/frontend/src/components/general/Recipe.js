@@ -27,6 +27,9 @@ function Recipe(props) {
     const [loadListsSuccess, setLoadListsSuccess] = useState('');
     const [lists, setLists] = useState();
     const [addRecipeToListSuccess, setAddRecipeToListSuccess] = useState('');
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [isFavoriteSuccess, setIsFavoriteSuccess] = useState('');
+    const [toggleFavoriteSuccess, setToggleFavoriteSuccess] = useState('');
 
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
@@ -40,6 +43,8 @@ function Recipe(props) {
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipe, setLoadRecipeSuccess, false);
         setLoadListsSuccess('waiting');
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/my', 'GET', undefined, setLists, setLoadListsSuccess, false);
+        setIsFavoriteSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/favorite/'+ encodeURIComponent(uuid), 'GET', undefined, setIsFavorite, setIsFavoriteSuccess, false);
     }, []);
 
     const [tags, setTags] = useState(['SampleTag', 'AnotherTag', 'Tasty']);
@@ -55,10 +60,10 @@ function Recipe(props) {
     const handleAddToList = (listId, newListTitle) => {
         setListTitle(newListTitle);
         setAddRecipeToListSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/addrecipe/' + encodeURIComponent(listId), 'POST', recipe.uuid, undefined, afterRequest, false); 
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/addrecipe/' + encodeURIComponent(listId), 'POST', recipe.uuid, undefined, afterRequestList, false); 
     }
 
-    const afterRequest = (successString) => {
+    const afterRequestList = (successString) => {
         setAddRecipeToListSuccess(successString);
         if(successString === 'success') {
             setToastMessage('Rezept zur Liste hinzugefügt.');
@@ -67,6 +72,25 @@ function Recipe(props) {
         if (successString === 'error') {
             setToastMessage('Das Rezept befindet sich schon in der Liste.');
             setShowToast(true);
+        }
+    }
+
+    const handleFavoriteClick = (e) => {
+        setToggleFavoriteSuccess('waiting');
+        setListTitle('Favoriten');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/favorite', isFavorite?'DELETE':'POST', recipe.uuid, undefined, afterRequestFavorite, false);
+    }
+
+    const afterRequestFavorite = (successString) => {
+        setIsFavoriteSuccess(successString);
+        if(successString === 'success') {
+            if (isFavorite) {
+                setToastMessage('Rezept aus den Favoriten entfernt.');
+            } else {
+                setToastMessage('Rezept zur Favoriten hinzugefügt.');
+            }
+            setShowToast(true);
+            setIsFavorite(!isFavorite);
         }
     }
 
@@ -87,6 +111,9 @@ function Recipe(props) {
                     :
                         null
                     }
+                    <Button variant="primary" className="d-flex align-items-center text-white" onClick={handleFavoriteClick}>
+                        <span className="material-icons">favorite{!isFavorite && '_border'}</span>
+                    </Button>
                     <Dropdown className="d-inline mx-2">
                         <Dropdown.Toggle id="dropdown-autoclose-true" className='d-flex align-items-center text-white'>
                             <span className="material-icons">playlist_add</span>
