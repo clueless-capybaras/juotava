@@ -22,8 +22,6 @@ function Lists() {
 
     const [updateRecipeListSuccess, setUpdateRecipeListSuccess] = useState(false);
 
-    const [icon, setIcon] = useState();
-
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [modalData, setModalData] = useState("");
@@ -44,11 +42,6 @@ function Lists() {
     }
 
     useEffect(() => {
-        if(false){
-            setIcon(favoriteIcon);
-        } else{
-            setIcon(placeholderImage);
-        }
         if (saveRecipeListSuccess === "success" || saveRecipeListSuccess === "") {
             setLoadRecipeListSuccess('waiting');
             arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/my', 'GET', undefined, setSavedLists, setLoadRecipeListSuccess, true);   
@@ -112,7 +105,7 @@ function Lists() {
                     (savedLists.length > 0) ? savedLists.map((list, index) => (
                         <Col key={index} style={{maxWidth: '12.75rem'}}>
                             <Row className='mb-4'>
-                                <StackedListIcon thumbnails={list.thumbnails} />
+                                <StackedListIcon thumbnails={list.thumbnails} favorite={list.title == 'Favoriten'} />
                             </Row>
                             <Row className='justify-content-center text-center'>
                                 <Col sm='8'>
