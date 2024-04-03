@@ -35,7 +35,7 @@ class AuthenticatedRequestWrapper{
                     let res = await responseClone.json();
                     successFunction('success');
                     if (debug) { console.log("Request was successful, because of valid json:", res); }
-                } else if (method === 'POST') { // POST requests are 'success' if the response is 'true', a UUID or can be successfully parsed as JSON
+                } else if (method === 'POST' || method == 'DELETE') { // POST/DELETE requests are 'success' if the response is 'true', a UUID or can be successfully parsed as JSON
                     let res = await responseClone.text();
                     if (res === 'true') { // if the response is 'true', it is 'success'
                         successFunction('success');
