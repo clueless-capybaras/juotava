@@ -25,7 +25,7 @@ function Browser() {
     const [loadRecipeExcerptsSuccess, setLoadRecipeExcerptsSuccess] = useState('');
     useEffect(() => {
         setLoadRecipeExcerptsSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all'+search, 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all'+search, 'GET', undefined, setRecipeExcerpts, setLoadRecipeExcerptsSuccess, false);
     }, [refresh, search]);
 
     return (
