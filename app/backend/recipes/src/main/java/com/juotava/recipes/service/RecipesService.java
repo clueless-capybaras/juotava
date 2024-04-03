@@ -121,7 +121,7 @@ public class RecipesService {
             ))
             .map(recipe -> {
                 RecipeExcerpt excerpt = this.parseToExcerpt(recipe);
-                excerpt.setFavorite(favorites.getRecipes().stream().anyMatch(f -> f.getUuid().equals(excerpt.getUuid())));
+                if(favorites != null){excerpt.setFavorite(favorites.getRecipes().stream().anyMatch(f -> f.getUuid().equals(excerpt.getUuid())));}
                 return excerpt;
             })
             .filter(excerpt ->  (search == null || excerpt.searchRecipeExcerpt(search.toLowerCase())))
@@ -294,6 +294,13 @@ public class RecipesService {
             System.out.println("Warning: List does not exist" + listId);
             return false;
         }
+    }
+
+    public boolean isRecipeInFavorites(UUID listId, String auth0id) {
+        RecipeList favoriteList = this.recipeListRepository.getFavoritesList(auth0id);
+        return favoriteList != null? 
+            favoriteList.getRecipes().stream().anyMatch(recipe -> recipe.getUuid().equals(listId))
+            : false;
     }
 
     //
