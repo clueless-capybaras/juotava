@@ -1,4 +1,4 @@
-import { Col, Container, Nav, Row, Tab } from 'react-bootstrap';
+import { Col, Nav, Row, Tab } from 'react-bootstrap';
 
 import User from './user/User';
 import About from './about/About';

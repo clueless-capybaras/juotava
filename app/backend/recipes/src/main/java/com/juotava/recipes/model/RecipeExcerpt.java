@@ -28,6 +28,8 @@ public class RecipeExcerpt {
     @OneToOne
     private Image image;
 
+    private Integer prio;
+
     public RecipeExcerpt(UUID uuid, String title, String category, boolean nonAlcoholic, String description, List<Ingredient> ingredients, Image image) {
         this.uuid = uuid;
         this.title = title;
@@ -47,5 +49,27 @@ public class RecipeExcerpt {
     public List<Ingredient> getIngredients() {
         this.ingredients.sort(Comparator.comparingInt(Ingredient::getOrder));
         return ingredients;
+    }
+
+    public String toString() {
+        String text = "";
+        text += this.title+"; ";
+        text += this.category+"; ";
+        text += this.description+"; ";
+        for (Ingredient ingredient : this.ingredients) {
+            text += ingredient.getName()+", ";
+        }
+        return text.toLowerCase();
+    }
+
+    public boolean searchRecipeExcerpt(String search){
+        List<String> decodedQuery = List.of(search.split(" "));
+        this.prio = 0;
+        for (String string : decodedQuery) {
+            if (this.toString().contains(string)) {
+                this.prio++;
+            }
+        }
+        return prio > 0;
     }
 }

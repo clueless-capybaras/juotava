@@ -1,15 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
+
 import { useNavigate, useParams } from 'react-router';
+
 import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
-import { Badge, Button, Col, Container, Dropdown, FloatingLabel, Form, Image, ListGroup, Row, Table, Toast, ToastContainer } from 'react-bootstrap';
-import { unitToString } from '../../helperFunctions/unitToString';
-import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders';
+
+import { Badge, Button, Col, Container, Dropdown, Form, Image, ListGroup, Row, Toast, ToastContainer } from 'react-bootstrap';
+
 import CreatorCard from './CreatorCard';
 
-import placeholderimage from '../../image-placeholder.jpeg';
+import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders';
 import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
+import { unitToString } from '../../helperFunctions/unitToString';
+
+import placeholderimage from '../../image-placeholder.jpeg';
 
 function Recipe(props) {
     const navigate = useNavigate();

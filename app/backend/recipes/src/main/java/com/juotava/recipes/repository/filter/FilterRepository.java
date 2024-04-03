@@ -1,7 +1,6 @@
 package com.juotava.recipes.repository.filter;
 
 import com.juotava.recipes.model.Filter;
-import com.juotava.recipes.repository.recipe.SpringRecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-import { Accordion, Card, Col, Container, Image, Placeholder, Row } from 'react-bootstrap';
+import { Accordion, Card, Col, Container, Image, Row } from 'react-bootstrap';
 
 import github from '../../../icons/github-mark.svg';
 import instagram from '../../../icons/instagram-mark.png';

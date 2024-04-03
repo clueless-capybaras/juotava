@@ -1,11 +1,15 @@
 import {React, useContext, useEffect, useState } from 'react';
-import DayDrinkCard from './DayDrinkCard';
-import { Col, Row, Container } from 'react-bootstrap';
+
+import { useNavigate } from 'react-router-dom';
+
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import { useAuth0 } from '@auth0/auth0-react';
 import { baseUrlRecipes } from '../../config/config';
+
+import { Col, Container, Row } from 'react-bootstrap';
+
+import DayDrinkCard from './DayDrinkCard';
 import RecipeCard from '../general/RecipeCard';
-import { useNavigate } from 'react-router-dom';
 
 function Home(props) {
     const arw = useContext(AuthenticatedRequestWrapperContext);

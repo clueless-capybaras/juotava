@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
+import { Button, Col, FloatingLabel, Form, InputGroup, Row } from 'react-bootstrap';
 
 function IngredientList({recipe, handleFunction}) {
 

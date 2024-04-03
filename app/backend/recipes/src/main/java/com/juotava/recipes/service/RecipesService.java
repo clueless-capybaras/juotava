@@ -110,16 +110,26 @@ public class RecipesService {
         return this.recipeRepository.findPublishedByCreatedByAuth0id(auth0id);
     }
 
-    public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id) {
+    public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id, String search) {
         Filter filter = getFilterByUser(auth0id, false);
         //Filter
-        return getAllRecipes().stream()
+        List<RecipeExcerpt> excerpts = new ArrayList<>(getAllRecipes().stream()
             .filter(recipe -> (
-                    (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
+                (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
                 && (filter.compareToCategories(recipe.getCategory()))
             ))
             .map(this::parseToExcerpt)
-            .collect(Collectors.toList());
+            .filter(excerpt ->  (search == null || excerpt.searchRecipeExcerpt(search.toLowerCase())))
+            .toList());
+
+        if(search != null) {
+            excerpts.sort((r1, r2) ->
+                r1.getPrio()<r2.getPrio() ? 1 :
+                    r1.getPrio()>r2.getPrio() ? -1 :
+                        0
+                );
+        }
+        return excerpts;
     }
 
     public List<RecipeExcerpt> getDraftedRecipeExcerptsByUser(String auth0id){
