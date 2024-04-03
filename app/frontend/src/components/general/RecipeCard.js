@@ -1,7 +1,6 @@
 import './RecipeCard.css';
 
-import {Col, Container, Placeholder, Row, Card} from 'react-bootstrap';
-import TextTruncate from 'react-text-truncate';
+import {Col, Row, Card} from 'react-bootstrap';
 import LinesEllipsis from 'react-lines-ellipsis';
 
 import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';

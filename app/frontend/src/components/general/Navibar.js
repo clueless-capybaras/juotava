@@ -1,7 +1,7 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
+
+import { Nav, Navbar } from 'react-bootstrap';
 
 import logo from "../../icons/Juotava_Draft_Icon.png";
 import LogInIndicator from '../auth/LogInIndicator';

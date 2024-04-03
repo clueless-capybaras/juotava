@@ -22,7 +22,13 @@ public class RecipeListRepository {
     }
 
     public List<RecipeList> findByCreatedByAuth0id(String auth0id){
-        return this.springRecipeListRepository.findByCreatedBy(auth0id);
+        List<RecipeList> recipeLists = this.springRecipeListRepository.findByCreatedBy(auth0id);
+        recipeLists.sort((l1, l2) ->
+            l1.getTitle().equals("Favoriten")?-1:
+                    l2.getTitle().equals("Favoriten")?1:
+                            0
+        );
+        return recipeLists;
     }
 
     public void save(RecipeList recipeList){

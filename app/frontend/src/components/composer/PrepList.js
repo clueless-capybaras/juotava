@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
-import { InputGroup } from 'react-bootstrap';
 
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
+import { Button, Col, FloatingLabel, Form, InputGroup, Row } from 'react-bootstrap';
 
 function PrepList({recipe, handleFunction}) {
 

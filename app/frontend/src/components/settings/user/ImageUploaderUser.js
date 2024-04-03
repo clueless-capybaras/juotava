@@ -1,11 +1,7 @@
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Image from 'react-bootstrap/Image';
-import Row from 'react-bootstrap/Row';
-
-import imgplaceholder from '../../../image-placeholder.jpeg';
 import { useEffect, useState } from 'react';
+
+import { Button, Col, Container, Row } from 'react-bootstrap';
+
 import ImageEditor from '../../general/ImageEditor';
 
 function ImageUploaderUser({handleChangeFunction, passedImage}) {

@@ -1,25 +1,17 @@
 import { useContext, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate, useParams } from 'react-router';
 
-import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import { useAuth0 } from '@auth0/auth0-react';
+import { AuthenticatedRequestWrapperContext } from '../../App';
+import { baseUrlRecipes } from '../../config/config';
+
+import { Button, Col, Container, FloatingLabel, Form, InputGroup, Row, Spinner } from 'react-bootstrap';
 
 import ImageUploaderComposer from './ImageUploaderComposer';
 import IngredientList from './IngredientList';
 import PrepList from './PrepList';
-import TagField from './TagField';
-
 import Recipe from '../../model/recipe';
-import { AuthenticatedRequestWrapperContext } from '../../App';
-import { baseUrlRecipes } from '../../config/config';
-import { InputGroup } from 'react-bootstrap';
+
 import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
 
 
@@ -163,14 +155,6 @@ function Composer() {
                 <h3 className="text-center">Zubereitung</h3>
                 <PrepList recipe={recipe} handleFunction={handleChangeSteps} />
             </Container>
-
-            {/*<Container className="text-center mb-5">
-                <Row className="justify-content-center mb-3">
-                    <Col>
-                        <TagField />
-                    </Col>
-                </Row>
-            </Container>*/}
 
             <Container className="text-center mb-5">
                 <Row className="justify-content-center mb-3">

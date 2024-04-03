@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
+
 import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 import {baseUrlRecipes } from '../../../config/config';
 
-import { Button, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 
 import GenericBrowser from "../../general/GenericBrowser";
 

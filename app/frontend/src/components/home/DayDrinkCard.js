@@ -1,7 +1,6 @@
-import {Col, Container, Row, Card} from 'react-bootstrap';
-import placeholderImage from '../../image-placeholder.jpeg'
 import { useEffect, useState } from 'react';
-import TextTruncate from 'react-text-truncate';
+
+import { Card } from 'react-bootstrap';
 
 function DayDrinkCard({drinkOfTheDay}) {
     const [drink, setDrink] = useState(drinkOfTheDay);

@@ -110,16 +110,26 @@ public class RecipesService {
         return this.recipeRepository.findPublishedByCreatedByAuth0id(auth0id);
     }
 
-    public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id) {
+    public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id, String search) {
         Filter filter = getFilterByUser(auth0id, false);
         //Filter
-        return getAllRecipes().stream()
+        List<RecipeExcerpt> excerpts = new ArrayList<>(getAllRecipes().stream()
             .filter(recipe -> (
-                    (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
+                (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
                 && (filter.compareToCategories(recipe.getCategory()))
             ))
             .map(this::parseToExcerpt)
-            .collect(Collectors.toList());
+            .filter(excerpt ->  (search == null || excerpt.searchRecipeExcerpt(search.toLowerCase())))
+            .toList());
+
+        if(search != null) {
+            excerpts.sort((r1, r2) ->
+                r1.getPrio()<r2.getPrio() ? 1 :
+                    r1.getPrio()>r2.getPrio() ? -1 :
+                        0
+                );
+        }
+        return excerpts;
     }
 
     public List<RecipeExcerpt> getDraftedRecipeExcerptsByUser(String auth0id){
@@ -186,6 +196,11 @@ public class RecipesService {
     }
 
     public List<RecipeListExcerpt> getRecipeListsByUser(String auth0id) {
+        if(this.recipeListRepository.getFavoritesList(auth0id) == null){
+            RecipeList favoriteList = new RecipeList("Favoriten", auth0id);
+            this.recipeListRepository.save(favoriteList);
+            System.out.println("Info: Creating new Favorites List");
+        }
         List<RecipeList> recipeLists = this.recipeListRepository.findByCreatedByAuth0id(auth0id);
         List<RecipeListExcerpt> recipeListExcerpts = recipeLists.stream().map((RecipeListExcerpt::new)).toList();
         return recipeListExcerpts;
@@ -207,6 +222,10 @@ public class RecipesService {
             RecipeList list = this.recipeListRepository.findByUuid(listId);
             if (!auth0id.equals(list.getCreatedBy())){
                 System.out.println("Error: List creator id (" + list.getCreatedBy().toString() + ") does not match auth0id (" + auth0id + ")");
+                return false;
+            }
+            if (list.getRecipes().stream().anyMatch(recipe -> recipe.getUuid().equals(recipeId))){
+                System.out.println("Error: Recipe already in list");
                 return false;
             }
             list.addRecipeToList(this.recipeRepository.findByUuid(recipeId));
@@ -262,6 +281,21 @@ public class RecipesService {
         } catch (Exception e){
             System.out.println("Warning: List does not exist" + listId);
             return null;
+        }
+    }
+
+    public boolean removeRecipeFromList(UUID listId, UUID recipeId, String auth0id) {
+        try {
+            RecipeList list = this.recipeListRepository.findByUuid(listId);
+            if (!auth0id.equals(list.getCreatedBy())){
+                return false;
+            }
+            list.removeRecipeFromList(this.recipeRepository.findByUuid(recipeId));
+            this.recipeListRepository.save(list);
+            return true;
+        } catch (Exception e){
+            System.out.println("Warning: List does not exist" + listId);
+            return false;
         }
     }
 

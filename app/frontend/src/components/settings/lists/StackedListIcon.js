@@ -2,16 +2,21 @@ import { useEffect, useState } from 'react';
 import './StackedListIcon.css'
 import { Container, Image } from 'react-bootstrap';
 import placeholderImage from '../../../image-placeholder.jpeg'
+import favoriteIcon from '../../../icons/favorite.png'
 
-function StackedListIcon({thumbnails}){
+function StackedListIcon({thumbnails, favorite}){
     const [images, setImages] = useState([]);
+    const [isFavorite, setIsFavorite] = useState(false);
     useEffect(() => {
         setImages(thumbnails);
-    }, [thumbnails]);
+        setIsFavorite(favorite);
+    }, [thumbnails, favorite]);
 
-    const useImageOrPlaceholder = (image) => {
+    const useImageOrPlaceholder = (image, index) => {
         if(image && image.base64data && image.base64data !== ""){
             return image.base64data;
+        } else if(isFavorite && index === 0){
+            return favoriteIcon;
         } else {
             return placeholderImage;
         }
@@ -20,9 +25,9 @@ function StackedListIcon({thumbnails}){
     return(
         <Container>
             <div className="parent">
-                <Image className="image1" src={useImageOrPlaceholder(images[0])} rounded style={{maxWidth:'10rem'}}/>
-                <Image className="image2" src={useImageOrPlaceholder(images[1])} rounded style={{maxWidth:'10rem'}}/>
-                <Image className="image3" src={useImageOrPlaceholder(images[2])} rounded style={{maxWidth:'10rem'}}/>
+                <Image className="image1" src={useImageOrPlaceholder(images[2], 2)} rounded style={{maxWidth:'10rem'}}/>
+                <Image className="image2" src={useImageOrPlaceholder(images[1], 1)} rounded style={{maxWidth:'10rem'}}/>
+                <Image className="image3" src={useImageOrPlaceholder(images[0], 0)} rounded style={{maxWidth:'10rem'}}/>
             </div>
         </Container>
     )

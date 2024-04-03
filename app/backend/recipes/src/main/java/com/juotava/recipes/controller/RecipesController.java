@@ -1,15 +1,12 @@
 package com.juotava.recipes.controller;
 
 import com.juotava.recipes.model.*;
-import com.juotava.recipes.model.enums.Unit;
 import com.juotava.recipes.service.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -102,9 +99,10 @@ public class RecipesController {
      */
 
     @GetMapping(path = "recipeexcerpt/all")
-    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication) {
+    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication, @RequestParam(required = false) String search) {
         String auth0id = authentication.getName();
-        return this.recipesService.getAllRecipeExcerpts(auth0id);
+        List<RecipeExcerpt> excerpts = this.recipesService.getAllRecipeExcerpts(auth0id, search);
+        return excerpts;
     }
 
     @GetMapping(path = "recipeexcerpt/mydrafted")
@@ -167,6 +165,14 @@ public class RecipesController {
     public RecipeList getRecipeList(@PathVariable UUID listId, Authentication authentication){
         String auth0id = authentication.getName();
         return this.recipesService.getRecipeList(listId, auth0id);
+    }
+
+    // Draft
+    @PostMapping(path = "list/{listId}/remove")
+    public boolean removeRecipeFromList(@PathVariable UUID listId, @RequestBody String recipeId, Authentication authentication){
+        UUID recipeUuid = UUID.fromString(recipeId);
+        String auth0id = authentication.getName();
+        return this.recipesService.removeRecipeFromList(listId, recipeUuid, auth0id);
     }
 
     /*
