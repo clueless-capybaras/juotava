@@ -8,20 +8,24 @@ import { AuthenticatedRequestWrapperContext } from '../../../App';
 import { baseUrlRecipes } from '../../../config/config';
 
 import GenericBrowser from '../../general/GenericBrowser';
+import RecipeExcerptsList from '../../../model/recipeExcerptsList';
 
-function Lists() {
+function List() {
     const navigate = useNavigate();
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
-    const [recipeExcerpts, setRecipeExcerpts] = useState([]);
+    const [search, setSearch] = useState('');
+    const [recipeExcerptsList, setRecipeExcerptsList] = useState(new RecipeExcerptsList(
+        '', '', []
+    ));
     const [loadListSuccess, setLoadListSuccess] = useState('');
 
     const { uuid } = useParams();
     // send request for specific list
     useEffect(() => {
         setLoadListSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/list/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipeExcerpts, setLoadListSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipeExcerptsList, setLoadListSuccess, true);
     }, []);
 
     return(
@@ -35,10 +39,10 @@ function Lists() {
             </Row>
             <Row>
                 <Col>
-                    <GenericBrowser recipeExcerpts={recipeExcerpts} loadRecipeExcerptsSuccess={loadListSuccess} />
+                    <GenericBrowser recipeExcerpts={recipeExcerptsList.excerpts} loadRecipeExcerptsSuccess={loadListSuccess} setSearch={setSearch} />
                 </Col>
             </Row>
-            {loadListSuccess === 'success' && recipeExcerpts.length === 0 && 
+            {loadListSuccess === 'success' && recipeExcerptsList.excerpts.length === 0 && 
                 <Row className='justify-content-center text-center'>
                     <Col>
                         <Button variant='link' onClick={() => navigate('/browser')}>
@@ -51,4 +55,4 @@ function Lists() {
     )
 }
 
-export default Lists;
+export default List;

@@ -15,10 +15,7 @@ import Recipe from './components/general/Recipe';
 import Composer from './components/composer/Composer';
 import Bartinder from './components/bartinder/Bartinder';
 import Settings from './components/settings/Settings';
-import List from './components/settings/lists/List'
-import { AuthGuard } from './components/auth/AuthGuard';
-import { createContext, useState } from 'react';
-import AuthenticatedRequestWrapper from './components/auth/AuthenticatedRequestWrapper';
+import List from './components/settings/lists/List';
 
 export const AuthenticatedRequestWrapperContext = createContext(AuthenticatedRequestWrapper);
 
