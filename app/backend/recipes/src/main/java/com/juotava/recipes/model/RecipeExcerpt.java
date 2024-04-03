@@ -2,6 +2,7 @@ package com.juotava.recipes.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,6 +30,9 @@ public class RecipeExcerpt {
     private Image image;
 
     private Integer prio;
+
+    @Setter
+    private boolean favorite;
 
     public RecipeExcerpt(UUID uuid, String title, String category, boolean nonAlcoholic, String description, List<Ingredient> ingredients, Image image) {
         this.uuid = uuid;

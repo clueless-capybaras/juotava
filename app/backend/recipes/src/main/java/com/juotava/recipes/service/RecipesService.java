@@ -112,13 +112,18 @@ public class RecipesService {
 
     public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id, String search) {
         Filter filter = getFilterByUser(auth0id, false);
+        RecipeList favorites = this.recipeListRepository.getFavoritesList(auth0id);
         //Filter
         List<RecipeExcerpt> excerpts = new ArrayList<>(getAllRecipes().stream()
             .filter(recipe -> (
                 (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
                 && (filter.compareToCategories(recipe.getCategory()))
             ))
-            .map(this::parseToExcerpt)
+            .map(recipe -> {
+                RecipeExcerpt excerpt = this.parseToExcerpt(recipe);
+                excerpt.setFavorite(favorites.getRecipes().stream().anyMatch(f -> f.getUuid().equals(excerpt.getUuid())));
+                return excerpt;
+            })
             .filter(excerpt ->  (search == null || excerpt.searchRecipeExcerpt(search.toLowerCase())))
             .toList());
 
@@ -256,6 +261,11 @@ public class RecipesService {
             }
 
         }
+    }
+
+    public boolean removeRecipeFromFavorites(UUID recipeId, String auth0id){
+        RecipeList favoriteList = this.recipeListRepository.getFavoritesList(auth0id);
+        return this.removeRecipeFromList(favoriteList.getUuid(), recipeId, auth0id);
     }
 
     public RecipeList getRecipeList(UUID listId, String auth0id) {
