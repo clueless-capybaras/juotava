@@ -9,6 +9,9 @@ updates:
     directory: "/app/frontend" # Location of package manifests
     schedule:
       interval: "daily"
+    ignore:
+      - dependency-name: "react-scripts"
+        dependency-type: "development"
   - package-ecosystem: "maven"
     directory: "/app/backend/recipes"
     schedule:
