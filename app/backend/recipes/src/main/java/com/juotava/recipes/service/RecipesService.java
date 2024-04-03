@@ -114,23 +114,23 @@ public class RecipesService {
     public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id, String search) {
         Filter filter = getFilterByUser(auth0id, false);
         //Filter
-        List<Recipe> recipes = new ArrayList<>(getAllRecipes().stream()
-                .filter(recipe -> (
-                        (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
-                                && (filter.compareToCategories(recipe.getCategory()))
-                                && (search == null || recipe.searchRecipe(search.toLowerCase()))
-                ))
+        List<RecipeExcerpt> excerpts = new ArrayList<>(getAllRecipes().stream()
+            .filter(recipe -> (
+                (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
+                && (filter.compareToCategories(recipe.getCategory()))
+            ))
+            .map(this::parseToExcerpt)
+            .filter(excerpt ->  (search == null || excerpt.searchRecipeExcerpt(search.toLowerCase())))
+            .toList());
 
-                .toList());
         if(search != null) {
-            recipes.sort((r1, r2) ->
-                    r1.getPrio()<r2.getPrio() ? 1 :
-                            r1.getPrio()>r2.getPrio() ? -1 :
-                                    0
-                    );
+            excerpts.sort((r1, r2) ->
+                r1.getPrio()<r2.getPrio() ? 1 :
+                    r1.getPrio()>r2.getPrio() ? -1 :
+                        0
+                );
         }
-
-        return recipes.stream().map(this::parseToExcerpt).collect(Collectors.toList());
+        return excerpts;
     }
 
     public List<RecipeExcerpt> getDraftedRecipeExcerptsByUser(String auth0id){

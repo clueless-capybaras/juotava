@@ -100,26 +100,4 @@ public class Recipe {
                 ", Title: " + this.title +
                 ", Description: " + this.description + ">";
     }
-
-    public String toString() {
-        String text = "";
-        text += this.title+"; ";
-        text += this.category+"; ";
-        text += this.description+"; ";
-        for (Ingredient ingredient : this.ingredients) {
-            text += ingredient.getName()+", ";
-        }
-        return text.toLowerCase();
-    }
-
-    public boolean searchRecipe(String search){
-        List<String> decodedQuery = List.of(search.split(" "));
-        this.prio = 0;
-        for (String string : decodedQuery) {
-            if (this.toString().contains(string)) {
-                this.prio++;
-            }
-        }
-        return prio > 0;
-    }
 }
