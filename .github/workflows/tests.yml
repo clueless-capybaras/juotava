@@ -16,7 +16,7 @@ jobs:
         distribution: 'temurin'
     - name: Preparation
       run: |
-        docker-compose -f app/docker-compose.yml up --build --force-recreate -d database
+        docker compose -f app/docker-compose.yml up --build --force-recreate -d database
         sed -i 's/database:3306/localhost:3306/' app/backend/recipes/src/main/resources/application.properties
     - name: Build
       run: mvn package -DskipTests --file app/backend/recipes/pom.xml
@@ -33,7 +33,7 @@ jobs:
         distribution: 'temurin'
     - name: Preparation
       run: |
-        docker-compose -f app/docker-compose.yml up --build --force-recreate -d database
+        docker compose -f app/docker-compose.yml up --build --force-recreate -d database
         sed -i 's/database:3306/localhost:3306/' app/backend/users/src/main/resources/application.properties
     - name: Build
       run: mvn package -DskipTests --file app/backend/users/pom.xml
