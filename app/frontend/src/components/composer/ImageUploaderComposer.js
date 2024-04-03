@@ -1,16 +1,13 @@
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Image from 'react-bootstrap/Image';
-import Row from 'react-bootstrap/Row';
-
-import imgplaceholder from '../../image-placeholder.jpeg';
 import { useContext, useEffect, useState } from 'react';
-import { Modal, Spinner } from 'react-bootstrap';
-import { useAuth0 } from '@auth0/auth0-react';
+
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import { baseUrlRecipes } from '../../config/config';
+
+import { Button, Col, Container, Image, Modal, Row, Spinner } from 'react-bootstrap';
+
 import ImageEditor from '../general/ImageEditor';
+
+import imgplaceholder from '../../image-placeholder.jpeg';
 
 function ImageUploaderComposer({handleChangeFunction, recipe, validationFunction, isAuthenticated, getAccessTokenSilently, user, showModal, setShowModal}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
@@ -126,7 +123,7 @@ function ImageUploaderComposer({handleChangeFunction, recipe, validationFunction
             <Button variant="secondary" onClick={handleModalClose}>
                 Abbrechen
             </Button>
-            <Button variant="success" disabled={!validationFunction(recipe) || genSuccess == 'waiting'} onClick={handleGenerateImage}>
+            <Button variant="success" disabled={!validationFunction(recipe) || genSuccess === 'waiting'} onClick={handleGenerateImage}>
                {genSuccess === '' && 
                     'Generieren'
                 }

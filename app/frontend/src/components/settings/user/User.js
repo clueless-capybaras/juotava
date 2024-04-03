@@ -1,21 +1,17 @@
 import {React, useContext, useEffect, useState} from 'react';
+
 import { useNavigate } from 'react-router';
-import LogOutButton from '../../auth/LogOutButton';
+
 import { useAuth0 } from '@auth0/auth0-react';
 import {baseUrlUser } from '../../../config/config';
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 
-import ImageUploaderUser from './ImageUploaderUser';
 import {userSettings, Settings} from '../../../model/userSettings';
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
+import { Button, Col, Container, FloatingLabel, Form, Row, Spinner } from 'react-bootstrap';
 
+import ImageUploaderUser from './ImageUploaderUser';
+import LogOutButton from '../../auth/LogOutButton';
 
 function User(props) {
     let style = { width: 'auto', cursor: 'pointer', padding: '0' };

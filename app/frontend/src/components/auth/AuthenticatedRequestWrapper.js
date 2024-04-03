@@ -1,6 +1,3 @@
-import React from 'react';
-import { useAuth0 } from "@auth0/auth0-react";
-
 const uuidRegex = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$');
 
 class AuthenticatedRequestWrapper{

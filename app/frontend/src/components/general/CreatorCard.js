@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { Col, Image, Row } from 'react-bootstrap';
-import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders';
+
 import { useAuth0 } from '@auth0/auth0-react';
 import {baseUrlUser } from '../../config/config';
 import { AuthenticatedRequestWrapperContext } from '../../App';
+
+import { Col, Image, Row } from 'react-bootstrap';
+
+import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders';
 
 import placeholderimage from '../../image-placeholder.jpeg';
 

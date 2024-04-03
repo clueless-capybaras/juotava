@@ -11,7 +11,7 @@ import GenericBrowser from '../general/GenericBrowser';
 
 function Browser() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
-    const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
+    const {isAuthenticated, getAccessTokenSilently} = useAuth0();
     const navigate = useNavigate()
     
     // Refresh trigger for GenericBrowser

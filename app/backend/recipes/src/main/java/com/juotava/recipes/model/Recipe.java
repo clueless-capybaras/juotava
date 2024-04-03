@@ -36,7 +36,7 @@ public class Recipe {
 
     @OneToOne
     private Image image;
-    
+
     public Recipe(String title, String description, String category, boolean nonAlcoholic) {
         this.title = title;
         this.description = description;

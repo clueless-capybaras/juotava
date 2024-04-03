@@ -1,15 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
+
 import { useNavigate, useParams } from 'react-router';
+
 import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
-import { Badge, Button, Col, Container, FloatingLabel, Form, Image, ListGroup, Row, Table } from 'react-bootstrap';
-import { unitToString } from '../../helperFunctions/unitToString';
-import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders';
+
+import { Badge, Button, Col, Container, Form, Image, ListGroup, Row } from 'react-bootstrap';
+
 import CreatorCard from './CreatorCard';
 
-import placeholderimage from '../../image-placeholder.jpeg';
+import { generatePlaceholders } from '../../helperFunctions/generatePlaceholders';
 import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
+import { unitToString } from '../../helperFunctions/unitToString';
+
+import placeholderimage from '../../image-placeholder.jpeg';
 
 function Recipe(props) {
     const navigate = useNavigate();
@@ -24,7 +29,7 @@ function Recipe(props) {
     const { uuid } = useParams();
     // send request for specific recipe
     useEffect(() => {
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipe, setLoadRecipeSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipe, setLoadRecipeSuccess, false);
     }, []);
 
     const [tags, setTags] = useState(['SampleTag', 'AnotherTag', 'Tasty']);

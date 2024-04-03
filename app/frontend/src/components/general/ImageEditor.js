@@ -1,14 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import AvatarEditor from "react-avatar-editor";
-import Button from "react-bootstrap/esm/Button";
-import Col from "react-bootstrap/esm/Col";
-import Container from "react-bootstrap/esm/Container";
-import Row from "react-bootstrap/esm/Row";
-import Form from "react-bootstrap/Form";
-import Image from "react-bootstrap/Image";
+import { Button, Col, Form, Image, Row } from "react-bootstrap";
+
 import imgplaceholder from "../../image-placeholder.jpeg";
-import { Card } from "react-bootstrap";
 
 function ImageEditor({inputImageB64, getEditedImageB64, edit, setEdit}) {
     const [editMode , setEditMode] = useState(edit);

@@ -1,6 +1,5 @@
 package com.juotava.recipes.repository.step;
 
-import com.juotava.recipes.model.Recipe;
 import com.juotava.recipes.model.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

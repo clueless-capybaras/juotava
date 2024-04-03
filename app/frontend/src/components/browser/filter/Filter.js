@@ -3,14 +3,14 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 import {baseUrlRecipes } from '../../../config/config';
 
-import { Button, ButtonGroup, Col, Container, Dropdown, FloatingLabel, Form, InputGroup, Row, Spinner } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Container, Dropdown, Form, Row } from 'react-bootstrap';
 
 import FilterModel from '../../../model/filterModel';
 import { getDrinkCategories } from '../../../helperFunctions/getDrinkCategories';
 
 function Filter({triggerRefresh}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
-    const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
+    const {isAuthenticated, getAccessTokenSilently} = useAuth0();
     
     const [filter, setFilter] = useState(
         new FilterModel(
