@@ -176,6 +176,12 @@ public class RecipesController {
         return this.recipesService.removeRecipeFromFavorites(recipeUuid, auth0id);
     }
 
+    @GetMapping(path = "list/favorite/{listId}")
+    public boolean isRecipeInFavorites(@PathVariable UUID listId, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.isRecipeInFavorites(listId, auth0id);
+    }
+
     /*
         Endpoints /filter/*
         Interact with filters
