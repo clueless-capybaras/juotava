@@ -9,9 +9,8 @@ updates:
     directory: "/app/frontend" # Location of package manifests
     schedule:
       interval: "daily"
-    ignore:
-      - dependency-name: "*"
-        dependency-type: "development"
+    allow:
+      - dependency-type: "development"
   - package-ecosystem: "maven"
     directory: "/app/backend/recipes"
     schedule:
