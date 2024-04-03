@@ -261,27 +261,13 @@ public class RecipesService {
     public RecipeExcerptsList getRecipeList(UUID listId, String auth0id) {
         try {
             RecipeList originalList = this.recipeListRepository.findByUuid(listId);
-            if (!auth0id.equals(originalList.getCreatedBy())){
+            if (!auth0id.equals(originalList.getCreatedBy()) || originalList.getRecipes() == null){
                 return null;
             }
-            RecipeExcerptsList list = new RecipeExcerptsList();
-            list.transformToRecipeExcerptList(originalList);
-            List<RecipeExcerpt> recipes = getRecipeExcerptsFromList(listId, auth0id);
-            list.setRecipes(recipes);
-            return list;
-        } catch (Exception e){
-            System.out.println("Warning: List does not exist" + listId);
-            return null;
-        }
-    }
-
-    public List<RecipeExcerpt> getRecipeExcerptsFromList(UUID listId, String auth0id) {
-        try {
-            RecipeList list = this.recipeListRepository.findByUuid(listId);
-            if (!auth0id.equals(list.getCreatedBy())){
-                return null;
-            }
-            return list.getRecipes().stream().map(this::parseToExcerpt).toList();
+            List<RecipeExcerpt> excerpts = originalList.getRecipes().stream()
+                    .map(this::parseToExcerpt)
+                    .toList();
+            return new RecipeExcerptsList(originalList, excerpts);
         } catch (Exception e){
             System.out.println("Warning: List does not exist" + listId);
             return null;

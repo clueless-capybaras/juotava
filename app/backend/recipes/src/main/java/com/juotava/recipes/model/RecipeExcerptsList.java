@@ -10,22 +10,13 @@ public class RecipeExcerptsList {
     private List<RecipeExcerpt> excerpts;
     private String createdBy;
 
-    public RecipeExcerptsList(String title, String createdBy) {
-        this.title = title;
-        this.excerpts = new ArrayList<>();
-        this.createdBy = createdBy;
-    }
-
-    public RecipeExcerptsList() {
-    }
-
-    public void transformToRecipeExcerptList(RecipeList recipeList) {
+    public RecipeExcerptsList(RecipeList recipeList, List<RecipeExcerpt> excerpts) {
         this.uuid = recipeList.getUuid();
         this.title = recipeList.getTitle();
+        this.excerpts = excerpts;
         this.createdBy = recipeList.getCreatedBy();
     }
 
-    public void setRecipes(List<RecipeExcerpt> excerpts) {
-        this.excerpts = excerpts;
+    public RecipeExcerptsList() {
     }
 }
