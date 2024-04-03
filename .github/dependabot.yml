@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: "daily"
     ignore:
-      dependency-type: "development"
+      - dependency-type: "development"
   - package-ecosystem: "maven"
     directory: "/app/backend/recipes"
     schedule:
