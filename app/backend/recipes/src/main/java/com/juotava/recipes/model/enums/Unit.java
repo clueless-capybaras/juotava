@@ -12,5 +12,5 @@ public enum Unit {
     PIECES,
     TEASPOONS,
     TABLESPOONS,
-    PINCH
+    PINCHES
 }
