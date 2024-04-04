@@ -79,7 +79,7 @@ function ListsOverview() {
     }
 
     const handleOpenList = (uuid) => {
-        navigate('/settings/lists/' + uuid);
+        navigate('/settings/list/' + uuid);
     }
     
     return(
