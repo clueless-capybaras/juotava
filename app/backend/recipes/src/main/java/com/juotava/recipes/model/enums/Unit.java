@@ -11,5 +11,6 @@ public enum Unit {
     KILOGRAMS,
     PIECES,
     TEASPOONS,
-    TABLESPOONS
+    TABLESPOONS,
+    PINCH
 }

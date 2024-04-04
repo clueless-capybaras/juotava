@@ -32,6 +32,9 @@ export function unitToString(unit) {
     if (unit === "TABLESPOONS") {
         return "EL";
     }
+    if (unit === "PINCH") {
+        return "Prise";
+    }
     else {
         return unit;
     }
