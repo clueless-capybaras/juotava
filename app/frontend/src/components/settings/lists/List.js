@@ -39,7 +39,7 @@ function List() {
             </Row>
             <Row>
                 <Col>
-                    <GenericBrowser recipeExcerpts={recipeExcerptsList.excerpts} loadRecipeExcerptsSuccess={loadListSuccess} setSearch={setSearch} />
+                    <GenericBrowser recipeExcerpts={recipeExcerptsList.excerpts} loadRecipeExcerptsSuccess={loadListSuccess} setSearch={setSearch} frontendSearch={true}/>
                 </Col>
             </Row>
             {loadListSuccess === 'success' && recipeExcerptsList.excerpts.length === 0 && 
