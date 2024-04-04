@@ -34,7 +34,7 @@ public class RecipeExcerpt {
     @Setter
     private boolean favorite;
 
-    public RecipeExcerpt(UUID uuid, String title, String category, boolean nonAlcoholic, String description, List<Ingredient> ingredients, Image image) {
+    public RecipeExcerpt(UUID uuid, String title, String category, boolean nonAlcoholic, String description, List<Ingredient> ingredients, Image image, boolean favorite) {
         this.uuid = uuid;
         this.title = title;
         this.category = category;
@@ -42,6 +42,7 @@ public class RecipeExcerpt {
         this.description = description;
         this.ingredients = ingredients;
         this.image = image;
+        this.favorite = favorite;
     }
 
     public RecipeExcerpt() {
