@@ -71,14 +71,6 @@ function RecipeCard({recipeExcerpt, handleClick}) {
                                 favorite{!favorite && '_border'}
                             </span>    
                         </Col>
-                        {/*<Col xs="6" sm="12" className='mt-4'>
-                            <span className="material-icons">
-                                star_border
-                            </span>
-                            <Card.Text>
-                                5
-                            </Card.Text>
-                        </Col>*/}
                     </Row>
                 </Col>
             </Row>

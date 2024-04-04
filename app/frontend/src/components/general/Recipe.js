@@ -172,19 +172,6 @@ function Recipe(props) {
                         : generatePlaceholders(5, 2, 5)}
                     </p>
                 </Row>
-                {/*<Row>
-                    <Col>
-                    <h3>
-                        {recipe ?
-                            tags.map((tag, index) => {
-                                return (
-                                    <Badge key={index} variant="primary" className="me-2">{tag}</Badge>
-                                );
-                            })
-                        : generatePlaceholders(2, 1, 2)}
-                    </h3>
-                    </Col>
-                </Row>*/}
             </Col>
         </Row>
 
