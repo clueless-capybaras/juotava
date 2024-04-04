@@ -25,7 +25,7 @@ function List() {
     // send request for specific list
     useEffect(() => {
         setLoadListSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipeExcerptsList, setLoadListSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipeExcerptsList, setLoadListSuccess, false);
     }, []);
 
     return(
