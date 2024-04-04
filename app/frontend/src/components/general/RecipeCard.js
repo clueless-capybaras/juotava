@@ -26,7 +26,6 @@ function RecipeCard({recipeExcerpt, handleClick}) {
 
     const handleFavoriteClick = (e) => {
         e.stopPropagation();
-        console.log("Favorite clicked was "+ favorite);
         setToggleFavoriteSuccess('waiting');
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/favorite', favorite?'DELETE':'POST', recipeExcerpt.uuid, undefined, setToggleFavoriteSuccess, false);
         setFavorite(!favorite);

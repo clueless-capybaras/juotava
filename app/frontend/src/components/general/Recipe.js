@@ -87,7 +87,7 @@ function Recipe(props) {
             if (isFavorite) {
                 setToastMessage('Rezept aus den Favoriten entfernt.');
             } else {
-                setToastMessage('Rezept zur Favoriten hinzugefügt.');
+                setToastMessage('Rezept zu Favoriten hinzugefügt.');
             }
             setShowToast(true);
             setIsFavorite(!isFavorite);
