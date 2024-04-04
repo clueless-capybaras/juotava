@@ -145,7 +145,7 @@ function Recipe(props) {
                         : generatePlaceholders(5, 2, 5)}
                     </p>
                 </Row>
-                <Row>
+                {/*<Row>
                     <Col>
                     <h3>
                         {recipe ?
@@ -157,7 +157,7 @@ function Recipe(props) {
                         : generatePlaceholders(2, 1, 2)}
                     </h3>
                     </Col>
-                </Row>
+                </Row>*/}
             </Col>
         </Row>
 
