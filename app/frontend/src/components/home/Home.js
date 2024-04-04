@@ -8,7 +8,7 @@ import { baseUrlRecipes } from '../../config/config';
 
 import { Col, Container, Row } from 'react-bootstrap';
 
-import DayDrinkCard from './DayDrinkCard';
+import DrinkOfTheDayReasoning from './DrinkOfTheDayReasoning';
 import RecipeCard from '../general/RecipeCard';
 
 function Home(props) {
@@ -21,7 +21,7 @@ function Home(props) {
 
     useEffect(() => {
         setLoadDrinkOfTheDaySuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'drinkoftheday', 'GET', undefined, setDrinkOfTheDay, setLoadDrinkOfTheDaySuccess, false);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'drinkoftheday', 'GET', undefined, setDrinkOfTheDay, setLoadDrinkOfTheDaySuccess, true);
 
         setTimeout(() => {
             setShowLoadingMessage(true);
@@ -37,33 +37,35 @@ function Home(props) {
                     </Col>
                 </Row>
                 {loadDrinkOfTheDaySuccess === 'waiting' && showLoadingMessage && 
-                    <Row className='justify-content-center'>
+                    <Row className='justify-content-center mb-5'>
                         <Col className='text-center'>
                             <h4>Drink des Tages wird gerade frisch für dich zubereitet. Bitte warte noch einen Moment.</h4>
                         </Col>
                     </Row>}
                 {loadDrinkOfTheDaySuccess === 'error' && 
-                    <Row className='justify-content-center'>
+                    <Row className='justify-content-center mb-5'>
                         <Col className='text-center'>
                             <h4>Bei der Zubereitung des Drink des Tages ist ein Fehler aufgetreten.</h4> 
                             <p>Wir werden ein ernstes Wörtchen mit dem Barkeeper reden. Bitte versuche es später noch einmal.</p>
                         </Col>
                     </Row>}
+                {loadDrinkOfTheDaySuccess === 'success' &&
                 <Row className='justify-content-center'>
                     <Col xs={12} sm={8}>
-                        <Row className="justify-content-center mb-5">
+                        <Row className="justify-content-center mb-2">
                             <Col>
                                 <RecipeCard handleClick={() => navigate('/browser/recipe/'+drinkOfTheDay?.recipe.uuid)} recipeExcerpt={drinkOfTheDay?.recipe} />
                             </Col>
                         </Row>
-                        <Row className="justify-content-center mb-5">
+                        <Row className="justify-content-start mb-5">
                             <Col>
-                                <DayDrinkCard drinkOfTheDay={drinkOfTheDay} />
+                                <DrinkOfTheDayReasoning drinkOfTheDay={drinkOfTheDay} />
                             </Col>
                         </Row>
+
                     </Col>
                 </Row>
-                
+                }
                 <Row>
                     <Col>
                     <h2 className='mb-3'>Finde deinen Lieblingsdrink!</h2>
