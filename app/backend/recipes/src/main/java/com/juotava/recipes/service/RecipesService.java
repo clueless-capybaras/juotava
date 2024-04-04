@@ -473,7 +473,7 @@ public class RecipesService {
     public boolean changeRecipeList(UUID listId, String newTitle, String auth0id) {
         try {
             RecipeList recipeList = this.recipeListRepository.findByUuid(listId);
-            if (!auth0id.equals(recipeList.getCreatedBy())){
+            if (!auth0id.equals(recipeList.getCreatedBy()) || recipeList.getTitle().equals("Favoriten")){
                 return false;
             }
             recipeList.setTitle(newTitle);
