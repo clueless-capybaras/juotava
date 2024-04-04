@@ -1,9 +1,10 @@
 package com.juotava.recipes.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.Getter;
+@Getter
 public class RecipeExcerptsList {
     private UUID uuid;
     private String title;
