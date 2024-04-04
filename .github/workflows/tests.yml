@@ -8,15 +8,15 @@ jobs:
   JUnit-Recipes:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4.1.1
+    - uses: actions/checkout@v4.1.2
     - name: Set up JDK
-      uses: actions/setup-java@v4.0.0
+      uses: actions/setup-java@v4.2.1
       with:
         java-version: '21'
         distribution: 'temurin'
     - name: Preparation
       run: |
-        docker-compose -f app/docker-compose.yml up --build --force-recreate -d database
+        docker compose -f app/docker-compose.yml up --build --force-recreate -d database
         sed -i 's/database:3306/localhost:3306/' app/backend/recipes/src/main/resources/application.properties
     - name: Build
       run: mvn package -DskipTests --file app/backend/recipes/pom.xml
@@ -25,15 +25,15 @@ jobs:
   JUnit-Users:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4.1.1
+    - uses: actions/checkout@v4.1.2
     - name: Set up JDK
-      uses: actions/setup-java@v4.0.0
+      uses: actions/setup-java@v4.2.1
       with:
         java-version: '21'
         distribution: 'temurin'
     - name: Preparation
       run: |
-        docker-compose -f app/docker-compose.yml up --build --force-recreate -d database
+        docker compose -f app/docker-compose.yml up --build --force-recreate -d database
         sed -i 's/database:3306/localhost:3306/' app/backend/users/src/main/resources/application.properties
     - name: Build
       run: mvn package -DskipTests --file app/backend/users/pom.xml

@@ -119,17 +119,26 @@ public class RecipesService {
                 && (filter.compareToCategories(recipe.getCategory()))
             ))
             .map(this::parseToExcerpt)
-            .filter(excerpt ->  (search == null || excerpt.searchRecipeExcerpt(search.toLowerCase())))
             .toList());
-
-        if(search != null) {
-            excerpts.sort((r1, r2) ->
-                r1.getPrio()<r2.getPrio() ? 1 :
-                    r1.getPrio()>r2.getPrio() ? -1 :
-                        0
-                );
+        if (search != null) {
+            excerpts = searchInRecipeExcerpts(excerpts, search);
         }
         return excerpts;
+    }
+
+    public List<RecipeExcerpt> searchInRecipeExcerpts(List<RecipeExcerpt> excerpts, String search) {
+        List<RecipeExcerpt> tempExcerpts = new ArrayList<>();
+        for (RecipeExcerpt excerpt : excerpts) {
+            if(excerpt.find(search.toLowerCase())){
+                tempExcerpts.add(excerpt);
+            }
+        }
+        tempExcerpts.sort((r1, r2) ->
+            r1.getPrio()<r2.getPrio() ? 1 :
+                r1.getPrio()>r2.getPrio() ? -1 :
+                    0
+        );
+        return tempExcerpts;
     }
 
     public List<RecipeExcerpt> getDraftedRecipeExcerptsByUser(String auth0id){
