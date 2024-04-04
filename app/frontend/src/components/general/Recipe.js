@@ -74,7 +74,7 @@ function Recipe(props) {
         <>
         <Container fluid>
             <Row className='mb-3'>
-                <Col>
+                <Col className="d-flex align-items-center">
                     <span className="material-icons mx-3" onClick={() => navigate(-1)} style={{cursor: "pointer"}}>
                         arrow_back_ios_new 
                     </span>
@@ -117,7 +117,7 @@ function Recipe(props) {
         </Container>
         <Container>
         <Row className="mb-5">
-            <Col lg={4} className="me-5">
+            <Col lg={4} className="text-center me-5 mb-3">
                 <Image src={recipe? recipe.image.base64data : placeholderimage} style={{maxWidth: "20rem"}} rounded />
             </Col>
             <Col lg={7}>
@@ -165,7 +165,7 @@ function Recipe(props) {
             <h3>Zutaten</h3>
         </Row>
         <Row className="mb-3">
-            <Col xs="1" className="d-flex align-items-center">
+            <Col xs="auto" className="d-flex align-items-center">
                 Portionen: 
             </Col>
             <Col>
