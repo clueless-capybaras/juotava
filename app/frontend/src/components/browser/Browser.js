@@ -31,7 +31,7 @@ function Browser() {
     return (
         <Container fluid className='mb-5'>
             <Row>
-                <Col sm='3'>
+                <Col sm='3' className="mb-3">
                     <Container style={{height: "100%"}}>
                         <Row className="position-sticky" style={{top: "5rem"}}>
                             <Col>
