@@ -4,11 +4,31 @@ import {Col, Row, Card} from 'react-bootstrap';
 import LinesEllipsis from 'react-lines-ellipsis';
 
 import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
+import { useContext, useEffect, useState } from 'react';
+import { AuthenticatedRequestWrapperContext } from '../../App';
+import { useAuth0 } from '@auth0/auth0-react';
+import { baseUrlRecipes } from '../../config/config';
 
 function RecipeCard({recipeExcerpt, handleClick}) {
+    const arw = useContext(AuthenticatedRequestWrapperContext);
+    const {isAuthenticated, getAccessTokenSilently} = useAuth0();
+
+    const [favorite, setFavorite] = useState(recipeExcerpt?.favorite);
+    const [toggleFavoriteSuccess, setToggleFavoriteSuccess] = useState('');
+
+    useEffect(() => {
+        setFavorite(recipeExcerpt?.favorite);
+    }, [recipeExcerpt?.favorite]);
 
     const getIngredientsString = (ingred) => {
         return ingred.map((ingr) => ingr.name).join(", ");
+    }
+
+    const handleFavoriteClick = (e) => {
+        e.stopPropagation();
+        setToggleFavoriteSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/favorite', favorite?'DELETE':'POST', recipeExcerpt.uuid, undefined, setToggleFavoriteSuccess, false);
+        setFavorite(!favorite);
     }
     
     return (
@@ -47,9 +67,9 @@ function RecipeCard({recipeExcerpt, handleClick}) {
                 <Col sm="2" className='text-center pb-2'>
                     <Row>
                         <Col xs="6" sm="12">
-                            <span className="material-icons mt-4">
-                                favorite_border
-                            </span>
+                            <span className="material-icons mt-4 favButton" onClick={handleFavoriteClick}>
+                                favorite{!favorite && '_border'}
+                            </span>    
                             <Card.Text className='text-muted'>
                                 420K
                             </Card.Text>
