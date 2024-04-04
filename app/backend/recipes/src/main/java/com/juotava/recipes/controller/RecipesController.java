@@ -156,7 +156,7 @@ public class RecipesController {
     }
 
     @GetMapping(path = "list/{listId}")
-    public RecipeList getRecipeList(@PathVariable UUID listId, Authentication authentication){
+    public RecipeExcerptsList getRecipeList(@PathVariable UUID listId, Authentication authentication){
         String auth0id = authentication.getName();
         return this.recipesService.getRecipeList(listId, auth0id);
     }

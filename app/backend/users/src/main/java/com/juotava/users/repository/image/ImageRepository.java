@@ -1,7 +1,6 @@
 package com.juotava.users.repository.image;
 
 import com.juotava.users.model.Image;
-import com.juotava.users.model.Settings;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

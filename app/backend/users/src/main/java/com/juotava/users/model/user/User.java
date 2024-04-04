@@ -5,7 +5,6 @@ import com.juotava.users.model.Settings;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.util.UUID;
 
 @Entity
 @Getter

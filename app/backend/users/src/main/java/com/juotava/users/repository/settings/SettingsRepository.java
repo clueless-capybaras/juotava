@@ -1,7 +1,6 @@
 package com.juotava.users.repository.settings;
 
 import com.juotava.users.model.Settings;
-import com.juotava.users.repository.user.SpringUserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

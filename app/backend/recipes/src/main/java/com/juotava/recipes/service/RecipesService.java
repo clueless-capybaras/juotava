@@ -278,13 +278,16 @@ public class RecipesService {
         return this.removeRecipeFromList(favoriteList.getUuid(), recipeId, auth0id);
     }
 
-    public RecipeList getRecipeList(UUID listId, String auth0id) {
+    public RecipeExcerptsList getRecipeList(UUID listId, String auth0id) {
         try {
-            RecipeList list = this.recipeListRepository.findByUuid(listId);
-            if (!auth0id.equals(list.getCreatedBy())){
+            RecipeList originalList = this.recipeListRepository.findByUuid(listId);
+            if (!auth0id.equals(originalList.getCreatedBy()) || originalList.getRecipes() == null){
                 return null;
             }
-            return list;
+            List<RecipeExcerpt> excerpts = originalList.getRecipes().stream()
+                    .map(this::parseToExcerpt)
+                    .toList();
+            return new RecipeExcerptsList(originalList, excerpts);
         } catch (Exception e){
             System.out.println("Warning: List does not exist" + listId);
             return null;
