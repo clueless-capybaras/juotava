@@ -112,11 +112,13 @@ function Lists() {
                                     {list.title}
                                 </Col>
                                 <Col sm='4'>
-                                    <Button variant='link' size='sm' onClick={() => handleEditList(list.title, list.uuid)}>
-                                        <span className='material-icons'>
-                                            edit
-                                        </span>
-                                    </Button>
+                                    {list.title !== 'Favoriten' ?
+                                        <Button variant='link' size='sm' onClick={() => handleEditList(list.title, list.uuid)}>
+                                            <span className='material-icons'>
+                                                edit
+                                            </span>
+                                        </Button> : ''
+                                    }
                                 </Col>
                             </Row>
                         </Col>

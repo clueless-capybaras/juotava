@@ -112,13 +112,19 @@ public class RecipesService {
 
     public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id, String search) {
         Filter filter = getFilterByUser(auth0id, false);
+        RecipeList favorites = this.recipeListRepository.getFavoritesList(auth0id);
         //Filter
         List<RecipeExcerpt> excerpts = new ArrayList<>(getAllRecipes().stream()
             .filter(recipe -> (
                 (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
                 && (filter.compareToCategories(recipe.getCategory()))
             ))
-            .map(this::parseToExcerpt)
+            .map(recipe -> {
+                RecipeExcerpt excerpt = this.parseToExcerpt(recipe);
+                if(favorites != null){excerpt.setFavorite(favorites.getRecipes().stream().anyMatch(f -> f.getUuid().equals(excerpt.getUuid())));}
+                return excerpt;
+            })
+            .filter(excerpt ->  (search == null || excerpt.find(search.toLowerCase())))
             .toList());
         if (search != null) {
             excerpts = searchInRecipeExcerpts(excerpts, search);
@@ -267,6 +273,11 @@ public class RecipesService {
         }
     }
 
+    public boolean removeRecipeFromFavorites(UUID recipeId, String auth0id){
+        RecipeList favoriteList = this.recipeListRepository.getFavoritesList(auth0id);
+        return this.removeRecipeFromList(favoriteList.getUuid(), recipeId, auth0id);
+    }
+
     public RecipeList getRecipeList(UUID listId, String auth0id) {
         try {
             RecipeList list = this.recipeListRepository.findByUuid(listId);
@@ -293,6 +304,13 @@ public class RecipesService {
             System.out.println("Warning: List does not exist" + listId);
             return false;
         }
+    }
+
+    public boolean isRecipeInFavorites(UUID listId, String auth0id) {
+        RecipeList favoriteList = this.recipeListRepository.getFavoritesList(auth0id);
+        return favoriteList != null? 
+            favoriteList.getRecipes().stream().anyMatch(recipe -> recipe.getUuid().equals(listId))
+            : false;
     }
 
     //
@@ -465,7 +483,7 @@ public class RecipesService {
     public boolean changeRecipeList(UUID listId, String newTitle, String auth0id) {
         try {
             RecipeList recipeList = this.recipeListRepository.findByUuid(listId);
-            if (!auth0id.equals(recipeList.getCreatedBy())){
+            if (!auth0id.equals(recipeList.getCreatedBy()) || recipeList.getTitle().equals("Favoriten")){
                 return false;
             }
             recipeList.setTitle(newTitle);

@@ -13,7 +13,7 @@ function StackedListIcon({thumbnails, favorite}){
     }, [thumbnails, favorite]);
 
     const useImageOrPlaceholder = (image, index) => {
-        if(image && image.base64data && image.base64data !== ""){
+        if(image && image.base64data && image.base64data !== "" && index !== 0){
             return image.base64data;
         } else if(isFavorite && index === 0){
             return favoriteIcon;
