@@ -66,7 +66,7 @@ public class RecipeExcerpt {
         return text.toLowerCase();
     }
 
-    public boolean searchRecipeExcerpt(String search){
+    public boolean find(String search){
         List<String> decodedQuery = List.of(search.split(" "));
         this.prio = 0;
         for (String string : decodedQuery) {
