@@ -1,17 +1,14 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router';
 
-import placeholderImage from '../../../image-placeholder.jpeg'
-import favoriteIcon from '../../../icons/favorite_border_black_48dp.svg'
 import { useState, useEffect, useContext } from "react";
 import { Button, Col, Container, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
 
 import StackedListIcon from "./StackedListIcon";
-import RecipeList from "../../../model/recipeList";
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 import { baseUrlRecipes } from '../../../config/config';
 
-function Lists() {
+function ListsOverview() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
     const navigate = useNavigate();
@@ -19,8 +16,6 @@ function Lists() {
 
     const [loadRecipeListSuccess, setLoadRecipeListSuccess] = useState("");
     const [saveRecipeListSuccess, setSaveRecipeListSuccess] = useState("");
-
-    const [updateRecipeListSuccess, setUpdateRecipeListSuccess] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -73,12 +68,18 @@ function Lists() {
         setShow(false);
     }
 
-    const handleSave = () => {
-        if(editMode){
-            handleUpdate();
-        } else {
-            handleNew();
+    const handleSave = (event) => {
+        if ((event.key === 'Enter' || event.type === 'click') && validateSaveButton()) {
+            if(editMode){
+                handleUpdate();
+            } else {
+                handleNew();
+            }
         }
+    }
+
+    const handleOpenList = (uuid) => {
+        navigate('/settings/list/' + uuid);
     }
     
     return(
@@ -104,7 +105,7 @@ function Lists() {
                 {loadRecipeListSuccess === 'success' ?
                     (savedLists.length > 0) ? savedLists.map((list, index) => (
                         <Col key={index} style={{maxWidth: '12.75rem'}}>
-                            <Row className='mb-4'>
+                            <Row className='mb-4' onClick={() => handleOpenList(list.uuid)}>
                                 <StackedListIcon thumbnails={list.thumbnails} favorite={list.title == 'Favoriten'} />
                             </Row>
                             <Row className='justify-content-center text-center'>
@@ -112,11 +113,13 @@ function Lists() {
                                     {list.title}
                                 </Col>
                                 <Col sm='4'>
-                                    <Button variant='link' size='sm' onClick={() => handleEditList(list.title, list.uuid)}>
-                                        <span className='material-icons'>
-                                            edit
-                                        </span>
-                                    </Button>
+                                    {list.title !== 'Favoriten' ?
+                                        <Button variant='link' size='sm' onClick={() => handleEditList(list.title, list.uuid)}>
+                                            <span className='material-icons'>
+                                                edit
+                                            </span>
+                                        </Button> : ''
+                                    }
                                 </Col>
                             </Row>
                         </Col>
@@ -142,7 +145,7 @@ function Lists() {
                     <Row>
                         <Col>
                             <FloatingLabel controlId="floatingTitle" label="Titel">
-                                <Form.Control placeholder="Titel" value={modalData} maxLength={30} onChange={(event) => handleTitleInput(event)}/>
+                                <Form.Control placeholder="Titel" value={modalData} maxLength={30} onKeyDown={(event) => handleSave(event)} onChange={(event) => handleTitleInput(event)}/>
                             </FloatingLabel>
                             <Form.Text className="text-muted">
                                 {modalData?modalData.length:0}/30 Zeichen
@@ -152,7 +155,7 @@ function Lists() {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>Abbrechen</Button>
-                    <Button variant="primary" disabled={!validateSaveButton()} onClick={handleSave}>Speichern</Button>
+                    <Button variant="primary" disabled={!validateSaveButton()} onClick={(event) => handleSave(event)}>Speichern</Button>
                 </Modal.Footer>
             </Modal>
         </Row>
@@ -160,4 +163,4 @@ function Lists() {
     )
 }
 
-export default Lists;
+export default ListsOverview;

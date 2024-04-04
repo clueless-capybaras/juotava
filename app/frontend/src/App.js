@@ -15,6 +15,7 @@ import Recipe from './components/general/Recipe';
 import Composer from './components/composer/Composer';
 import Bartinder from './components/bartinder/Bartinder';
 import Settings from './components/settings/Settings';
+import List from './components/settings/lists/List';
 
 export const AuthenticatedRequestWrapperContext = createContext(AuthenticatedRequestWrapper);
 
@@ -33,6 +34,7 @@ function App() {
             <Route path='/composer/:editUuid?' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<AuthGuard component={Bartinder} />}/>
             <Route path='/settings' element={<AuthGuard component={Settings}/>}/>
+            <Route path='/settings/list/:uuid' element={<AuthGuard component={List}/>}/>
             <Route path='*' element={<h1>404</h1>} />
           </Routes>
         </BrowserRouter>
