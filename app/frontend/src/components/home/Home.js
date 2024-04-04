@@ -6,10 +6,13 @@ import { AuthenticatedRequestWrapperContext } from '../../App';
 import { useAuth0 } from '@auth0/auth0-react';
 import { baseUrlRecipes } from '../../config/config';
 
-import { Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 
 import DrinkOfTheDayReasoning from './DrinkOfTheDayReasoning';
 import RecipeCard from '../general/RecipeCard';
+
+import filterModel from '../../model/filterModel';
+import { getDrinkCategories } from '../../helperFunctions/getDrinkCategories';
 
 function Home(props) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
@@ -18,15 +21,39 @@ function Home(props) {
     const [showLoadingMessage, setShowLoadingMessage] = useState(false);
     const [drinkOfTheDay, setDrinkOfTheDay] = useState();
     const navigate = useNavigate();
+    const [filter, setFilter] = useState(new filterModel(false, []));
+    const [filterSuccess, setFilterSuccess] = useState('');
+        
+
 
     useEffect(() => {
         setLoadDrinkOfTheDaySuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'drinkoftheday', 'GET', undefined, setDrinkOfTheDay, setLoadDrinkOfTheDaySuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'drinkoftheday', 'GET', undefined, setDrinkOfTheDay, setLoadDrinkOfTheDaySuccess, false);
+        setFilterSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/my', 'GET', undefined, setFilter, setFilterSuccess, false);
 
         setTimeout(() => {
             setShowLoadingMessage(true);
         }, 300);
     }, []);
+
+    const handleCategoryButtonClick = (category) => {
+        let temp = {...filter};
+        temp.showNonAlcOnly = false;
+        temp.categories = [category.id];
+        setFilter(temp);
+        saveFilter(temp);
+    }
+    const [saveFilterSuccess, setSaveFilterSuccess] = useState('');
+    const saveFilterSuccessHandler = (msg) => {
+        setSaveFilterSuccess(msg);
+        if (msg === 'success') {
+            navigate('/browser');
+        }
+    }
+    const saveFilter = (newFilter) => {
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'filter/save', 'POST', JSON.stringify(newFilter), setFilter, saveFilterSuccessHandler, false);
+    }
 
     return (
         <>
@@ -72,13 +99,12 @@ function Home(props) {
                     </Col>
                 </Row>
                 <Row className="text-center">
-                    <Col>cocktails</Col>
-                    <Col>coffee</Col>
-                    <Col>smoothies</Col>
-                    <Col>juices</Col>
-                    <Col>lemonades</Col>
-                    <Col>longdrinks</Col>
-                    <Col>shots</Col>
+                    {getDrinkCategories().map((category, index) => {
+                        return (
+                        <Col key={index}>
+                            <Button id={category.id} variant="link" onClick={() => handleCategoryButtonClick(category)}>{category.label}</Button>
+                        </Col>);
+                    })}
                 </Row>
             </Container>
         </>
