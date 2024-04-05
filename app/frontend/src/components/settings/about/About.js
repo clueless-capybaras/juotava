@@ -9,45 +9,36 @@ function About(props) {
     
     return (
         <>
-        <h1>Über</h1>
+        <h1>Über Uns</h1>
         
         <Container className="mb-5">
-            <Card>
-            <Card.Body>
-            <h2>Features</h2>
+            <Row>
+                <Col>
+                    <h2>Features</h2>
+                </Col>
+            </Row>
             <Row>
                 <Col>
                     <p>
-                    With Juotava, we provide a tool for exploring and creating your favorite drinks. Whether you are a beginner or a professional bartender, Juotava is the perfect app for you. It offers a wide range of features to find the next drink you want to prepare. The app is available on all devices via your browser. You can also save it to the home screen of your smartphone or tablet. After loading a page once, you can access it even when you are offline.
+                        Juotava ist eine Rezept-App, die perfekt auf Getränke abgestimmt wurde. Du kannst verschiedenste Rezepte finden, speichern und teilen. Und wenn nichts für dich dabei ist, kannst du dir mit Bartinder ganz einfach Rezepte vorschlagen lassen oder im Composer dein eigenes hochladen. 
                     </p>
                     <p>
-                    Use Juotava now to bring your morning routine or your next party to another level!
+                        Weil KI cool ist, machen wir das auch. Wenn du kein Bild zu deinem Rezept hast, kannst du eines generieren. Bartinder schlägt dir Rezepte vor, die zu deinen Vorlieben passen. Den Drink des Tages sucht sich GPT persönlich aus.
                     </p>
                     <Accordion>
                         <Accordion.Item eventKey="browser">
                             <Accordion.Header>Browser</Accordion.Header>
                             <Accordion.Body>
-                                With the Browser, finding drinks is easy.
+                                Rezepte finden war noch nie so einfach.
                                 <ul>
                                     <li>
-                                        You can find drinks that can be made with the ingredients you have at home.
-                                    </li>
-                                    <ul>
-                                        <li>
-                                            If you cannot find a drink with these ingredients, an AI prepares a recipe of a drink that could be made with the ingredients.
-                                        </li>
-                                        <li>
-                                            The AI generated recipe is editable and publishable.
-                                        </li>
-                                    </ul>
-                                    <li>
-                                        With individual favorites and other lists, you can save drinks and recipes for different occasions.
+                                        Eine Vielzahl von Filtern und Suchoptionen helfen dir, das perfekte Getränk zu finden.
                                     </li>
                                     <li>
-                                        Thanks to the rating system, you can find drinks that are similar to the ones you liked and that are popular among other users.
+                                        Dank hoher Performance musst du nicht lange auf ein Ergebnis warten.
                                     </li>
                                     <li>
-                                        A wide range of filters and search options help you finding the perfect drink.
+                                        Mit individuellen Favoriten und anderen Listen kannst du Getränke und Rezepte für verschiedene Anlässe speichern.
                                     </li>
                                 </ul>
                             </Accordion.Body>
@@ -55,30 +46,24 @@ function About(props) {
                         <Accordion.Item eventKey="composer">
                             <Accordion.Header>Composer</Accordion.Header>
                             <Accordion.Body>
-                                The Composer is the perfect tool for creating and editing drinks.
+                                Der Composer ist das perfekte Tool, um Drinks zu erstellen und zu bearbeiten.
                                 <ul>
                                     <li>
-                                        When you are adding ingredients to the recipe, the list expands dynamically.
-                                    </li>
-                                    <li>
-                                        In addition to the ingredients, you need to describe the preparation process.
-                                    </li>
-                                    <li>
-                                        You should always add at least one image that illustrate your drink.
+                                        Es nervt, wenn ein Rezept ohne Bild hochgeladen wird. Wir haben die Lösung:
                                     </li>
                                     <ul>
                                         <li>
-                                            If you do not have an image, an AI generates an image based on the ingredients and the preparation process.
+                                            Wenn du kein Bild hast, generiert eine KI ein Bild anhand der Zutaten und des Zubereitungsprozesses.
                                         </li>
                                         <li>
-                                            You can choose between different AI generated images.
+                                            Wenn du mit dem Bild nicht zufriden bist, kannst du es erneut generieren lassen.
                                         </li>
                                     </ul>
                                     <li>
-                                        Unfinished drinks can be saved as a draft and edited later.
+                                        Unfertige Rezepte können als Entwurf gespeichert und später bearbeitet werden.
                                     </li>
                                     <li>
-                                        Finished drinks can be published and are editable.
+                                        Fertige Rezepte können veröffentlicht und wieder bearbeitet werden.
                                     </li>
                                 </ul>
                             </Accordion.Body>
@@ -86,19 +71,19 @@ function About(props) {
                         <Accordion.Item eventKey="bartinder">
                             <Accordion.Header>Bartinder</Accordion.Header>
                             <Accordion.Body>
-                                Bartinder is a whole new way to discover recipes.
+                                Hättest du gedacht, dass du mal Getränke daten würdest?
                                 <ul>
                                     <li>
-                                        When you are using Bartinder for the first time, you will be asked to set up your preferences. You can always change these settings.
+                                        Du kannst in Bartinder deine Vorlieben festlegen. Diese Einstellungen kannst du jederzeit ändern.
                                     </li>
                                     <li>
-                                        Bartinder suggests random drink based on these preferences.
+                                        Bartinder schlägt dir zufällige Rezepte vor, die zu diesen Vorlieben passen.
                                     </li>
                                     <li>
-                                        You can swipe through the suggestions, left for dislike and right for like.
+                                        Du kannst durch die Vorschläge swipen, links für Dislike und rechts für Like.
                                     </li>
                                     <li>
-                                        It's a match! Your liked drinks are saved to a personal list.
+                                        It's a match! Deine gelikten Getränke werden in deinen Favoriten gespeichert.
                                     </li>
                                 </ul>
                             </Accordion.Body>
@@ -106,36 +91,45 @@ function About(props) {
                     </Accordion>
                 </Col>
             </Row>
-            </Card.Body>
-            </Card>
         </Container>
         <Container className="">
-            <Card>
-            <Card.Body>
-            <h2>Devs</h2>
             <Row>
                 <Col>
+                    <h2>Devs</h2>
+                </Col>
+            </Row>
+            <Row>
+                <Col sm={9}>
                     <p>
-                    Hab gestern schon wieder wie so nen achtarmiger mir einen reingeorgelt! Mit GerHARD. Wir war'n richtig verklüngelt alda! Heute morgen bisschen zerknittert, awa ich geb euch nen Tipps: Ein Ei, vier Zigaretten, eine Ibuprofen, dazu ein Rosinenbrötchen mit Leberwurst und dann kommt Bier ins Spiel. Und dann geht es schon! Ich bin jetzt beim dritten angelangt, und, alles wieder normaaal. Faktor wieder drinne!!
+                        Juotava wurde ursprünglich von einem Team aus drei Studierenden der DHBW Karlsruhe entwickelt. Als Studienarbeit wurde die Open Beta im Sommer 2024 veröffentlicht. Seitdem wird die App stetig weiterentwickelt und verbessert.
+                    </p>
+                    <p>
+                        Heute ist Juotava die weltweit größte Rezept-App für Getränke. Mit über 1.000.000 Rezepten und 10.000.000 Nutzern ist Juotava die erste Anlaufstelle für alle, die auf der Suche nach dem perfekten Drink sind. Das milliardenschwere Unternehmen hinter der App "Capybara Corp." entwickelt inzwischen auch andere Apps, z.B. Juotava for Pros, Canteen Manager und Community Dashboards für Universitäten weltweit.
                     </p>
                 </Col>
-                <Col>
+                <Col sm={3}>
                     <Row>
-                        <a href="https://github.com/EhrlerL/juotava" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={github} style={{maxHeight: "2vh"}} className="me-1" />GitHub</a>
+                        <Col>
+                            <a href="https://github.com/EhrlerL/juotava" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={github} style={{maxHeight: "2vh"}} className="me-1" />GitHub</a>
+                        </Col>
                     </Row>
                     <Row>
-                        <a href="https://www.instagram.com/jimseven/" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={instagram} style={{maxHeight: "2vh"}} className="me-1" />Instagram</a>
+                        <Col>
+                            <a href="https://www.instagram.com/jimseven/" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={instagram} style={{maxHeight: "2vh"}} className="me-1" />Instagram</a>
+                        </Col>
                     </Row>
                     <Row>
-                        <a href="https://juotava.mush-it.com/" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={twitter} style={{maxHeight: "2vh"}} className="me-1" />X ehemals Twitter</a>
+                        <Col>
+                            <a href="https://twitter.com/Markus_Soeder" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={twitter} style={{maxHeight: "2vh"}} className="me-1" />X ehemals Twitter</a>
+                        </Col>
                     </Row>
                     <Row>
-                        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={linkedin} style={{maxHeight: "2vh"}} className="me-1" />LinkedIn</a>
+                        <Col>
+                            <a href="https://www.linkedin.com/in/markus-soeder/?originalSubdomain=de" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={linkedin} style={{maxHeight: "2vh"}} className="me-1" />LinkedIn</a>
+                        </Col>
                     </Row>
                 </Col>
             </Row>
-            </Card.Body>
-            </Card>
         </Container>
         </>
 

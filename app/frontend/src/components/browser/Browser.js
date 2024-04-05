@@ -31,16 +31,27 @@ function Browser() {
     return (
         <Container fluid className='mb-5'>
             <Row>
-                <Col sm='3'>
-                    <Filter triggerRefresh={triggerRefresh} />
+                <Col sm='3' className="mb-3" style={{zIndex: 3}}>
+                    <Container style={{height: "100%"}}>
+                        <Row className="position-sticky" style={{top: "5rem"}}>
+                            <Col>
+                                <Filter triggerRefresh={triggerRefresh} />
+                            
+                            </Col>
+                        </Row>
+                    </Container>
                 </Col>
                 <Col sm='9'>
                     <GenericBrowser recipeExcerpts={recipeExcerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} setSearch={setSearch} />
+                    {loadRecipeExcerptsSuccess === 'success' && recipeExcerpts.length === 0 &&
+                        <Row className="text-center">
+                            <Col>
+                                <Button variant="link" onClick={() => navigate("/composer")}>Lade das erste Rezept hoch, das zu deiner Suche passt!</Button>                            
+                            </Col>
+                        </Row>
+                    }
                 </Col>
             </Row>
-            {loadRecipeExcerptsSuccess === 'success' && recipeExcerpts.length === 0 ?
-                <Button variant="link" onClick={() => navigate("/composer")}>Lade das erste Rezept hoch, das zu deiner Suche passt!</Button>
-            : null}
         </Container>
     );
 }

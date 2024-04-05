@@ -74,8 +74,8 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, f
     return(
         <>
         {/* Search */}
-        <Row className="mb-3 justify-content-end">
-            <Col xs={3}>
+        <Row className="mb-3 justify-content-end" style={{margin: 0}}>
+            <Col md={6} lg={5}>
                 <InputGroup>
                     <FloatingLabel label="Suche">
                         <Form.Control type="text" placeholder="Suche" onChange={(event) => handleSearchChange(event)} onKeyDown={(event) => handleSearch(event)} />

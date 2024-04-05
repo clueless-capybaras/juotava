@@ -32,7 +32,7 @@ function Settings() {
                             <Nav.Link eventKey="privacy">Privatsphäre und Datenschutz</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="about">Über</Nav.Link>
+                            <Nav.Link eventKey="about">Über Uns</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="imprint">Impressum</Nav.Link>

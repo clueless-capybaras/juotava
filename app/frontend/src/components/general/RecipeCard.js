@@ -64,23 +64,12 @@ function RecipeCard({recipeExcerpt, handleClick}) {
                         </Card.Text>
                     </Card.Body>
                 </Col>
-                <Col sm="2" className='text-center pb-2'>
+                <Col sm="1" className='text-center pb-2'>
                     <Row>
-                        <Col xs="6" sm="12">
-                            <span className="material-icons mt-4 favButton" onClick={handleFavoriteClick}>
+                        <Col /*xs="6" sm="12"*/>
+                            <span className="material-icons my-4 favButton" onClick={handleFavoriteClick}>
                                 favorite{!favorite && '_border'}
                             </span>    
-                            <Card.Text className='text-muted'>
-                                420K
-                            </Card.Text>
-                        </Col>
-                        <Col xs="6" sm="12" className='mt-4'>
-                            <span className="material-icons">
-                                star_border
-                            </span>
-                            <Card.Text>
-                                5
-                            </Card.Text>
                         </Col>
                     </Row>
                 </Col>
