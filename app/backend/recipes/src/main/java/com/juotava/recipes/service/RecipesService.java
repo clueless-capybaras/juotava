@@ -18,6 +18,10 @@ import com.juotava.recipes.repository.step.StepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,9 +31,11 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Array;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,22 +116,47 @@ public class RecipesService {
         return this.recipeRepository.findPublishedByCreatedByAuth0id(auth0id);
     }
 
-    public List<RecipeExcerpt> getAllRecipeExcerpts(String auth0id, String search) {
+    public Map<String, Object> getAllRecipeExcerpts(String auth0id, String search, Integer page, Integer size) {
+        // Get User's Filter
         Filter filter = getFilterByUser(auth0id, false);
+
+        // Get User's Favorites
         RecipeList favorites = this.recipeListRepository.getFavoritesList(auth0id);
-        //Filter
-        List<RecipeExcerpt> excerpts = new ArrayList<>(getAllRecipes().stream()
-            .filter(recipe -> (
-                (!filter.isShowNonAlcOnly() || recipe.isNonAlcoholic())
-                && (filter.compareToCategories(recipe.getCategory()))
-            ))
-            .map(recipe -> this.parseToExcerpt(recipe, favorites))
-            .filter(excerpt ->  (search == null || excerpt.find(search.toLowerCase())))
-            .toList());
+
+        // Create Pageable object
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Split Search String
+        List<String> searchInputs = new ArrayList<>();
         if (search != null) {
-            excerpts = searchInRecipeExcerpts(excerpts, search);
+            if(search.contains(" ")) {
+                searchInputs = List.of(search.split(" "));
+            } else {
+                searchInputs.add(search);
+            }
         }
-        return excerpts;
+        // Generate Search Regex
+        String searchRegex = searchInputs.stream()
+            .map(Pattern::quote)
+            .collect(Collectors.joining("|"));
+
+        // Find published Recipes, paginate and search even when search is empty
+        Page<Recipe> recipePage = recipeRepository.findAllPublishedSearchedAndFiltered(filter, searchRegex, pageable);
+
+        // stream to apply filters and parse to excerpts
+        List<RecipeExcerpt> excerpts = recipePage.stream()
+            // parse Recipes to RecipeExcerpts and check for favorite
+            .map(recipe -> this.parseToExcerpt(recipe, favorites))
+            .toList();
+
+        // create map
+        Map<String, Object> response = new HashMap<>();
+        response.put("excerpts", excerpts);
+        response.put("currentPage", recipePage.getNumber());
+        response.put("totalItems", recipePage.getTotalElements());
+        response.put("totalPages", recipePage.getTotalPages());
+
+        return response;
     }
 
     public List<RecipeExcerpt> searchInRecipeExcerpts(List<RecipeExcerpt> excerpts, String search) {

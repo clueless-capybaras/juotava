@@ -3,11 +3,13 @@ package com.juotava.recipes.controller;
 import com.juotava.recipes.model.*;
 import com.juotava.recipes.service.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -99,9 +101,13 @@ public class RecipesController {
      */
 
     @GetMapping(path = "recipeexcerpt/all")
-    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication, @RequestParam(required = false) String search) {
+    public Map<String, Object> getAllRecipeExcerpts(
+            Authentication authentication,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         String auth0id = authentication.getName();
-        List<RecipeExcerpt> excerpts = this.recipesService.getAllRecipeExcerpts(auth0id, search);
+        Map<String, Object> excerpts = this.recipesService.getAllRecipeExcerpts(auth0id, search, page, size);
         return excerpts;
     }
 
