@@ -36,6 +36,9 @@ function List() {
                         arrow_back_ios_new 
                     </span>
                 </Col>
+                <Col sm='auto'>
+                    <h4>{recipeExcerptsList.title}</h4>
+                </Col>
             </Row>
             <Row>
                 <Col>

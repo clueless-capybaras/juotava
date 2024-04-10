@@ -95,6 +95,12 @@ public class RecipesController {
         return this.recipesService.getRecipe(uuid, auth0id);
     }
 
+    @DeleteMapping(path = "recipe/{uuid}")
+    public boolean deleteRecipe(@PathVariable UUID uuid, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.deleteRecipe(uuid, auth0id);
+    }
+
     /*
         Endpoints /recipeexcerpt/*
         Interact with recipe excerpts
