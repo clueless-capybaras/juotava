@@ -9,7 +9,7 @@ import { AuthenticatedRequestWrapperContext } from '../../App';
 import { useAuth0 } from '@auth0/auth0-react';
 import { baseUrlRecipes } from '../../config/config';
 
-function RecipeCard({recipeExcerpt, handleClick}) {
+function RecipeCard({recipeExcerpt, handleClick, inList}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {isAuthenticated, getAccessTokenSilently} = useAuth0();
 
@@ -72,6 +72,15 @@ function RecipeCard({recipeExcerpt, handleClick}) {
                             </span>    
                         </Col>
                     </Row>
+                    {inList &&
+                        <Row>
+                            <Col>
+                                <span class="material-icons-outlined">
+                                    playlist_remove
+                                </span>
+                            </Col>
+                        </Row>
+                    }
                 </Col>
             </Row>
         </Card>
