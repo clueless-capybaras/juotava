@@ -10,7 +10,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { baseUrlRecipes } from '../../config/config';
 import { useNavigate } from 'react-router';
 
-function RecipeCard({recipeExcerpt, handleClick, inList, listId}) {
+function RecipeCard({recipeExcerpt, handleClick, inList, setInList, listId}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {isAuthenticated, getAccessTokenSilently} = useAuth0();
     const navigate = useNavigate();
@@ -90,6 +90,8 @@ function RecipeCard({recipeExcerpt, handleClick, inList, listId}) {
                             </Col>
                         </Row>
                     }
+                    {removeFromListSuccess === 'success' && setInList(false)}
+                    {toggleFavoriteSuccess === 'success' && setInList && setInList(false)}
                 </Col>
             </Row>
         </Card>
