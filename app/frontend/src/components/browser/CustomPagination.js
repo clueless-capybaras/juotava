@@ -20,7 +20,7 @@ function CustomPagination({setPage, currentPage, totalPages, totalItems}) {
             pages.push(i);
         }
     } else {
-        pages.push(<Pagination.Ellipsis />);
+        pages.push(<Pagination.Ellipsis disabled />);
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
             pages.push(i);
         }
@@ -38,7 +38,7 @@ function CustomPagination({setPage, currentPage, totalPages, totalItems}) {
     );
 
     return (
-        <Pagination className="my-auto">
+        <Pagination className="my-auto mx-3">
             <Pagination.First onClick={() => setPage(0)} disabled={currentPage === 0} />
             <Pagination.Prev onClick={() => setPage(currentPage-1)} disabled={currentPage === 0} />
             {pageNumbers}

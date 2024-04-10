@@ -24,7 +24,7 @@ function Browser() {
     // handle search and pagination
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(16);
+    const [size, setSize] = useState(8);
     const [response, setResponse] = useState({});
     const [loadRecipeExcerptsSuccess, setLoadRecipeExcerptsSuccess] = useState('');
     useEffect(() => {
@@ -39,6 +39,7 @@ function Browser() {
     }, [refresh, search, size, page]);
     const handleChangePageSize = (event) => {
         setSize(event.target.value);
+        setPage(0);
     }
     const sendRequest = (path) => {
         setLoadRecipeExcerptsSuccess('waiting');
@@ -59,7 +60,7 @@ function Browser() {
                         </Row>
                     </Container>
                 </Col>
-                
+
                 {/* Browser */}
                 <Col sm='9'>
                     {loadRecipeExcerptsSuccess === 'success' && response.excerpts.length === 0 &&
@@ -75,9 +76,10 @@ function Browser() {
 
                 {/* Pagination */}
                 {loadRecipeExcerptsSuccess === 'success' && response &&
-                    <Container className="mb-3">
+                    <Container className="mt-5">
                         <Row>
-                            <Col className="my-auto">
+                            {/* On desktop, this will take 4 columns. On mobile, it will take the full width and be the second item. */}
+                            <Col lg={4} md={12} className="order-sm-2 order-lg-1 d-flex justify-content-center align-items-center mb-3">
                                 <Row>
                                     <Col xs="auto">
                                         <Form.Select defaultValue={size} size="sm" onChange={(event) => handleChangePageSize(event)} style={{width: "auto"}}>
@@ -91,12 +93,14 @@ function Browser() {
                                     </Col>
                                 </Row>
                             </Col>
-                            <Col className="d-flex justify-content-center">
+                            {/* On desktop, this will take 4 columns and be in the middle. On mobile, it will take the full width and be the first item. */}
+                            <Col lg={4} md={12} className="order-sm-1 order-lg-2 d-flex justify-content-center mb-3">
                                 <CustomPagination setPage={setPage} currentPage={response.currentPage} totalPages={response.totalPages} totalItems={response.totalItems} />
                             </Col>
-                            <Col className="text-end my-auto">
-                                {(response.currentPage)*size + response.excerpts.length} von {response.totalItems} Rezepten gesehen
-                                </Col>
+                            {/* On desktop, this will take 4 columns and be on the right. On mobile, it will take the full width and be the third item. */}
+                            <Col lg={4} md={12} className="order-sm-2 order-lg-3 d-flex align-items-center justify-content-center text-muted mb-3">
+                                {(response.currentPage)*size + response.excerpts.length} von {response.totalItems} angezeigt
+                            </Col>
                         </Row>
                     </Container>
                     }
