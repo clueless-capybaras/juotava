@@ -32,6 +32,19 @@
     animation: click 0.3s ease forwards;
 }
 
+.deleteButton {
+    cursor: pointer;
+    transition: color 0.3s ease forwards;
+}
+
+.deleteButton:hover {
+    color: #D98F60;
+}
+
+.deleteButton:active {
+    animation: click 0.3s ease forwards;
+}
+
 @keyframes click {
     0% {
         transform: scale(1);
