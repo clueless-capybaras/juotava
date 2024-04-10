@@ -26,6 +26,7 @@ function Browser() {
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(8);
     const [response, setResponse] = useState({});
+
     const [loadRecipeExcerptsSuccess, setLoadRecipeExcerptsSuccess] = useState('');
     useEffect(() => {
         let path = "?";
@@ -37,15 +38,17 @@ function Browser() {
         console.log(path);
         sendRequest(path);
     }, [refresh, search, size, page]);
+
+    const sendRequest = (path) => {
+        setLoadRecipeExcerptsSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all'+path, 'GET', undefined, setResponse, setLoadRecipeExcerptsSuccess, false);
+    }
+    
     const handleChangePageSize = (event) => {
         setSize(event.target.value);
         setPage(0);
     }
-    const sendRequest = (path) => {
-        setLoadRecipeExcerptsSuccess('waiting');
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all'+path, 'GET', undefined, setResponse, setLoadRecipeExcerptsSuccess, true);
-    }
-
+    
     return (
         <Container fluid>
             <Row>
@@ -71,7 +74,9 @@ function Browser() {
                         </Row>
                     }
                     {loadRecipeExcerptsSuccess === 'success' && response.excerpts.length > 0 &&
+                    
                         <GenericBrowser recipeExcerpts={response.excerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} search={search} setSearch={setSearch} frontendSearch={false} />
+                    
                     }
 
                 {/* Pagination */}
@@ -103,7 +108,7 @@ function Browser() {
                             </Col>
                         </Row>
                     </Container>
-                    }
+                }   
                 </Col>
             </Row>
         </Container>
