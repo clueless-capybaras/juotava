@@ -276,6 +276,23 @@ public class RecipesService {
         return this.removeRecipeFromList(favoriteList.getUuid(), recipeId, auth0id);
     }
 
+    public boolean deleteRecipe(UUID recipeId, String auth0id) {
+        try {
+            Recipe recipe = this.recipeRepository.findByUuid(recipeId);
+            if (!auth0id.equals(recipe.getCreatedBy())){
+                System.out.println("ERROR: Recipe "+ recipe.getUuid()+" exists but does not belong to user "+recipe.getCreatedBy());
+                return false;
+            }
+            List<RecipeList> recipeLists = this.recipeListRepository.findByRecipeId(recipeId);
+            recipeLists.forEach(list -> list.removeRecipeFromList(recipe));
+            this.recipeRepository.delete(recipe);
+            return true;
+        } catch (Exception e){
+            System.out.println("ERROR: Could not find recipe with UUID: " + recipeId);
+            return false;
+        }
+    }
+
     public RecipeExcerptsList getRecipeList(UUID listId, String auth0id) {
         try {
             RecipeList originalList = this.recipeListRepository.findByUuid(listId);
