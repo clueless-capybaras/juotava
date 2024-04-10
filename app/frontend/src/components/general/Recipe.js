@@ -105,16 +105,16 @@ function Recipe(props) {
                 </Col>
                 <Col className="d-flex justify-content-end">
                     {recipe && user && recipe.createdBy === user.sub ?
-                        <Button variant="primary" onClick={editRecipe} className='text-white' style={{display: 'inline-flex', alignItems: 'center'}}>
+                        <Button variant="primary" onClick={editRecipe} className='text-white me-2' style={{display: 'inline-flex', alignItems: 'center'}}>
                             <span style={{marginRight: '.5rem'}}>Bearbeiten</span> <span className="material-icons">edit</span>
                         </Button>
                     :
                         null
                     }
-                    <Button variant="primary" className="d-flex align-items-center text-white" onClick={handleFavoriteClick}>
+                    <Button variant="primary" className="d-flex align-items-center text-white me-2" onClick={handleFavoriteClick}>
                         <span className="material-icons">favorite{!isFavorite && '_border'}</span>
                     </Button>
-                    <Dropdown className="d-inline mx-2">
+                    <Dropdown className="d-inline">
                         <Dropdown.Toggle id="dropdown-autoclose-true" className='d-flex align-items-center text-white'>
                             <span className="material-icons">playlist_add</span>
                         </Dropdown.Toggle>

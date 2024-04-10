@@ -38,4 +38,8 @@ public class RecipeRepository {
     public void save(Recipe recipe){
         this.springRecipeRepository.save(recipe);
     }
+
+    public void delete(Recipe recipe) {
+        this.springRecipeRepository.delete(recipe);
+    }
 }

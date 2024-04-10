@@ -38,4 +38,8 @@ public class RecipeListRepository {
     public RecipeList getFavoritesList(String auth0id){
         return this.springRecipeListRepository.findByCreatedByAndTitle(auth0id, "Favoriten");
     }
+
+    public List<RecipeList> findByRecipeId(UUID recipeId){
+        return this.springRecipeListRepository.findByRecipeId(recipeId);
+    }
 }

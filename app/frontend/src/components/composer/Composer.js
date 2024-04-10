@@ -26,7 +26,9 @@ function Composer() {
     ));
     const [loadRecipeSuccess, setLoadRecipeSuccess] = useState("");
     const [saveRecipeSuccess, setSaveRecipeSuccess] = useState("");
+    const [deleteRecipeSuccess, setDeleteRecipeSuccess] = useState("");
     const [uuid, setUuid] = useState();
+    const [editMode, setEditMode] = useState(false);
 
     const handleChangeImage = (data) => {
         setRecipe({...recipe, image: data})
@@ -66,7 +68,7 @@ function Composer() {
         tmp.draft = draft;
         tmp.createdBy = user.sub;
         setRecipe((prevRecipe) => ({...prevRecipe, draft: draft, createdBy: user.sub}));
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmp), setUuid, setSaveRecipeSuccess, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/save', 'POST', JSON.stringify(tmp), setUuid, setSaveRecipeSuccess, false);
     }
 
     const validateRecipe = (recipe) => {
@@ -82,8 +84,18 @@ function Composer() {
         navigate('/browser/recipe/'+uuid);
     }
 
+    const handleOpenBrowser = () => {
+        navigate('/browser');
+    }
+
+    const handleDelete = () => {
+        setDeleteRecipeSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(editUuid), 'DELETE', undefined, undefined, setDeleteRecipeSuccess, true);
+    }
+
     useState(() => {
         if (editUuid !== undefined) {
+            setEditMode(true);
             setLoadRecipeSuccess('waiting');
             arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipe/'+ encodeURIComponent(editUuid), 'GET', undefined, setRecipe, setLoadRecipeSuccess, false);
         }
@@ -160,7 +172,8 @@ function Composer() {
                 <Row className="justify-content-center mb-3">
                     <Col xs="8">
                         <Button variant="primary" className="me-1" disabled={!validateRecipe(recipe)} onClick={() => handleSave(false)}>Veröffentlichen</Button>
-                        <Button variant="secondary" disabled={!validateRecipe(recipe)} onClick={() => handleSave(true)}>Entwurf speichern</Button>
+                        <Button variant="secondary" className="me-1" disabled={!validateRecipe(recipe)} onClick={() => handleSave(true)}>Entwurf speichern</Button>
+                        {editMode && <Button variant='danger' disabled={!validateRecipe(recipe)} onClick={() => handleDelete()}>Löschen</Button>}
                     </Col>
                 </Row>
                 <Row className="justify-content-center mb-3">
@@ -173,6 +186,15 @@ function Composer() {
                         : null}
                         {saveRecipeSuccess === "error" ? 
                             <div>Speichern fehlgeschlagen</div>
+                        : null}
+                        {deleteRecipeSuccess === "waiting" ? 
+                            <Spinner animation="border" role="status" />
+                        : null}
+                        {deleteRecipeSuccess === "success" ? 
+                            handleOpenBrowser(uuid)
+                        : null}
+                        {deleteRecipeSuccess === "error" ? 
+                            <div>Löschen fehlgeschlagen</div>
                         : null}
                     </Col>
                 </Row>
