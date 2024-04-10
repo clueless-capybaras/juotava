@@ -4,10 +4,11 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
 
-import {Button, Col, Container, Pagination, Row } from 'react-bootstrap'
+import {Button, Col, Container, Form, Pagination, Row } from 'react-bootstrap'
 
 import Filter from './filter/Filter';
 import GenericBrowser from '../general/GenericBrowser';
+import CustomPagination from './CustomPagination';
 
 function Browser() {
     const arw = useContext(AuthenticatedRequestWrapperContext);
@@ -23,6 +24,7 @@ function Browser() {
     // handle search and pagination
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
+    const [size, setSize] = useState(16);
     const [response, setResponse] = useState({});
     const [loadRecipeExcerptsSuccess, setLoadRecipeExcerptsSuccess] = useState('');
     useEffect(() => {
@@ -31,20 +33,22 @@ function Browser() {
         let s = search;
         if(search !== '') { path += "search=" + s + "&"; }
         path += "page=" + p;
-        path += "&size=10";
+        path += "&size=" + size;
         console.log(path);
         sendRequest(path);
-    }, [refresh, search, page]);
-
+    }, [refresh, search, size, page]);
+    const handleChangePageSize = (event) => {
+        setSize(event.target.value);
+    }
     const sendRequest = (path) => {
         setLoadRecipeExcerptsSuccess('waiting');
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'recipeexcerpt/all'+path, 'GET', undefined, setResponse, setLoadRecipeExcerptsSuccess, true);
     }
 
     return (
-        <>
-        <Container fluid className='mb-5'>
+        <Container fluid>
             <Row>
+                {/* Filter */}
                 <Col sm='3' className="mb-3" style={{zIndex: 3}}>
                     <Container style={{height: "100%"}}>
                         <Row className="position-sticky" style={{top: "5rem"}}>
@@ -55,6 +59,8 @@ function Browser() {
                         </Row>
                     </Container>
                 </Col>
+                
+                {/* Browser */}
                 <Col sm='9'>
                     {loadRecipeExcerptsSuccess === 'success' && response.excerpts.length === 0 &&
                         <Row className="text-center">
@@ -66,34 +72,37 @@ function Browser() {
                     {loadRecipeExcerptsSuccess === 'success' && response.excerpts.length > 0 &&
                         <GenericBrowser recipeExcerpts={response.excerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} search={search} setSearch={setSearch} frontendSearch={false} />
                     }
+
+                {/* Pagination */}
+                {loadRecipeExcerptsSuccess === 'success' && response &&
+                    <Container className="mb-3">
+                        <Row>
+                            <Col className="my-auto">
+                                <Row>
+                                    <Col xs="auto">
+                                        <Form.Select defaultValue={size} size="sm" onChange={(event) => handleChangePageSize(event)} style={{width: "auto"}}>
+                                            <option value={8}>8</option>
+                                            <option value={16}>16</option>
+                                            <option value={32}>32</option>
+                                        </Form.Select>
+                                    </Col>
+                                    <Col className="my-auto" style={{padding: "0"}}>
+                                        pro Seite
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col className="d-flex justify-content-center">
+                                <CustomPagination setPage={setPage} currentPage={response.currentPage} totalPages={response.totalPages} totalItems={response.totalItems} />
+                            </Col>
+                            <Col className="text-end my-auto">
+                                {(response.currentPage)*size + response.excerpts.length} von {response.totalItems} Rezepten gesehen
+                                </Col>
+                        </Row>
+                    </Container>
+                    }
                 </Col>
             </Row>
         </Container>
-        <Container className="d-flex justify-content-center">
-            <Row>
-                <Col>
-                    <Pagination>
-                        <Pagination.First onClick={() => setPage(0)} disabled={loadRecipeExcerptsSuccess === 'error' || response.currentPage === 0} />
-                        <Pagination.Prev onClick={() => setPage(response.currentPage-1)} disabled={loadRecipeExcerptsSuccess === 'error' || response.currentPage === 0} />
-                        {loadRecipeExcerptsSuccess === 'success' && response &&
-                            Array.from({length: response.totalPages}, (_, i) => i + 1).map((p) => {
-                                return (
-                                    <Pagination.Item key={p} active={p-1 === response.currentPage} onClick={() => setPage(p-1)}>{p}</Pagination.Item>
-                                );
-                            })
-                        }
-                        <Pagination.Next onClick={() => setPage(response.currentPage+1)} disabled={loadRecipeExcerptsSuccess === 'error' || response.currentPage === response.totalPages-1} />
-                        <Pagination.Last onClick={() => setPage(response.totalPages-1)} disabled={loadRecipeExcerptsSuccess === 'error' || response.currentPage === response.totalPages-1} />
-                    </Pagination>
-                </Col>
-                {loadRecipeExcerptsSuccess === 'success' && response.totalItems > 0 &&
-                    <Col className="d-flex justify-content-end">
-                        {response.excerpts.length} von {response.totalItems} Rezepten
-                    </Col>
-                }
-            </Row>
-        </Container>
-        </>
     );
 }
 export default Browser;
