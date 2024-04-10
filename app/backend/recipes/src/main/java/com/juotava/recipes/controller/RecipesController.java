@@ -111,7 +111,7 @@ public class RecipesController {
             Authentication authentication,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "8") int size) {
         String auth0id = authentication.getName();
         Map<String, Object> excerpts = this.recipesService.getAllRecipeExcerpts(auth0id, search, page, size);
         return excerpts;
