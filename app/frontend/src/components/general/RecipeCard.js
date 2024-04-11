@@ -8,13 +8,16 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import { useAuth0 } from '@auth0/auth0-react';
 import { baseUrlRecipes } from '../../config/config';
+import { useNavigate } from 'react-router';
 
-function RecipeCard({recipeExcerpt, handleClick}) {
+function RecipeCard({recipeExcerpt, handleClick, inList, setInList, listId}) {
     const arw = useContext(AuthenticatedRequestWrapperContext);
     const {isAuthenticated, getAccessTokenSilently} = useAuth0();
+    const navigate = useNavigate();
 
     const [favorite, setFavorite] = useState(recipeExcerpt?.favorite);
     const [toggleFavoriteSuccess, setToggleFavoriteSuccess] = useState('');
+    const [removeFromListSuccess, setRemoveFromListSuccess] = useState('');
 
     useEffect(() => {
         setFavorite(recipeExcerpt?.favorite);
@@ -29,6 +32,12 @@ function RecipeCard({recipeExcerpt, handleClick}) {
         setToggleFavoriteSuccess('waiting');
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/favorite', favorite?'DELETE':'POST', recipeExcerpt.uuid, undefined, setToggleFavoriteSuccess, false);
         setFavorite(!favorite);
+    }
+
+    const handleRemoveFromList = (e) => {
+        e.stopPropagation();
+        setRemoveFromListSuccess('waiting');
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/'+ listId +'/remove', 'POST', recipeExcerpt.uuid, undefined, setRemoveFromListSuccess, false);
     }
     
     return (
@@ -72,6 +81,17 @@ function RecipeCard({recipeExcerpt, handleClick}) {
                             </span>    
                         </Col>
                     </Row>
+                    {inList &&
+                        <Row>
+                            <Col>
+                                <span class="material-icons-outlined deleteButton" onClick={handleRemoveFromList}>
+                                    playlist_remove
+                                </span>
+                            </Col>
+                        </Row>
+                    }
+                    {removeFromListSuccess === 'success' && setInList(false)}
+                    {toggleFavoriteSuccess === 'success' && setInList && setInList(false)}
                 </Col>
             </Row>
         </Card>

@@ -5,7 +5,7 @@ import { Col, FloatingLabel, Form, InputGroup, Row, Spinner } from 'react-bootst
 
 import RecipeCard from './RecipeCard';
 
-function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, search, setSearch, frontendSearch}) {
+function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, search, setSearch, frontendSearch, inList, setInList, listId}) {
     const navigate = useNavigate();
     const handleOpenRecipe = ((uuid) => {
         navigate('/browser/recipe/'+uuid);
@@ -110,6 +110,9 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, search, setS
                                 id={excerpt.uuid} 
                                 handleClick={() => handleOpenRecipe(excerpt.uuid)} 
                                 recipeExcerpt={excerpt}
+                                inList={inList}
+                                setInList={setInList}
+                                listId={listId}
                             />
                         </Col>
                     </Row>

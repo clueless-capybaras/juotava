@@ -75,7 +75,7 @@ function Browser() {
                     }
                     {loadRecipeExcerptsSuccess === 'success' && response.excerpts.length > 0 &&
                     
-                        <GenericBrowser recipeExcerpts={response.excerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} search={search} setSearch={setSearch} frontendSearch={false} />
+                        <GenericBrowser recipeExcerpts={response.excerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} search={search} setSearch={setSearch} frontendSearch={false} inList={false} />
                     
                     }
 
