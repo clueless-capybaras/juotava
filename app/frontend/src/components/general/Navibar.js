@@ -58,7 +58,7 @@ function Navibar(props) {
           </Nav.Link>
         </Nav>
         </Col>
-        <Col className="d-flex justify-content-end me-3">
+        <Col className="d-flex justify-content-end me-2">
         <Nav>
           <NavDropdown align="end" className="d-flex align-items-center" title={mode}>
               <NavDropdown.Item active={getStoredTheme() === "light"} onClick={() => handleSetTheme("light")} className="d-flex align-items-center"><span className="material-icons me-2">light_mode</span> Light Mode</NavDropdown.Item>
