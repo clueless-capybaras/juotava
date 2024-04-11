@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.icon-align {
+  vertical-align: middle;
+}
+.dropdown-toggle.nav-link::after {
+  vertical-align: middle;
+}
