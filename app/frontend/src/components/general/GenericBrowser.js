@@ -7,7 +7,7 @@ import RecipeCard from './RecipeCard';
 
 import categoryToString from '../../helperFunctions/categoryToString';
 
-function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, frontendSearch}) {
+function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, frontendSearch, inList, setInList, listId}) {
     const navigate = useNavigate();
     const handleOpenRecipe = ((uuid) => {
         navigate('/browser/recipe/'+uuid);
@@ -115,6 +115,9 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, f
                                 id={excerpt.uuid} 
                                 handleClick={() => handleOpenRecipe(excerpt.uuid)} 
                                 recipeExcerpt={excerpt}
+                                inList={inList}
+                                setInList={setInList}
+                                listId={listId}
                             />
                         </Col>
                     </Row>
