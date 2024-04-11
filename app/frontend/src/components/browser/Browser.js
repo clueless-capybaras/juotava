@@ -42,7 +42,7 @@ function Browser() {
                     </Container>
                 </Col>
                 <Col sm='9'>
-                    <GenericBrowser recipeExcerpts={recipeExcerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} setSearch={setSearch} />
+                    <GenericBrowser recipeExcerpts={recipeExcerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} setSearch={setSearch} inList={false}/>
                     {loadRecipeExcerptsSuccess === 'success' && recipeExcerpts.length === 0 &&
                         <Row className="text-center">
                             <Col>
