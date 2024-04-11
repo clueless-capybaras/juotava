@@ -8,6 +8,9 @@ import com.juotava.recipes.model.dto.textgen.Message;
 import com.juotava.recipes.model.dto.textgen.TextRequest;
 import com.juotava.recipes.model.dto.textgen.TextResponseSuccess;
 import com.juotava.recipes.model.dto.weather.WeatherResponseSuccess;
+import com.juotava.recipes.repository.bartinderFilter.BartinderFilterRepository;
+import com.juotava.recipes.repository.bartinderFilter.SpringBartinderFilterRepository;
+import com.juotava.recipes.repository.bartinderSuggestion.BartinderSuggestionRepository;
 import com.juotava.recipes.repository.drinkOfTheDay.DrinkOfTheDayRepository;
 import com.juotava.recipes.repository.filter.FilterRepository;
 import com.juotava.recipes.repository.image.ImageRepository;
@@ -63,9 +66,13 @@ public class RecipesService {
     private final RecipeListRepository recipeListRepository;
     private final FilterRepository filterRepository;
     private final DrinkOfTheDayRepository drinkOfTheDayRepository;
+    private final BartinderFilterRepository bartinderFilterRepository;
+    private final BartinderSuggestionRepository bartinderSuggestionRepository;
+    private final SpringBartinderFilterRepository springBartinderFilterRepository;
 
     @Autowired
-    public RecipesService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, StepRepository stepRepository, ImageRepository imageRepository, RecipeListRepository recipeListRepository, FilterRepository filterRepository, DrinkOfTheDayRepository drinkOfTheDayRepository) {
+    public RecipesService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, StepRepository stepRepository, ImageRepository imageRepository, RecipeListRepository recipeListRepository, FilterRepository filterRepository, DrinkOfTheDayRepository drinkOfTheDayRepository, BartinderFilterRepository bartinderFilterRepository, BartinderSuggestionRepository bartinderSuggestionRepository,
+                          SpringBartinderFilterRepository springBartinderFilterRepository) {
         this.recipeRepository = recipeRepository;
         this.ingredientRepository = ingredientRepository;
         this.stepRepository = stepRepository;
@@ -73,6 +80,9 @@ public class RecipesService {
         this.recipeListRepository = recipeListRepository;
         this.filterRepository = filterRepository;
         this.drinkOfTheDayRepository = drinkOfTheDayRepository;
+        this.bartinderFilterRepository = bartinderFilterRepository;
+        this.bartinderSuggestionRepository = bartinderSuggestionRepository;
+        this.springBartinderFilterRepository = springBartinderFilterRepository;
     }
 
     //
@@ -495,6 +505,64 @@ public class RecipesService {
             return true;
         } catch (Exception e){
             System.out.println("Warning: List does not exist" + listId);
+            return false;
+        }
+    }
+
+    //
+    // Bartinder
+    //
+
+    public Recipe getNextBartind(String auth0id){
+        BartinderFilter filter = this.bartinderFilterRepository.findByCorrespondingUserAuth0id(auth0id);
+        List<BartinderSuggestion> suggestions = this.bartinderSuggestionRepository.findByCorrespondingUser(auth0id);
+        if (filter == null){
+            return null;
+        }
+        return this.recipeRepository.findRandomByBartinderFilter(filter, suggestions);
+    }
+
+    public BartinderFilter getBartinderFilter(String auth0id){
+        return this.bartinderFilterRepository.findByCorrespondingUserAuth0id(auth0id);
+    }
+
+    public boolean saveBartinderFilter(BartinderFilter filter, String auth0id) {
+        if (!auth0id.equals(filter.getCorrespondingUser())){
+            System.out.println("ERROR: Filter correspondingUser "+filter.getCorrespondingUser()+" does not match with sending user "+ auth0id);
+            return false;
+        }
+        try {
+            BartinderFilter existing = this.bartinderFilterRepository.findByCorrespondingUserAuth0id(auth0id);
+            if (existing == null){
+                System.out.println("INFO: Saving new BartinderFilter for user "+auth0id);
+                this.springBartinderFilterRepository.save(filter);
+                return true;
+            } else if (!existing.getCorrespondingUser().equals(filter.getCorrespondingUser())) {
+                System.out.println("ERROR: Filter " + filter.getUuid() + " exists but does not belong to user " + auth0id);
+                return false;
+            } else {
+                existing.setCategories(filter.getCategories());
+                existing.setShowNonAlcOnly(filter.isShowNonAlcOnly());
+                System.out.println("INFO: Updating existing BartinderFilter for user "+auth0id);
+                this.springBartinderFilterRepository.save(existing);
+                return true;
+            }
+        } catch (Exception e){
+            System.out.println("ERROR: Could not save BartinderFilter "+ filter.getUuid());
+            return false;
+        }
+    }
+
+    public boolean saveBartinderSuggestion(BartinderSuggestion suggestion, String auth0id) {
+        try {
+            suggestion.setCorrespondingUser(auth0id);
+            this.bartinderSuggestionRepository.save(suggestion);
+            if (suggestion.isLiked()){
+                this.addRecipeToFavorite(suggestion.getRecipeUuid(), auth0id);
+            }
+            return true;
+        } catch (Exception e){
+            System.out.println("ERROR: Could not save BartinderSuggestion");
             return false;
         }
     }
