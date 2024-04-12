@@ -5,9 +5,7 @@ import { Col, FloatingLabel, Form, InputGroup, Row, Spinner } from 'react-bootst
 
 import RecipeCard from './RecipeCard';
 
-import categoryToString from '../../helperFunctions/categoryToString';
-
-function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, frontendSearch, inList, setInList, listId}) {
+function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, search, setSearch, frontendSearch, inList, setInList, listId}) {
     const navigate = useNavigate();
     const handleOpenRecipe = ((uuid) => {
         navigate('/browser/recipe/'+uuid);
@@ -18,7 +16,7 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, f
     //
     
     const [displayedRecipeExcerpts, setDisplayedRecipeExcerpts] = useState([...recipeExcerpts]);
-    const [currentSearchTerm, setCurrentSearchTerm] = useState("");
+    const [currentSearchTerm, setCurrentSearchTerm] = useState('');
     const handleSearchChange = (event) => {
         setCurrentSearchTerm(event.target.value);
         
@@ -50,6 +48,7 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, f
     useEffect(() => {
 
         setDisplayedRecipeExcerpts(recipeExcerpts);
+        setCurrentSearchTerm(search);
         
     }, [recipeExcerpts]);
 
@@ -62,11 +61,7 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, f
             } 
             // Backend Search
             else {
-                if (currentSearchTerm === '') {
-                    setSearch("");
-                } else {
-                    setSearch("?search="+encodeURIComponent(currentSearchTerm));
-                }
+                setSearch(encodeURIComponent(currentSearchTerm));
             }
         }
     }       
@@ -77,8 +72,8 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, setSearch, f
         <Row className="mb-3 justify-content-end" style={{margin: 0}}>
             <Col md={6} lg={5}>
                 <InputGroup>
-                    <FloatingLabel label="Suche">
-                        <Form.Control type="text" placeholder="Suche" onChange={(event) => handleSearchChange(event)} onKeyDown={(event) => handleSearch(event)} />
+                    <FloatingLabel value={currentSearchTerm} label="Suche">
+                        <Form.Control type="text" placeholder="Suche" value={currentSearchTerm} onChange={(event) => handleSearchChange(event)} onKeyDown={(event) => handleSearch(event)} />
                     </FloatingLabel>
                     <InputGroup.Text onClick={(event) => handleSearch(event)} style={{cursor: "pointer"}}><span className="material-icons">search</span></InputGroup.Text>
                 </InputGroup>
