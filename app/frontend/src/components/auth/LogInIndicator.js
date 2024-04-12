@@ -7,13 +7,13 @@ function LogInIndicator(){
     const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
     return (
         (isAuthenticated) ? (<>
-            <Nav.Link as={NavLink} to="/settings">
+            <Nav.Link as={NavLink} to="/settings" className="d-flex align-items-center">
                 <span className="material-icons">
                 manage_accounts
                 </span>
             </Nav.Link>
         </>):(<>
-            <Nav.Link onClick={() => loginWithRedirect()}>
+            <Nav.Link onClick={() => loginWithRedirect()} className="d-flex align-items-center">
                 <span className="material-icons">
                 person
                 </span>
