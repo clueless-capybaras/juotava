@@ -35,7 +35,6 @@ function Browser() {
         if(search !== '') { path += "search=" + s + "&"; }
         path += "page=" + p;
         path += "&size=" + size;
-        console.log(path);
         sendRequest(path);
     }, [refresh, search, size, page]);
 
