@@ -79,7 +79,7 @@ function Bartinder(props) {
             recipeUuid: recipe.uuid,
             liked: liked,
         }
-        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'bartinder/suggestion', 'POST', JSON.stringify(suggestion), undefined, afterSuggestion, true);
+        arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'bartinder/suggestion', 'POST', JSON.stringify(suggestion), undefined, afterSuggestion, false);
     }
     const afterSuggestion = (successMessage) => {
         if (successMessage === 'success') {
@@ -108,48 +108,68 @@ function Bartinder(props) {
             {loadRecipeSuccess === 'error' && <Row><Col className='text-center'><h4>Es gab keine passenden Rezepte. Bitte ändere deine Präferenzen.</h4></Col></Row>}
             {loadRecipeSuccess === 'success' &&
             <>
-            <Row>
-                <Col className='justify-content-center mb-3'>
-                    <h2>{recipe?.title}</h2>
-                </Col>
-            </Row>
-            <Row>
-                <Col className='text-end'>
-                    <Container className='justify-content-end mb-5'>
-                        <Row className='justify-content-end'>
-                            <h4>Zutaten</h4>
-                        </Row>
-                        <Row className='justify-content-end'>
-                            {getIngredientsString(recipe?.ingredients)}
-                        </Row>
-                    </Container>
-                    <Container className='justify-content-end mb-5'>
-                    {recipe?.nonAlcoholic? 
-                        'Dieser Drink ist alkoholfrei.' :
-                        'Dieser Drink enthält Alkohol.'
-                    }
-                    </Container>
-                </Col>
-                <Col>
-                    <Row className='mb-3'>
-                        <Image src={recipe?.image.base64data} rounded />
+                <Container>
+                    <Row>
+                        <Col className='justify-content-center'>
+                            <h2>{recipe?.title}</h2>
+                        </Col>
                     </Row>
                     <Row>
-                        <Col className='text-center'>
-                            <Button variant='secondary' style={{ fontSize: '2rem', padding: '10px 20px' }} onClick={()=>handleLike(false)}>
-                                🤢
-                            </Button>
-                            
-                        </Col>
-                        <Col className='text-center'>
-                            <Button variant='primary' style={{ fontSize: '2rem', padding: '10px 20px' }} onClick={()=>handleLike(true)}>
-                                😋
-                            </Button>
+                        <Col className='justify-content-center mb-3'>
+                            <h4 className="text-muted text-center">{getDrinkCategories().find(c => c.id === recipe?.category).label}{recipe?.nonAlcoholic ? <strong> (✅ alkoholfrei)</strong> : null}</h4>
                         </Col>
                     </Row>
-                </Col>
-                <Col></Col>
-            </Row>
+                </Container>
+                <Row>
+                    <Col>
+                        <Container className="mb-5">
+                            <Row>
+                                <Col className='text-end'>
+                                    <h4>Beschreibung</h4>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className='text-end'>
+                                    {recipe?.description}
+                                </Col>
+                            </Row>
+                        </Container>
+                        <Container>
+                            <Row>
+                                <Col className='text-end'>
+                                    <h4>Zutaten</h4>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className='text-end'>
+                                    {getIngredientsString(recipe?.ingredients)}
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Col>
+                    <Col>
+                        <Container>
+                                <Row className='mb-3'>
+                                    <Col>
+                                        <Image src={recipe?.image.base64data} rounded fluid />
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className='text-center'>
+                                        <Button variant='secondary' style={{ fontSize: '3rem', padding: '10px 20px' }} onClick={()=>handleLike(false)}>
+                                            🤢
+                                        </Button>
+                                    </Col>
+                                    <Col className='text-center'>
+                                        <Button variant='primary' style={{ fontSize: '3rem', padding: '10px 20px' }} onClick={()=>handleLike(true)}>
+                                            😋
+                                        </Button>
+                                    </Col>
+                                </Row>
+                        </Container>
+                    </Col>
+                    <Col></Col>
+                </Row>
             </>}
         </Container>
 
