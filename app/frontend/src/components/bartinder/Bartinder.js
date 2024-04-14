@@ -121,40 +121,14 @@ function Bartinder(props) {
                     </Row>
                 </Container>
                 <Row>
-                    <Col>
+                    <Col sm={12} md={4} className="order-md-2">
                         <Container className="mb-5">
-                            <Row>
-                                <Col className='text-end'>
-                                    <h4>Beschreibung</h4>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col className='text-end'>
-                                    {recipe?.description}
-                                </Col>
-                            </Row>
-                        </Container>
-                        <Container>
-                            <Row>
-                                <Col className='text-end'>
-                                    <h4>Zutaten</h4>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col className='text-end'>
-                                    {getIngredientsString(recipe?.ingredients)}
-                                </Col>
-                            </Row>
-                        </Container>
-                    </Col>
-                    <Col>
-                        <Container>
-                                <Row className='mb-3'>
+                                <Row className='text-center mb-3'>
                                     <Col>
                                         <Image src={recipe?.image.base64data} rounded fluid />
                                     </Col>
                                 </Row>
-                                <Row>
+                                <Row className="d-flex g-0">
                                     <Col className='text-center'>
                                         <Button variant='secondary' style={{ fontSize: '3rem', padding: '10px 20px' }} onClick={()=>handleLike(false)}>
                                             🤢
@@ -168,7 +142,33 @@ function Bartinder(props) {
                                 </Row>
                         </Container>
                     </Col>
-                    <Col></Col>
+                    <Col sm={12} md={4} className="order-md-1">
+                        <Container className="mb-5">
+                            <Row>
+                                <Col>
+                                    <h4>Zutaten</h4>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    {getIngredientsString(recipe?.ingredients)}
+                                </Col>
+                            </Row>
+                        </Container>
+                        <Container className="mb-5">
+                            <Row>
+                                <Col>
+                                    <h4>Beschreibung</h4>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    {recipe?.description}
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Col>
+                    <Col className="order-3"></Col>
                 </Row>
             </>}
         </Container>
