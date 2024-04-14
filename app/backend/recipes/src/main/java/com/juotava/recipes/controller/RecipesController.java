@@ -3,11 +3,13 @@ package com.juotava.recipes.controller;
 import com.juotava.recipes.model.*;
 import com.juotava.recipes.service.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -93,15 +95,25 @@ public class RecipesController {
         return this.recipesService.getRecipe(uuid, auth0id);
     }
 
+    @DeleteMapping(path = "recipe/{uuid}")
+    public boolean deleteRecipe(@PathVariable UUID uuid, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.deleteRecipe(uuid, auth0id);
+    }
+
     /*
         Endpoints /recipeexcerpt/*
         Interact with recipe excerpts
      */
 
     @GetMapping(path = "recipeexcerpt/all")
-    public List<RecipeExcerpt> getAllRecipeExcerpts(Authentication authentication, @RequestParam(required = false) String search) {
+    public Map<String, Object> getAllRecipeExcerpts(
+            Authentication authentication,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
         String auth0id = authentication.getName();
-        List<RecipeExcerpt> excerpts = this.recipesService.getAllRecipeExcerpts(auth0id, search);
+        Map<String, Object> excerpts = this.recipesService.getAllRecipeExcerpts(auth0id, search, page, size);
         return excerpts;
     }
 
@@ -161,7 +173,6 @@ public class RecipesController {
         return this.recipesService.getRecipeList(listId, auth0id);
     }
 
-    // Draft
     @PostMapping(path = "list/{listId}/remove")
     public boolean removeRecipeFromList(@PathVariable UUID listId, @RequestBody String recipeId, Authentication authentication){
         UUID recipeUuid = UUID.fromString(recipeId);

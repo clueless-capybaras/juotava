@@ -20,13 +20,14 @@ function List() {
         '', '', []
     ));
     const [loadListSuccess, setLoadListSuccess] = useState('');
-
+    const [inList, setInList] = useState(true);
     const { uuid } = useParams();
     // send request for specific list
     useEffect(() => {
+        setInList(true);
         setLoadListSuccess('waiting');
         arw.request({isAuthenticated, getAccessTokenSilently}, baseUrlRecipes, 'list/'+ encodeURIComponent(uuid), 'GET', undefined, setRecipeExcerptsList, setLoadListSuccess, false);
-    }, []);
+    }, [inList===false]);
 
     return(
         <Container fluid>
@@ -36,10 +37,13 @@ function List() {
                         arrow_back_ios_new 
                     </span>
                 </Col>
+                <Col sm='auto'>
+                    <h4>{recipeExcerptsList.title}</h4>
+                </Col>
             </Row>
             <Row>
                 <Col>
-                    <GenericBrowser recipeExcerpts={recipeExcerptsList.excerpts} loadRecipeExcerptsSuccess={loadListSuccess} setSearch={setSearch} frontendSearch={true}/>
+                    <GenericBrowser recipeExcerpts={recipeExcerptsList.excerpts} loadRecipeExcerptsSuccess={loadListSuccess} setSearch={setSearch} frontendSearch={true} inList={inList} setInList={setInList} listId={recipeExcerptsList.uuid}/>
                 </Col>
             </Row>
             {loadListSuccess === 'success' && recipeExcerptsList.excerpts.length === 0 && 

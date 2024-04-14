@@ -2,10 +2,15 @@ package com.juotava.recipes.repository.recipe;
 
 import com.juotava.recipes.model.BartinderFilter;
 import com.juotava.recipes.model.BartinderSuggestion;
+import com.juotava.recipes.model.Filter;
 import com.juotava.recipes.model.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,8 +42,17 @@ public class RecipeRepository {
         return this.springRecipeRepository.findByDraftFalse();
     }
 
+    public Page<Recipe> findAllPublishedSearchedAndFiltered(Filter filter, String search, Pageable pageable) {
+        List<String> categories = filter.getCategories().stream().map(Enum::toString).toList();
+        return this.springRecipeRepository.findByDraftFalseAndFilteredAndSearched(categories, filter.isShowNonAlcOnly(), search, pageable);
+    }
+
     public void save(Recipe recipe){
         this.springRecipeRepository.save(recipe);
+    }
+
+    public void delete(Recipe recipe) {
+        this.springRecipeRepository.delete(recipe);
     }
 
     public Recipe findRandomByBartinderFilter(BartinderFilter filter, List<BartinderSuggestion> suggestions) {

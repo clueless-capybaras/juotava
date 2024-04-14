@@ -18,7 +18,7 @@ public class RecipeList {
     @Column(length = 30)
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Recipe> recipes;
 
     private String createdBy;
