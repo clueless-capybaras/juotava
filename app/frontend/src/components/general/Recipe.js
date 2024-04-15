@@ -6,7 +6,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
 
-import { Badge, Button, Col, Container, Dropdown, Form, Image, ListGroup, Row, Toast, ToastContainer } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, Form, Image, ListGroup, Row, Toast, ToastContainer } from 'react-bootstrap';
 
 import CreatorCard from './CreatorCard';
 

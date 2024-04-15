@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate, useParams } from 'react-router';
 
 import { useState, useEffect, useContext } from "react";
-import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
 import { AuthenticatedRequestWrapperContext } from '../../../App';
 import { baseUrlRecipes } from '../../../config/config';

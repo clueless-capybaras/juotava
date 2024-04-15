@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { Accordion, Card, Col, Container, Image, Row } from 'react-bootstrap';
+import { Accordion, Col, Container, Image, Row } from 'react-bootstrap';
 
-import { getStoredTheme, getPreferredTheme } from '../../../App';
+import { getPreferredTheme } from '../../../App';
 
 import githubdark from '../../../icons/github-mark.svg';
 import githublight from '../../../icons/github-mark-white.svg';

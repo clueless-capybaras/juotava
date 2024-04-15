@@ -4,7 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
 
-import {Button, Col, Container, Form, Pagination, Row } from 'react-bootstrap'
+import {Button, Col, Container, Form, Row } from 'react-bootstrap'
 
 import Filter from './filter/Filter';
 import GenericBrowser from '../general/GenericBrowser';

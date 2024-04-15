@@ -1,14 +1,6 @@
-import { Col, Nav, Row, Tab } from 'react-bootstrap';
+import { Col, Nav, Row } from 'react-bootstrap';
 
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
-
-import User from './user/User';
-import About from './about/About';
-import Imprint from './imprint/Imprint';
-import Privacy from './privacy/Privacy';
-import Lists from './lists/ListsOverview';
-import MyRecipes from './myrecipes/MyRecipes';
-import MyDrafts from './mydrafts/MyDrafts';
+import { NavLink } from 'react-router-dom';
 
 function SettingsNav() {
 
@@ -40,10 +32,6 @@ function SettingsNav() {
                         </Nav.Item>*/}
                     </Nav>
                     <hr />
-                </Col>
-                </Row>
-                <Row>
-                <Col>
                 </Col>
             </Row>
         </>
