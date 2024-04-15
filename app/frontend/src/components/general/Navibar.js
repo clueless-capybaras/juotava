@@ -18,9 +18,9 @@ function Navibar(props) {
         case 'dark':
           return <span className="material-icons icon-align">dark_mode</span>;
         case 'auto':
-          return <span className="material-icons icon-align">auto_awesome</span>;
+          return <span className="material-icons icon-align">contrast</span>;
         default:
-          return <span className="material-icons icon-align">auto_awesome</span>;
+          return <span className="material-icons icon-align">contrast</span>;
       }
     }
     const [mode, setMode] = useState(getIcon(getStoredTheme()));
@@ -63,7 +63,7 @@ function Navibar(props) {
           <NavDropdown align="end" title={mode}>
               <NavDropdown.Item active={getStoredTheme() === "light"} onClick={() => handleSetTheme("light")} className="d-flex align-items-center"><span className="material-icons me-2">light_mode</span> Light Mode</NavDropdown.Item>
               <NavDropdown.Item active={getStoredTheme() === "dark"} onClick={() => handleSetTheme("dark")} className="d-flex align-items-center"><span className="material-icons me-2">dark_mode</span> Dark Mode</NavDropdown.Item>
-              <NavDropdown.Item active={getStoredTheme() === "auto"} onClick={() => handleSetTheme("auto")} className="d-flex align-items-center"><span className="material-icons me-2">auto_awesome</span> Auto Mode</NavDropdown.Item>
+              <NavDropdown.Item active={getStoredTheme() === "auto"} onClick={() => handleSetTheme("auto")} className="d-flex align-items-center"><span className="material-icons me-2">contrast</span> Auto Mode</NavDropdown.Item>
           </NavDropdown>
           <LogInIndicator />
         </Nav>
