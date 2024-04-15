@@ -32,14 +32,15 @@ function List() {
     return(
         <Container fluid>
             <Row className='mb-3'>
-                <Col sm=''>
-                    <span className="material-icons mx-3" onClick={() => navigate(-1)} style={{cursor: "pointer"}}>
+                <Col xs={1}>
+                    <span className="material-icons ms-3" onClick={() => navigate(-1)} style={{cursor: "pointer"}}>
                         arrow_back_ios_new 
                     </span>
                 </Col>
-                <Col sm='auto'>
-                    <h4>{recipeExcerptsList.title}</h4>
+                <Col xs={10} className="text-center">
+                    <h2>{recipeExcerptsList.title}</h2>
                 </Col>
+                <Col xs={1}></Col>
             </Row>
             <Row>
                 <Col>

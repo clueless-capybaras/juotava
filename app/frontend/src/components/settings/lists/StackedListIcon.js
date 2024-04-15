@@ -25,9 +25,9 @@ function StackedListIcon({thumbnails, favorite}){
     return(
         <Container>
             <div className="parent">
-                <Image className="image1" src={useImageOrPlaceholder(images[2], 2)} rounded style={{maxWidth:'10rem'}}/>
-                <Image className="image2" src={useImageOrPlaceholder(images[1], 1)} rounded style={{maxWidth:'10rem'}}/>
-                <Image className="image3" src={useImageOrPlaceholder(images[0], 0)} rounded style={{maxWidth:'10rem'}}/>
+                <Image className="image1" src={useImageOrPlaceholder(images[2], 2)} rounded style={{maxWidth:'9rem'}}/>
+                <Image className="image2" src={useImageOrPlaceholder(images[1], 1)} rounded style={{maxWidth:'9rem'}}/>
+                <Image className="image3" src={useImageOrPlaceholder(images[0], 0)} rounded style={{maxWidth:'9rem'}}/>
             </div>
         </Container>
     )

@@ -84,7 +84,7 @@ function ListsOverview() {
     
     return(
         <Container>
-        <Row>
+            <Row className="justify-content-center">
                 {loadRecipeListSuccess === 'waiting' ? 
                     <Col>
                         <h4 className="text-center my-5">
@@ -104,18 +104,18 @@ function ListsOverview() {
                 }
                 {loadRecipeListSuccess === 'success' ?
                     (savedLists.length > 0) ? savedLists.map((list, index) => (
-                        <Col key={index} style={{maxWidth: '12.75rem'}}>
+                        <Col key={index} style={{maxWidth: '12.75rem'}} className="mb-3">
                             <Row className='mb-4' onClick={() => handleOpenList(list.uuid)}>
                                 <StackedListIcon thumbnails={list.thumbnails} favorite={list.title == 'Favoriten'} />
                             </Row>
                             <Row className='justify-content-center text-center'>
-                                <Col sm='8'>
+                                <Col xs='8' className="d-flex align-items-center">
                                     {list.title}
                                 </Col>
-                                <Col sm='4'>
+                                <Col xs='4'>
                                     {list.title !== 'Favoriten' ?
                                         <Button variant='link' size='sm' onClick={() => handleEditList(list.title, list.uuid)}>
-                                            <span className='material-icons'>
+                                            <span className='material-icons inline-icon'>
                                                 edit
                                             </span>
                                         </Button> : ''
@@ -123,42 +123,49 @@ function ListsOverview() {
                                 </Col>
                             </Row>
                         </Col>
-                    )) : 'Es sind bisher keine Listen erstellt worden'
+                    )) : 'Du hast bisher keine Listen erstellt.'
                 : ''
                 }
-            <Col>
-                <Button variant="primary" size="lg" onClick={handleNewList}>+</Button>
-            </Col>
-            <Modal
-                show={show} 
-                onHide={handleClose}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                    Listentitel ändern
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Row>
-                        <Col>
-                            <FloatingLabel controlId="floatingTitle" label="Titel">
-                                <Form.Control placeholder="Titel" value={modalData} maxLength={30} onKeyDown={(event) => handleSave(event)} onChange={(event) => handleTitleInput(event)}/>
-                            </FloatingLabel>
-                            <Form.Text className="text-muted">
-                                {modalData?modalData.length:0}/30 Zeichen
-                            </Form.Text>
-                        </Col>
-                    </Row>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>Abbrechen</Button>
-                    <Button variant="primary" disabled={!validateSaveButton()} onClick={(event) => handleSave(event)}>Speichern</Button>
-                </Modal.Footer>
-            </Modal>
-        </Row>
+                <Col className="mt-5 ms-5">
+                    <Button 
+                        variant="primary" 
+                        onClick={handleNewList} 
+                        className="text-light d-flex justify-content-center" 
+                        style={{width: "4rem", height: "4rem"}}
+                    >
+                        <span class="material-icons-outlined md-48">add</span>
+                    </Button>
+                </Col>
+                <Modal
+                    show={show} 
+                    onHide={handleClose}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                        Listentitel ändern
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Row>
+                            <Col>
+                                <FloatingLabel controlId="floatingTitle" label="Titel">
+                                    <Form.Control placeholder="Titel" value={modalData} maxLength={30} onKeyDown={(event) => handleSave(event)} onChange={(event) => handleTitleInput(event)}/>
+                                </FloatingLabel>
+                                <Form.Text className="text-muted">
+                                    {modalData?modalData.length:0}/30 Zeichen
+                                </Form.Text>
+                            </Col>
+                        </Row>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>Abbrechen</Button>
+                        <Button variant="primary" disabled={!validateSaveButton()} onClick={(event) => handleSave(event)}>Speichern</Button>
+                    </Modal.Footer>
+                </Modal>
+            </Row>
         </Container>
     )
 }
