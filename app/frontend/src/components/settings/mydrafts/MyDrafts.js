@@ -22,7 +22,7 @@ function MyDrafts() {
 
 
     return (
-        <Row>
+        <Row className="mx-0">
             <Col>
                 <GenericBrowser recipeExcerpts={recipeExcerpts} loadRecipeExcerptsSuccess={loadRecipeExcerptsSuccess} />
             </Col>
