@@ -121,7 +121,7 @@ function Bartinder(props) {
                     </Row>
                 </Container>
                 <Row>
-                    <Col sm={12} md={4} className="order-md-2">
+                    <Col md={12} lg={4} className="order-lg-2">
                         <Container className="mb-5">
                                 <Row className='text-center mb-3'>
                                     <Col>
@@ -142,7 +142,7 @@ function Bartinder(props) {
                                 </Row>
                         </Container>
                     </Col>
-                    <Col sm={12} md={4} className="order-md-1">
+                    <Col md={12} lg={4} className="order-lg-1">
                         <Container className="mb-5">
                             <Row>
                                 <Col>
