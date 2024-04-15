@@ -16,7 +16,7 @@ function SettingsNav() {
         <>
             <Row className="mx-0">
                 <Col>
-                    <Nav variant="pills" defaultActiveKey="user" className="justify-content-center" fill>
+                    <Nav variant="pills" className="justify-content-center" fill>
                         <Nav.Item>
                             <Nav.Link as={NavLink} to="/settings/user" eventKey="user">Benutzer</Nav.Link>
                         </Nav.Item>
