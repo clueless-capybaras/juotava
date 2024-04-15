@@ -1,11 +1,39 @@
-import { Accordion, Card, Col, Container, Image, Row } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 
-import github from '../../../icons/github-mark.svg';
+import { Accordion, Col, Container, Image, Row } from 'react-bootstrap';
+
+import { getPreferredTheme } from '../../../App';
+
+import githubdark from '../../../icons/github-mark.svg';
+import githublight from '../../../icons/github-mark-white.svg';
 import instagram from '../../../icons/instagram-mark.png';
-import twitter from '../../../icons/x-mark.webp';
+import xdark from '../../../icons/x-mark.webp';
+import xlight from '../../../icons/x-mark-white.png';
 import linkedin from '../../../icons/linkedin-mark.png';
 
 function About(props) {
+    const [githubMark, setGithubMark] = useState('');
+    const [xMark, setXMark] = useState('');
+
+    useEffect(() => {
+        if (getPreferredTheme() === 'auto') {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setGithubMark(githublight);
+                setXMark(xlight);
+            }
+            else {
+                setGithubMark(githubdark);
+                setXMark(xdark);
+            }
+        }
+        if (getPreferredTheme() === 'light') {
+            setGithubMark(githubdark);
+            setXMark(xdark);
+        } else if (getPreferredTheme() === 'dark') {
+            setGithubMark(githublight);
+            setXMark(xlight);
+        }
+    } , []);
     
     return (
         <>
@@ -92,7 +120,7 @@ function About(props) {
                 </Col>
             </Row>
         </Container>
-        <Container className="">
+        <Container className="mb-3">
             <Row>
                 <Col>
                     <h2>Devs</h2>
@@ -110,7 +138,7 @@ function About(props) {
                 <Col sm={3}>
                     <Row>
                         <Col>
-                            <a href="https://github.com/EhrlerL/juotava" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={github} style={{maxHeight: "2vh"}} className="me-1" />GitHub</a>
+                            <a href="https://github.com/EhrlerL/juotava" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={githubMark} style={{maxHeight: "2vh"}} className="me-1" />GitHub</a>
                         </Col>
                     </Row>
                     <Row>
@@ -120,7 +148,7 @@ function About(props) {
                     </Row>
                     <Row>
                         <Col>
-                            <a href="https://twitter.com/Markus_Soeder" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={twitter} style={{maxHeight: "2vh"}} className="me-1" />X ehemals Twitter</a>
+                            <a href="https://twitter.com/Markus_Soeder" target="_blank" rel="noreferrer" className="d-flex align-items-center"><Image src={xMark} style={{maxHeight: "2vh"}} className="me-1" />X ehemals Twitter</a>
                         </Col>
                     </Row>
                     <Row>

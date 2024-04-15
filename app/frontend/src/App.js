@@ -1,8 +1,8 @@
 import './App.css';
 
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AuthGuard } from './components/auth/AuthGuard';
 import AuthenticatedRequestWrapper from './components/auth/AuthenticatedRequestWrapper';
@@ -14,8 +14,13 @@ import Browser from './components/browser/Browser';
 import Recipe from './components/general/Recipe';
 import Composer from './components/composer/Composer';
 import Bartinder from './components/bartinder/Bartinder';
-import Settings from './components/settings/Settings';
+import SettingsNav from './components/settings/SettingsNav';
+import User from './components/settings/user/User';
+import ListsOverview from './components/settings/lists/ListsOverview';
 import List from './components/settings/lists/List';
+import MyRecipes from './components/settings/myrecipes/MyRecipes';
+import MyDrafts from './components/settings/mydrafts/MyDrafts';
+import About from './components/settings/about/About';
 
 export const AuthenticatedRequestWrapperContext = createContext(AuthenticatedRequestWrapper);
 
@@ -48,13 +53,21 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
   }
 })
 
-function App() {
+function SettingsNavibar() {
+  const location = useLocation();
+  const inSettings = location.pathname.startsWith('/settings/');
+  return (
+    inSettings && <SettingsNav />
+  )
+}
 
+function App() {
   return (
     <div className="App">
       <AuthenticatedRequestWrapperContext.Provider value={new AuthenticatedRequestWrapper()}>
         <BrowserRouter>
           <Navibar cyClass="cy-navBarNav"/>
+          <SettingsNavibar />
           <ErrorModal />
           <Routes>
             <Route path='/' element={<AuthGuard component={Home}/>}/>
@@ -62,8 +75,12 @@ function App() {
             <Route path='/browser/recipe/:uuid' element={<AuthGuard component={Recipe}/>} />
             <Route path='/composer/:editUuid?' element={<AuthGuard component={Composer}/>}/>
             <Route path='/bartinder' element={<AuthGuard component={Bartinder} />}/>
-            <Route path='/settings' element={<AuthGuard component={Settings}/>}/>
-            <Route path='/settings/list/:uuid' element={<AuthGuard component={List}/>}/>
+            <Route path='/settings/user' element={<AuthGuard component={User}/>}/>
+            <Route path='/settings/lists' element={<AuthGuard component={ListsOverview}/>}/>
+            <Route path='/settings/lists/:uuid' element={<AuthGuard component={List}/>}/>
+            <Route path='/settings/myrecipes' element={<AuthGuard component={MyRecipes}/>}/>
+            <Route path='/settings/mydrafts' element={<AuthGuard component={MyDrafts}/>}/>
+            <Route path='/settings/about' element={<AuthGuard component={About}/>}/>
             <Route path='*' element={<h1>404</h1>} />
           </Routes>
         </BrowserRouter>

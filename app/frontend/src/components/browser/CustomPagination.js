@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { Pagination } from 'react-bootstrap';
 
 function CustomPagination({setPage, currentPage, totalPages, totalItems}) {

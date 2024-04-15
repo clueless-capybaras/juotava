@@ -53,3 +53,10 @@ width: 48px !important;
   vertical-align: bottom;
   font-size: 24px !important;
 }
+
+.icon-align {
+  vertical-align: middle;
+}
+.dropdown-toggle.nav-link::after {
+  vertical-align: middle;
+}

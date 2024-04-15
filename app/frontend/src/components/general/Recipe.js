@@ -6,7 +6,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AuthenticatedRequestWrapperContext } from '../../App';
 import {baseUrlRecipes } from '../../config/config';
 
-import { Badge, Button, Col, Container, Dropdown, Form, Image, ListGroup, Row, Toast, ToastContainer } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, Form, Image, ListGroup, Row, Toast, ToastContainer } from 'react-bootstrap';
 
 import CreatorCard from './CreatorCard';
 
@@ -132,7 +132,7 @@ function Recipe(props) {
                         </Dropdown.Menu>
                     </Dropdown>
                     <ToastContainer position='bottom-end' className='mb-3 me-3'>
-                        <Toast bg="secondary" show={showToast} delay={3000} autohide onClose={() => setShowToast(false)}>
+                        <Toast bg="secondary" show={showToast} delay={3000} autohide onClose={() => setShowToast(false)} className="text-dark">
                             <Toast.Header>
                                 <strong className="me-auto">{listTitle}</strong>
                             </Toast.Header>

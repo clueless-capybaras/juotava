@@ -74,18 +74,21 @@ function User(props) {
     
     return (
         <>
-        <h1 className="text-center mb-5">Benutzer {userSet.userName}</h1>
         <Container className="mb-5">
-            <Row className="justify-content-center mb-3">
+            <Row className="d-flex mb-3">
+                <Col></Col>
+                <Col>
+                    <h1>Benutzer {userSet.userName}</h1>
+                </Col>
                 <Col className="text-end">
                     <LogOutButton />
                 </Col>
             </Row>
-            <Row className="justify-content-center mb-3">
+            <Row className="justify-content-center mb-5">
                 <ImageUploaderUser handleChangeFunction={handleChangeImage} passedImage={userSet.image.base64data} />
             </Row>
             <Row className="justify-content-center mb-3">
-                <Col>
+                <Col sm={9} md={7} lg={5}>
                     <FloatingLabel controlId="floatingUserName" label="Benutzername">
                         <Form.Control placeholder="Benutzername" onChange={(e) => handleChangeUsername(e)} value={userSet.userName}
                             maxLength={50}
@@ -94,7 +97,7 @@ function User(props) {
                 </Col>
             </Row>
             <Row className="justify-content-center mb-3">
-                <Col>
+                <Col sm={9} md={7} lg={5}>
                     <FloatingLabel controlId='floatingShowUserName'>
                         <Form.Check type="checkbox" label="Benutzername anzeigen" onChange={(e) => handleChangeShowUsername(e)} checked={userSet.settings.showUserNameInRecipe}/>
                     </FloatingLabel>
