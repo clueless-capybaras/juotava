@@ -132,7 +132,7 @@ function Recipe(props) {
                         </Dropdown.Menu>
                     </Dropdown>
                     <ToastContainer position='bottom-end' className='mb-3 me-3'>
-                        <Toast bg="secondary" show={showToast} delay={3000} autohide onClose={() => setShowToast(false)}>
+                        <Toast bg="secondary" show={showToast} delay={3000} autohide onClose={() => setShowToast(false)} className="text-dark">
                             <Toast.Header>
                                 <strong className="me-auto">{listTitle}</strong>
                             </Toast.Header>
