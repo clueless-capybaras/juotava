@@ -97,7 +97,7 @@ function GenericBrowser({recipeExcerpts, loadRecipeExcerptsSuccess, search, setS
             <Row>
                 <Col>
                     <h4 className="text-center my-5">
-                        Wir konnten leider keine passenden Rezepte finden...
+                        Wir konnten leider keine Rezepte finden...
                     </h4>
                 </Col>
             </Row>
