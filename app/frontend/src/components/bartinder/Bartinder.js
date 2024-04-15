@@ -128,13 +128,11 @@ function Bartinder(props) {
                                         <Image src={recipe?.image.base64data} rounded fluid style={{maxHeight: "22rem"}} />
                                     </Col>
                                 </Row>
-                                <Row className="d-flex g-0">
+                                <Row>
                                     <Col className='text-center'>
-                                        <Button variant='secondary' style={{ fontSize: '2.5rem', padding: '10px 20px' }} onClick={()=>handleLike(false)}>
+                                        <Button variant='secondary' className="me-5" style={{ fontSize: '2.5rem', padding: '10px 20px' }} onClick={()=>handleLike(false)}>
                                             🤢
                                         </Button>
-                                    </Col>
-                                    <Col className='text-center'>
                                         <Button variant='primary' style={{ fontSize: '2.5rem', padding: '10px 20px' }} onClick={()=>handleLike(true)}>
                                             😋
                                         </Button>
