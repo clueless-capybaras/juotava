@@ -220,4 +220,32 @@ public class RecipesController {
         return this.recipesService.getDrinkOfTheDay();
     }
 
+    //
+    // Bartinder
+    //
+
+    @GetMapping(path = "bartinder/random")
+    public Recipe getBartinder(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getNextBartind(auth0id);
+    }
+
+    @GetMapping(path = "bartinder/filter")
+    public BartinderFilter getBartinderFilter(Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.getBartinderFilter(auth0id);
+    }
+
+    @PostMapping(path = "bartinder/filter")
+    public boolean saveBartinderFilter(@RequestBody BartinderFilter filter, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.saveBartinderFilter(filter, auth0id);
+    }
+
+    @PostMapping(path = "bartinder/suggestion")
+    public boolean saveBartinderSuggestion(@RequestBody BartinderSuggestion suggestion, Authentication authentication){
+        String auth0id = authentication.getName();
+        return this.recipesService.saveBartinderSuggestion(suggestion, auth0id);
+    }
+
 }

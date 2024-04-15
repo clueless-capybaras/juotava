@@ -1,5 +1,7 @@
 package com.juotava.recipes.repository.recipe;
 
+import com.juotava.recipes.model.BartinderFilter;
+import com.juotava.recipes.model.BartinderSuggestion;
 import com.juotava.recipes.model.Filter;
 import com.juotava.recipes.model.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +53,11 @@ public class RecipeRepository {
 
     public void delete(Recipe recipe) {
         this.springRecipeRepository.delete(recipe);
+    }
+
+    public Recipe findRandomByBartinderFilter(BartinderFilter filter, List<BartinderSuggestion> suggestions) {
+        List<UUID> alreadySuggested = suggestions.stream().map(BartinderSuggestion::getRecipeUuid).toList();
+        List<String> categories = filter.getCategories().stream().map(Enum::toString).toList();
+        return this.springRecipeRepository.findByBartinderFilter(categories, filter.isShowNonAlcOnly(), alreadySuggested);
     }
 }

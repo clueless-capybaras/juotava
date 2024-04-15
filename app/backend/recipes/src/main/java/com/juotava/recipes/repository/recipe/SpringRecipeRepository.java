@@ -20,4 +20,7 @@ public interface SpringRecipeRepository extends JpaRepository<Recipe, UUID> {
             countQuery = "SELECT COUNT(DISTINCT r.uuid) FROM recipe r LEFT JOIN recipe_ingredients ri ON r.uuid = ri.recipe_uuid LEFT JOIN ingredient i ON ri.ingredients_uuid = i.uuid WHERE r.draft = false AND r.category IN (:categories) AND (:nonAlcOnly = false OR r.non_alcoholic = :nonAlcOnly) AND ( (LOWER(r.title) RLIKE :search) OR (LOWER(r.category) RLIKE :search) OR (LOWER(r.description) RLIKE :search) OR (LOWER(i.name) RLIKE :search) )",
             nativeQuery = true)
     public Page<Recipe> findByDraftFalseAndFilteredAndSearched(@Param("categories")List<String> categories, @Param("nonAlcOnly")boolean nonAlcOnly, @Param("search")String search, Pageable pageable);
+
+    @Query(value = "SELECT * FROM recipe r WHERE r.draft = false AND r.category IN :categories AND (:showNonAlcOnly = false OR r.non_alcoholic = :showNonAlcOnly) AND (COALESCE(:alreadySuggested) IS NULL OR r.uuid NOT IN (:alreadySuggested)) ORDER BY RAND() LIMIT 1", nativeQuery = true)
+    public Recipe findByBartinderFilter(@Param("categories") List<String> categories, @Param("showNonAlcOnly") boolean showNonAlcOnly, @Param("alreadySuggested") List<UUID> alreadySuggested);
 }
