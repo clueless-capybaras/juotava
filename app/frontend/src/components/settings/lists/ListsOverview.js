@@ -152,7 +152,7 @@ function ListsOverview() {
                         <Row>
                             <Col>
                                 <FloatingLabel controlId="floatingTitle" label="Titel">
-                                    <Form.Control placeholder="Titel" value={modalData} maxLength={30} onKeyDown={(event) => handleSave(event)} onChange={(event) => handleTitleInput(event)}/>
+                                    <Form.Control autoFocus placeholder="Titel" value={modalData} maxLength={30} onKeyDown={(event) => handleSave(event)} onChange={(event) => handleTitleInput(event)}/>
                                 </FloatingLabel>
                                 <Form.Text className="text-muted">
                                     {modalData?modalData.length:0}/30 Zeichen
