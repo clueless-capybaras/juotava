@@ -13,13 +13,16 @@ function StackedListIcon({thumbnails, favorite}){
     }, [thumbnails, favorite]);
 
     const useImageOrPlaceholder = (image, index) => {
-        if(image && image.base64data && image.base64data !== "" && index !== 0){
+        if(index === 0){
+            if(isFavorite){
+                return favoriteIcon;
+            } else if(image && image.base64data && image.base64data !== ""){
+                return image.base64data;
+            }
+        } else if(image && image.base64data && image.base64data !== ""){
             return image.base64data;
-        } else if(isFavorite && index === 0){
-            return favoriteIcon;
-        } else {
-            return placeholderImage;
         }
+        return placeholderImage;
     }
 
     return(
